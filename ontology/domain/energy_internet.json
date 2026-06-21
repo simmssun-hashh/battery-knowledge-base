@@ -1,0 +1,109 @@
+{
+  "domain": "energy_internet",
+  "name": "能源互联网与虚拟电厂",
+  "description": "虚拟电厂（VPP）、需求响应、电力市场、聚合调度、源网荷储协同",
+  "version": "V2.0",
+  "last_updated": "2026-05-11T13:06:00Z",
+  "ontology_model": "TBox+ABox",
+  "tbox": {
+    "description": "概念定义层：VPP资源聚合、需求响应类型、电力市场结构的TBox定义",
+    "classes": [
+      {
+        "id": "VirtualPowerPlant",
+        "label": "虚拟电厂",
+        "parent": "Thing",
+        "definition": "聚合分布式能源资源参与电力市场的虚拟调度实体",
+        "aggregatable_resources": ["分布式储能", "EV电池", "屋顶光伏", "柔性负荷"],
+        "value_proposition": "100个×100MWh工商储=10GWh VPP等效容量",
+        "key_challenges": ["调度精度", "通信可靠性", "结算机制", "市场准入"],
+        "response_requirement": "AGC响应≤30s"
+      },
+      {
+        "id": "DemandResponse",
+        "label": "需求响应",
+        "parent": "Thing",
+        "definition": "电力用户响应市场价格或激励信号调整用电行为",
+        "subclasses": ["PriceBasedDR", "IncentiveBasedDR", "EmergencyDR"],
+        "compensation_cn": "2-5元/kWh"
+      },
+      {
+        "id": "PowerMarket",
+        "label": "电力市场",
+        "parent": "Thing",
+        "definition": "电力交易的市场化机制",
+        "subclasses": ["SpotMarket", "AncillaryServices", "CapacityMarket", "GreenCertificate"],
+        "cn_status": "现货市场建设加速，独立储能可参与"
+      },
+      {
+        "id": "SourceGridLoadStorage",
+        "label": "源网荷储协同",
+        "parent": "Thing",
+        "definition": "电源-电网-负荷-储能一体化协同优化调度",
+        "optimization_target": "可再生能源消纳最大化+系统成本最小化",
+        "key_technologies": ["预测调度", "实时优化", "数字孪生"]
+      },
+      {
+        "id": "V2G",
+        "label": "车网互动",
+        "parent": "DemandResponse",
+        "definition": "电动车电池作为分布式储能资源参与电网互动",
+        "modes": ["V1G(单向调节充电功率)", "V2G(双向充放电)"]
+      }
+    ],
+    "properties": [
+      {
+        "id": "hasAggregatedCapacity",
+        "label": "聚合容量",
+        "domain": "VirtualPowerPlant",
+        "range": "float",
+        "unit": "MW/MWh",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasResponseTime",
+        "label": "响应时间",
+        "domain": "VirtualPowerPlant",
+        "range": "float",
+        "unit": "s",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasCompensationRate",
+        "label": "补偿单价",
+        "domain": "DemandResponse",
+        "range": "float",
+        "unit": "元/kWh",
+        "cardinality": "1"
+      }
+    ],
+    "rules": [
+      {
+        "id": "rule_vpp_scale_effect",
+        "label": "VPP规模效应规则",
+        "if": "vpp.aggregated_capacity > 1 GWh",
+        "then": "market_influence_significant AND dispatch_scheduling_cost_efficient",
+        "threshold": "100个×100MWh=10GWh→规模效应凸显"
+      },
+      {
+        "id": "rule_dr_economic_trigger",
+        "label": "需求响应经济触发",
+        "if": "dr.compensation_rate > peak_valley_spread",
+        "then": "DR_preferred_over_arbitrage",
+        "current": "2-5元/kWh >> 0.5-0.8元/kWh价差→DR优于套利"
+      }
+    ]
+  },
+  "abox": {
+    "description": "事实数据层：VPP/DR/电力市场的具体参数和案例",
+    "source_documents": [
+      "工商储盈利模式分水岭（VPP聚合部分）",
+      "从等级到智能（电力调度相关）"
+    ]
+  },
+  "learning_template": {
+    "description": "能源互联网领域的学习笔记采集模板",
+    "required_fields": ["市场/模式名称", "聚合资源类型", "调度策略", "收益/补偿机制"],
+    "optional_fields": ["政策文件", "准入条件", "技术门槛", "试点案例"],
+    "example": "VPP→聚合工商储+充电桩→现货市场→补偿2-5元/kWh→准入需AGC响应≤30s"
+  }
+}

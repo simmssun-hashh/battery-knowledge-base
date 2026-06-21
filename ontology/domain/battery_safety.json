@@ -1,0 +1,665 @@
+{
+  "domain": "battery_safety",
+  "name": "电池安全与监测预警",
+  "description": "安全标准、故障诊断、在线监测、热失控预警、绝缘检测",
+  "version": "V2.1",
+  "last_updated": "2026-06-16T15:30:00Z",
+  "ontology_model": "TBox+ABox",
+  "tbox": {
+    "description": "概念定义层：安全事件类型层级、阈值属性、分类规则",
+    "classes": [
+      {
+        "id": "SafetyEvent",
+        "label": "安全事件",
+        "parent": "Thing",
+        "definition": "电池运行中任何偏离正常安全边界的事件",
+        "subclasses": [
+          "ThermalEvent",
+          "ElectricalEvent",
+          "InsulationEvent",
+          "MechanicalEvent",
+          "SamplingEvent"
+        ]
+      },
+      {
+        "id": "ThermalEvent",
+        "parent": "SafetyEvent",
+        "definition": "温度相关安全事件",
+        "subclasses": [
+          "OvertemperatureEvent",
+          "TemperatureDifferentialEvent",
+          "ThermalRunawayEvent"
+        ]
+      },
+      {
+        "id": "ElectricalEvent",
+        "parent": "SafetyEvent",
+        "definition": "电压/电流异常事件",
+        "subclasses": [
+          "OvervoltageEvent",
+          "UndervoltageEvent",
+          "VoltageConsistencyEvent",
+          "SOCAnomalyEvent"
+        ]
+      },
+      {
+        "id": "InsulationEvent",
+        "parent": "SafetyEvent",
+        "definition": "绝缘异常事件",
+        "key_threshold": "DC: <100Ω/V | AC: <1MΩ"
+      },
+      {
+        "id": "SafetyStandard",
+        "parent": "Thing",
+        "definition": "电池安全相关的国家/国际标准",
+        "subclasses": [
+          "强制性国标",
+          "推荐性国标",
+          "国际标准"
+        ],
+        "key_properties": [
+          "implement_date",
+          "key_thresholds",
+          "replaces_standard"
+        ]
+      },
+      {
+        "id": "FaultMonitorItem",
+        "parent": "Thing",
+        "definition": "GB/T 45688 定义的12项实时故障监测项",
+        "key_properties": [
+          "monitor_target",
+          "data_source",
+          "alert_level"
+        ]
+      },
+      {
+        "id": "HiddenRiskModel",
+        "parent": "Thing",
+        "definition": "GB/T 45688 定义的12项云端隐患模型(C.1-C.12)",
+        "key_properties": [
+          "category",
+          "calculation_method",
+          "data_window"
+        ]
+      },
+      {
+        "id": "BatteryChemistry",
+        "parent": "Thing",
+        "definition": "电池化学体系类型（引用自battery_technology）",
+        "instances": [
+          "NCM",
+          "LFP"
+        ],
+        "key_properties": [
+          "max_temp_charge_C",
+          "max_temp_discharge_C",
+          "max_voltage_V",
+          "min_voltage_V"
+        ]
+      },
+      {
+        "id": "AlertLevel",
+        "parent": "Thing",
+        "definition": "GB/T 45688 告警分级",
+        "instances": [
+          "一级故障(最严重)",
+          "二级故障",
+          "三级故障",
+          "一级隐患",
+          "二级隐患"
+        ],
+        "key_properties": [
+          "action_required",
+          "notification_target"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "id": "hasMaxChargeTemp",
+        "label": "充电最高温度",
+        "domain": "BatteryChemistry",
+        "range": "float",
+        "unit": "°C",
+        "cardinality": "1",
+        "description": "充电工况下电池单体允许的最高温度（GB/T 44500）"
+      },
+      {
+        "id": "hasMaxDischargeTemp",
+        "label": "放电最高温度",
+        "domain": "BatteryChemistry",
+        "range": "float",
+        "unit": "°C",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasMaxVoltage",
+        "label": "单体最高允许电压",
+        "domain": "BatteryChemistry",
+        "range": "float",
+        "unit": "V",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasMinVoltage",
+        "label": "单体最低允许电压",
+        "domain": "BatteryChemistry",
+        "range": "float",
+        "unit": "V",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasVoltageRangeLimit",
+        "label": "电压极差限值",
+        "domain": "BatteryChemistry",
+        "range": "float",
+        "unit": "V",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasInsulationThresholdDC",
+        "label": "直流绝缘阈值",
+        "domain": "InsulationEvent",
+        "range": "float",
+        "unit": "Ω/V",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasInsulationThresholdAC",
+        "label": "交流绝缘阈值",
+        "domain": "InsulationEvent",
+        "range": "float",
+        "unit": "MΩ",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasEquipotentialResistance",
+        "label": "电位均衡电阻",
+        "domain": "ElectricalEvent",
+        "range": "float",
+        "unit": "Ω",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasThermalRunawayDelay",
+        "label": "热扩散延迟要求",
+        "domain": "ThermalRunawayEvent",
+        "range": "float",
+        "unit": "h",
+        "cardinality": "1",
+        "description": "GB 38031-2025: 2小时不起火不爆炸"
+      },
+      {
+        "id": "hasOfflineMaxDays",
+        "label": "最大离线天数",
+        "domain": "SafetyEvent",
+        "range": "integer",
+        "unit": "day",
+        "cardinality": "1",
+        "description": "GB/T 45688: 非私人车60天/私人车90天"
+      },
+      {
+        "id": "hasAccidentDataWindow",
+        "label": "事故数据窗口",
+        "domain": "SafetyEvent",
+        "range": "integer",
+        "unit": "s",
+        "cardinality": "1",
+        "description": "事故前后30s数据，采样≤1s"
+      }
+    ],
+    "rules": [
+      {
+        "id": "rule_critical_overtemp",
+        "label": "超温告警规则",
+        "if": "battery.temperature > battery.chemistry.hasMaxChargeTemp",
+        "then": "classify_as OvertemperatureEvent AND alert_level = min(1, current_alert_level)",
+        "constraint": "阈值因化学体系而异，NCM vs LFP 不同"
+      },
+      {
+        "id": "rule_voltage_consistency",
+        "label": "电压一致性告警",
+        "if": "max_cell_voltage - min_cell_voltage > hasVoltageRangeLimit",
+        "then": "classify_as VoltageConsistencyEvent",
+        "threshold_GB44500": "0.3V（同类型电池）",
+        "threshold_GB45688": "0.5V RMS"
+      },
+      {
+        "id": "rule_insulation_daily_check",
+        "label": "绝缘日检规则",
+        "if": "insulation_resistance < hasInsulationThresholdDC AND occurrences_per_day >= 5",
+        "then": "classify_as InsulationEvent AND report_to_GB45688_C9",
+        "source": "GB/T 45688 C.9"
+      },
+      {
+        "id": "rule_thermal_runaway_delay",
+        "label": "热扩散延迟规则",
+        "if": "event.type == ThermalRunawayEvent",
+        "then": "must_not_ignite_within_2h",
+        "source": "GB 38031-2025",
+        "note": "从24h(G2020)收紧至2h(G2025)"
+      },
+      {
+        "id": "rule_offline_monitoring",
+        "label": "离线监测规则",
+        "if": "battery.offline_days > hasOfflineMaxDays",
+        "then": "classify_as OfflineRiskEvent",
+        "source": "GB/T 45688"
+      }
+    ]
+  },
+  "abox": {
+    "description": "事实数据层：具体标准条文、阈值、监测项列表",
+    "chemistry_thresholds": [
+      {
+        "id": "NCM_safety",
+        "class": "BatteryChemistry",
+        "label": "三元",
+        "hasMaxChargeTemp": 60,
+        "hasMaxDischargeTemp": 60,
+        "hasMaxVoltage": 4.5,
+        "hasMinVoltage": 1.8,
+        "hasVoltageRangeLimit": 0.3
+      },
+      {
+        "id": "LFP_safety",
+        "class": "BatteryChemistry",
+        "label": "磷酸铁锂",
+        "hasMaxChargeTemp": 65,
+        "hasMaxDischargeTemp": 65,
+        "hasMaxVoltage": 3.85,
+        "hasMinVoltage": 1.5,
+        "hasVoltageRangeLimit": 0.3
+      }
+    ],
+    "standards": [
+      {
+        "id": "GB_38031-2025",
+        "class": "SafetyStandard",
+        "type": "强制性国标",
+        "name": "电动汽车用动力蓄电池安全要求",
+        "hasThermalRunawayDelay": 2,
+        "implement_date": "2026-07-01",
+        "replaces": "GB 38031-2020",
+        "key_requirements": [
+          "2小时不起火不爆炸",
+          "热扩散试验(报警≤5min, 烟气5min不进乘员舱)",
+          "针刺90%深度/过充/过放(SOC=0%→1I1/30min)/外部短路",
+          "底部撞击测试(30mm半球/10kg/150J) —2025新增",
+          "快充循环后安全测试(仅快充能力产品) —2025新增",
+          "温度冲击先高温后低温(UN R100协调)",
+          "内部加热触发(热扩散触发新方法)"
+        ],
+        "new_in_2025": [
+          "底部撞击测试",
+          "快充循环后安全测试",
+          "内部加热触发热失控",
+          "烟气安全(包级+整车级)",
+          "统一形式判定规则(多回路均需短路测试)"
+        ]
+      },
+      {
+        "id": "GB_T_44500-2024",
+        "class": "SafetyStandard",
+        "type": "推荐性国标",
+        "name": "新能源汽车运行安全性能检验规程",
+        "implement_date": "2025-03-01",
+        "key_requirements": [
+          "动力蓄电池安全（充电+放电）",
+          "驱动电机安全",
+          "电控系统安全",
+          "电气安全（绝缘+电位均衡）"
+        ],
+        "notes": "年检标准。非营运小型/微客6年内免检，6-10年每2年1次。企业技术文件阈值优先于附录B参考阈值"
+      },
+      {
+        "id": "GB_T_45688-2025",
+        "class": "SafetyStandard",
+        "type": "推荐性国标",
+        "name": "新能源汽车运行安全性能动态监测预警",
+        "implement_date": "2025-12-01",
+        "key_requirements": [
+          "12项故障监测",
+          "12项隐患模型C.1-C.12",
+          "三级故障+两级隐患告警",
+          "换电7项特殊适配",
+          "事故前后30s数据≤1s采样"
+        ]
+      }
+    ],
+    "fault_monitoring_12_items": [
+      "battery_max_temperature",
+      "battery_temp_differential",
+      "cell_max_voltage",
+      "cell_min_voltage",
+      "cell_voltage_consistency",
+      "SOC_anomaly",
+      "motor_temperature",
+      "controller_temperature",
+      "DC_DC_temperature",
+      "insulation_resistance",
+      "HVIL_status"
+    ],
+    "hidden_risk_models_12_items": {
+      "charging": [
+        "C.1_max_temp",
+        "C.2_max_voltage",
+        "C.3_voltage_range_RMS"
+      ],
+      "discharging": [
+        "C.4_max_temp",
+        "C.5_min_voltage"
+      ],
+      "thermal": [
+        "C.6_motor_temp_90d",
+        "C.7_controller_temp_90d",
+        "C.8_DCDC_temp_90d"
+      ],
+      "insulation": [
+        "C.9_insulation_100ΩV_5x_daily"
+      ],
+      "sampling": [
+        "C.10_sampling_anomaly"
+      ]
+    },
+    "swap_adaptations_GB45688": [
+      "电池级监测（替代车辆级）",
+      "跨车历史追踪",
+      "换电前中后三阶段突变检测",
+      "换电站库存电池离线监测",
+      "电池资产ID与VIN解耦",
+      "BaaS数据归属",
+      "聚集停放电池+车辆双重监测"
+    ],
+    "source_documents": [
+      "GB/T 45688-2025 学习笔记",
+      "GB/T 44500-2024 年检规程",
+      "GB 38031-2025 电池安全要求",
+      "ATL电池基本原理培训",
+      "绝缘失效机理与检测算法_CEO文档_2026-05-25"
+    ],
+    "insulation_failure_mechanisms": {
+      "description": "绝缘失效物理机理（来源：CEO文档 2026-05-25）",
+      "cu_foreign_body_corrosion_5step": {
+        "step1": "铜异物引入—密封圈沾染铜屑桥接负极极柱与铝顶盖",
+        "step2": "Cu阳极氧化溶解—Cu→Cu²⁺+2e⁻, ΔV=3-4V驱动力",
+        "step3": "Cu²⁺迁移与枝晶沉积—充放电周期驱动溶解-迁移-沉积循环",
+        "step4": "高阻回路形成—间歇性接触+SOC周期性关联",
+        "step5": "Li-Al合金化壳体腐蚀—Al+xLi⁺+xe⁻→Li_xAl, 体积膨胀~100%, 穿孔漏液"
+      },
+      "other_failure_modes": [
+        "机械应力振动疲劳（箱体裂缝/微动磨损/连接器松动）",
+        "制造缺陷（极耳毛刺/焊接飞溅/绝缘膜褶皱）",
+        "化学腐蚀（LiPF₆水解HF腐蚀铝壳, RH>60%劣化3-5x）",
+        "热老化（PET膜介电强度年降5-15%, CTE不匹配微裂纹）"
+      ]
+    },
+    "insulation_detection_algorithms": {
+      "description": "绝缘阻抗检测与软短路诊断算法（来源：CEO文档 2026-05-25）",
+      "methods": {
+        "DC_injection": "直流注入法—注入已知DC电压测漏电流算R_ins",
+        "AC_injection": "交流注入法—注入AC信号同步解调, 抗DC偏置干扰"
+      },
+      "signal_processing": {
+        "filter": "三阶Butterworth低通滤波",
+        "adaptive_threshold": "μ±3σ→异常后收紧至μ±5σ动态窗口"
+      },
+      "soft_short_detection": {
+        "key_indicators": [
+          "绝缘阻值间歇性下降（非持续）",
+          "与SOC周期性相关（充电高/放电低）",
+          "异常后自适应阈值收紧捕获间歇特征"
+        ],
+        "SOC_correlation": "SOC>80%→电位差最大→Cu溶解驱动力最强→R_ins低谷"
+      }
+    },
+    "thermal_runaway": {
+      "description": "热失控热力学窗口（来源：Besenhard Ch1深读 2026-05-14）",
+      "SEI_decomposition_onset_C": "80-120",
+      "anode_electrolyte_reaction_C": "120-150",
+      "separator_shutdown_C": "130-135 (PE), 165 (PP)",
+      "LCO_oxygen_release_C": ">180",
+      "NCM811_oxygen_release_C": "~200",
+      "LFP_oxygen_release_C": ">250",
+      "thermal_runaway_window_formula": "正极释氧温度 − SEI分解温度",
+      "LCO_safety_window": "100°C (180−80)",
+      "LFP_safety_window": "170°C (250−80)",
+      "NCM_high_Ni_trend_warning": "高Ni低Co缩小安全窗口, NCM811释氧仅~200°C"
+    },
+    "cumulative_stress_batch_detection": {
+      "name": "累积应力批次异常识别方法",
+      "class": "AnomalyDetectionMethod",
+      "description": "基于电芯累积应力监测识别高风险电池批次，监测维度：充电应力/日历老化/工况应力/批次信息",
+      "target_batches": [
+        "AD",
+        "AF",
+        "AH",
+        "AK"
+      ],
+      "three_phase_validation": [
+        "回溯验证识别率",
+        "拆解对照根因一致性",
+        "召回闭环SOP"
+      ],
+      "business_case": "质保期内召回→供应商承担成本",
+      "ai_capabilities": [
+        "应力异常检测",
+        "批次聚类差异对比",
+        "拆解-数据映射图谱"
+      ],
+      "learned_date": "2026-05-26",
+      "source_doc": "EewNd3YIXocpmaxETlxc7wA7nrU"
+    },
+    "nio_safety_design_standard": {
+      "id": "QBS_GS_0004_01_2021",
+      "type": "enterprise_standard",
+      "name": "NIO电池系统安全设计标准 QBS-GS-0004-01-2021",
+      "properties": {
+        "protection_class": "IP68 + IP6K9K",
+        "creepage_distance_min_mm": 5.0,
+        "electrical_clearance_min_mm": 2.5,
+        "dielectric_withstand": ">=1910VAC或2700VDC 60s不击穿",
+        "insulation_resistance_lifetime": ">=500Ω/V全寿命",
+        "insulation_resistance_ambient": ">=200MΩ常温常湿",
+        "equipotential_bonding_max_ohm": 0.1,
+        "short_circuit_protection": "BMS 3ms内发点火信号→5ms内切断高压(Pyrofuse)",
+        "HVIL": "检测高压回路完整性,故障上报",
+        "post_crash_voltage_V": "<30V AC / 60V DC(碰撞后60s内)",
+        "post_crash_energy_J": "TE < 0.2J(高压母线)",
+        "post_crash_requirement": "24h内不爆炸不起火,无电解液泄漏",
+        "high_voltage_disconnect_max_ms": 12
+      },
+      "source": "learning_20260531_nas_batch1",
+      "importance": 0.95
+    },
+    "npd_vs_tesla_thermal_safety_comparison": {
+      "id": "NPD_vs_Tesla_thermal",
+      "type": "benchmark_data",
+      "name": "NPD 4695 vs Tesla 21700热安全全维度对比",
+      "properties": {
+        "NPD_energy_density_Wh_per_kg": 287.5,
+        "Tesla_energy_density_Wh_per_kg": 260,
+        "NPD_cathode": "NCM",
+        "Tesla_cathode": "NCA(高Ni低Co)",
+        "NPD_anode": "SiO复合",
+        "Tesla_anode": "Si含量~10%",
+        "NPD_thermal_runaway_onset_C": 143,
+        "Tesla_thermal_runaway_onset_C": [
+          125.1,
+          132.5
+        ],
+        "NPD_self_heating_Tonset_C": 102,
+        "NPD_shell_thickness_mm": 0.4,
+        "Tesla_shell_thickness_mm": 0.3,
+        "NPD_venting": "1个阀,负极朝下",
+        "Tesla_venting": "1个阀,正极朝上",
+        "Tesla_diffusion_mitigation": [
+          "全面填充(电芯间隙+模组壳体间隙)→绝氧+隔热",
+          "铝丝Busbar易熔断→切断短路电路",
+          "泄气阀朝上+填充阻断→不导向相邻电芯"
+        ],
+        "NPD_CTP_risk": "无Block隔火层→反射结构导向相邻电芯(已识别需改)",
+        "NPD_cooling": "20L/min max 7.5kW",
+        "Tesla_cooling": "单蛇形管+导热胶填充"
+      },
+      "source": "learning_20260531_nas_batch1",
+      "importance": 0.9
+    }
+  },
+  "thermal_runaway_chain": {
+    "description": "热失控六阶段链式反应（来源：Linden Handbook of Batteries Ch22 + 多源交叉验证）",
+    "learned_date": "2026-05-28",
+    "source": "Handbook of Batteries Ch22 锂离子电池安全",
+    "stages": [
+      {
+        "stage": 1,
+        "name": "SEI分解",
+        "temperature_C": "80-120",
+        "heat_release": "低(~0.1 kJ/g)",
+        "mechanism": "SEI膜(Li₂CO₃+LiF+ROLi+Li₂O)热分解→暴露新鲜负极表面",
+        "engineering_note": "化成质量决定SEI热稳定性→安全链第一张牌"
+      },
+      {
+        "stage": 2,
+        "name": "负极-电解液反应",
+        "temperature_C": "120-150",
+        "heat_release": "中(~0.5-1.0 kJ/g)",
+        "mechanism": "LiₓC₆+碳酸酯溶剂→Li₂CO₃+碳氢气体+热→不可逆自放热起点",
+        "engineering_note": "真正的不可逆点—此后即使切断外热仍然自升温"
+      },
+      {
+        "stage": 3,
+        "name": "隔膜熔融/关断",
+        "temperature_C": "PE~135 / PP~165",
+        "heat_release": "吸热(熔化潜热)",
+        "mechanism": "PE微孔闭合关断电流/PP机械完整性丧失→正负极直接接触",
+        "engineering_note": "PE/PP三层复合提供~35°C安全窗口(130→165°C)"
+      },
+      {
+        "stage": 4,
+        "name": "正极分解与释氧",
+        "temperature_C": "NCM200-250 / LFP250-300",
+        "heat_release": "高+释放O₂",
+        "mechanism": "层状LiₓNiCoMnO₂→岩盐相+O₂↑；LFP橄榄石PO₄³⁻锁定O→释氧温度高~50°C",
+        "engineering_note": "最危险阶段—O₂+电解液蒸气=可燃混合物；LFP安全窗口宽50°C的根本原因"
+      },
+      {
+        "stage": 5,
+        "name": "电解液氧化与燃烧",
+        "temperature_C": ">200",
+        "heat_release": "极高(15-25 kJ per 18650)",
+        "mechanism": "O₂+电解液蒸气→剧烈氧化→正反馈循环→更多释氧→更多氧化",
+        "engineering_note": "阶段不可避—安全设计的核心是不让到达阶段4"
+      },
+      {
+        "stage": 6,
+        "name": "Pack级热扩散",
+        "temperature_C": "传播中",
+        "heat_release": "多模态(传导+对流+辐射)",
+        "mechanism": "单电芯失控→三模态传热→相邻电芯→多米诺→GB38031-2025要求≥2h不蔓延",
+        "engineering_note": "三杠杆:热阻最大化(气凝胶)+热容最优化(PCM)+热排出(定向排气)"
+      }
+    ],
+    "safety_devices": {
+      "PTC": "正温度系数热敏电阻→~100-120°C电阻跃升3-5数量级→限流",
+      "CID": "电流中断装置→内压>10-15bar→机械断开正极端子→永久切断",
+      "Vent": "安全阀→内压>20-30bar→定向刻痕破裂→排气防爆",
+      "Shutdown_Separator": "PE关断~135°C/PP保持~165°C→陶瓷涂层Al₂O₃>1000°C热稳定"
+    },
+    "bms_three_layer": {
+      "layer1_boundary_protection": "过充4.25V(NCM)/3.65V(LFP)→过放2.5V/2.0V→过温60/65°C→过流",
+      "layer2_state_estimation": "SOC不准→边界判断错误→SOH衰退→安全余量动态缩窄→绝缘日检<100Ω/V",
+      "layer3_fault_diagnosis": "电压一致性>0.3V→温度异常散度→采样跳变→SOC跳跃→内短路早期预警"
+    },
+    "abuse_tests": [
+      "过充:1C→>150%SOC/指定电压→四层纵深防御",
+      "针刺:3-8mm钢针穿透→NCM 1-3s失控 vs LFP仅冒烟",
+      "挤压:13kN/15%形变→多热点不规则短路",
+      "外部短路:仅受内阻限制→隔膜关断通常成功",
+      "热滥用:5°C/min升温→探测SEI热稳定性→起始温度决定安全边界"
+    ],
+    "cross_book_references": {
+      "Bard_Ch15_solid_electrolyte": "固态电解质的本征安全优势+晶界失效新问题",
+      "Kittel_Ch3_phonon": "声子热传导率决定热蔓延速度→石墨面内κ~1-10 vs LCO κ~0.5",
+      "Kittel_Ch8_band": "电子SEI隧穿→Fowler-Nordheim→电子漏导触发阶段2",
+      "March_Ch12_13_14": "SEI成膜六层交响曲→化成质量→安全种子",
+      "Besenhard_Ch12_Li_metal": "Li枝晶针刺→内短路第一诱因→Li箔表面处理调控枝晶形态",
+      "Linden_Ch17_manufacturing": "制造缺陷→金属异物→内短路种子→老化K值筛选是第一道防火墙"
+    },
+    "sudden_death_thermal_runaway": {
+      "definition": "猝死型热失控：电压/温度正常→约3min内电压异常→整车级温度报警；发生前容量/内阻参数均符合生产标准，无渐变离群征兆",
+      "two_phase_model": {
+        "phase1_incubation": "制造缺陷/多因素工况叠加→局部锂析出→锂枝晶成百上千次循环缓慢生长→BMS层面无信号表征",
+        "phase2_explosion": "枝晶刺穿/压破隔膜→电压突降+局部急剧温升→SEI分解+正极释氧→热失控(秒级爆发)"
+      },
+      "highest_risk_mode": "铝箔参与的内短路 > 其他模式",
+      "detection_features": {
+        "冲高放低现象": "低SOC时电压偏低、高SOC时电压偏高（大数据统计特征）",
+        "缓慢自放电": "长期累积的自放电速率异常",
+        "电压排序漂移": "单体电压在整包中排序随时间累积变化"
+      },
+      "three_risk_classes": {
+        "class1": "电压排序异常+自放电→可识别",
+        "class2": "缓慢自放电→部分可识别",
+        "class3": "完全无BMS层面表征→仍在探究"
+      },
+      "mitigation": {
+        "design": "异物鲁棒性提升（N/P比/涂布面密度/压实密度/隔膜选型/对齐度/盖板/绝缘）",
+        "manufacturing": "电极制备(金属异物/漏金属)→装配(焊接/极耳/入壳)→化成(负压/密封钉/注液/添加剂)",
+        "detection": "二维/三维CT全覆盖(极片翻折/碎裂/对齐度)→云端电压排序大数据拉长时间维度预警",
+        "contamination_control": "成立专门组织→异物标准与地图→研发设计阶段前置→密闭设备→反向溯源"
+      },
+      "use_triggers": [
+        "早期间歇性大电流",
+        "BMS控制不当致微过充/过放",
+        "低/高SOC长期搁置"
+      ],
+      "source": "2026-06-04 飞书PDtIdiHyNoA0CixjosOc9v4vnZg"
+    }
+  },
+  "learning_template": {
+    "description": "电池安全领域的学习笔记采集模板",
+    "required_fields": [
+      "标准号/事件类型",
+      "阈值/关键参数",
+      "监测对象",
+      "触发条件"
+    ],
+    "optional_fields": [
+      "与已知标准的关系（互补/引用/替代/冲突）",
+      "对运营系统的落地要求"
+    ],
+    "example": "GB/T 44500→年检→三元60°C/LFP65°C→与45688互补(年检快照vs在线预警)"
+  },
+  "entities": [
+    {
+      "id": "ohzuku_threshold",
+      "name": "Ohzuku阈值：LiNiO₂脱锂崩塌临界",
+      "type": "safety_threshold",
+      "attributes": {
+        "threshold_value": "x > 0.75 (脱锂量)",
+        "mechanism": "LiNiO₂脱锂→NiO₂形成→不可逆层间距收缩→晶格崩塌→释氧",
+        "applicable_chemistry": "NCM / NCA 高镍体系",
+        "significance": "与R值铁律并列的电池安全金标准",
+        "detection": "dQ/dV 正极峰左移"
+      },
+      "source": "Handbook of Battery Materials Ch14 + NAS Day7",
+      "learned_date": "2026-06-15"
+    },
+    {
+      "id": "large_cell_thermal_paradox",
+      "name": "大电芯散热平方律悖论",
+      "type": "engineering_constraint",
+      "attributes": {
+        "principle": "发热∝L³(体积), 散热∝L²(表面积), 尺寸翻倍→散热赤字翻倍",
+        "example_2710Ah": "截面厚度~200mm vs 314Ah的~70mm, 热扩散时间常数×10",
+        "consequence": "中心电芯衰减≠边缘电芯衰减, 5年后SOH差异可达6%+",
+        "not_a_safety_risk": "GB38031-2025触发热失控测试可覆盖",
+        "real_risk": "长期运行一致性问题, 通常第3-5年暴露"
+      },
+      "source": "SNEC 2026 比亚迪Haohan分析 + 储能白皮书2026",
+      "learned_date": "2026-06-16"
+    }
+  ]
+}

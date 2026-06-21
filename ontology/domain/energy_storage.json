@@ -1,0 +1,294 @@
+{
+  "domain": "energy_storage",
+  "name": "储能系统",
+  "description": "工商业储能、电网储能、户用储能、储能经济性（IRR）、盈利模式",
+  "version": "V2.0",
+  "last_updated": "2026-06-16",
+  "ontology_model": "TBox+ABox",
+  "tbox": {
+    "description": "概念定义层：储能系统架构、市场分类、经济模型的TBox定义",
+    "classes": [
+      {
+        "id": "StorageSystem",
+        "label": "储能系统",
+        "parent": "Thing",
+        "definition": "从电芯到站级控制的全层级储能系统",
+        "subclasses": [
+          "CIStorage",
+          "GridStorage",
+          "ResidentialStorage"
+        ],
+        "hierarchy": "cell → module → rack → container → station"
+      },
+      {
+        "id": "CIStorage",
+        "label": "工商业储能",
+        "parent": "StorageSystem",
+        "capacity_range": "100kW-10MW",
+        "revenue_streams": [
+          "峰谷套利",
+          "需量管理",
+          "需求响应"
+        ],
+        "irr_sensitivity": "峰谷价差从0.8→0.5元/kWh→IRR从12%→4.2%"
+      },
+      {
+        "id": "GridStorage",
+        "label": "电网侧储能",
+        "parent": "StorageSystem",
+        "capacity_range": "10MW+",
+        "applications": [
+          "调频",
+          "调峰",
+          "新能源消纳",
+          "黑启动"
+        ],
+        "policy": "独立储能可参与电力现货市场"
+      },
+      {
+        "id": "RevenueStream",
+        "label": "收益来源",
+        "parent": "Thing",
+        "instances": [
+          "PeakValleyArbitrage",
+          "DemandResponseSubsidy",
+          "CapacityLeasing",
+          "AncillaryServices",
+          "VPPAggregation"
+        ],
+        "key_properties": [
+          "unit_price",
+          "availability_guarantee",
+          "policy_dependency"
+        ]
+      },
+      {
+        "id": "EconomicModel",
+        "label": "经济性模型",
+        "parent": "Thing",
+        "definition": "储能项目投资回报计算模型",
+        "key_inputs": [
+          "battery_cost_per_kWh",
+          "PCS_cost",
+          "BOP_cost",
+          "O&M_cost",
+          "revenue_streams"
+        ],
+        "key_outputs": [
+          "IRR",
+          "payback_years",
+          "NPV"
+        ],
+        "LFP_real_degradation": "年衰减2-3%/第5年仅剩85%"
+      },
+      {
+        "id": "SodiumIonStorage",
+        "label": "钠电储能",
+        "parent": "CIStorage",
+        "cost_advantage": "理论比LFP低30-40%，量产初期实际低10-15%",
+        "cycle_life": "实验室3000-5000次 vs LFP已验6000-8000次",
+        "low_temp_advantage": "-20°C正常充放电",
+        "critical_window": "2026-2028最关键三年",
+        "market_signal": "CATL 60GWh大单验证"
+      }
+    ],
+    "properties": [
+      {
+        "id": "hasIRR",
+        "label": "内部收益率",
+        "domain": "EconomicModel",
+        "range": "float",
+        "unit": "%",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasPeakValleySpread",
+        "label": "峰谷价差",
+        "domain": "CIStorage",
+        "range": "float",
+        "unit": "元/kWh",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasPaybackYears",
+        "label": "回本周期",
+        "domain": "EconomicModel",
+        "range": "float",
+        "unit": "年",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasCapacityDegradationRate",
+        "label": "容量衰减率",
+        "domain": "StorageSystem",
+        "range": "float",
+        "unit": "%/年",
+        "cardinality": "1"
+      }
+    ],
+    "rules": [
+      {
+        "id": "rule_irr_breakdown_duck_curve",
+        "label": "鸭子曲线IRR崩塌规则",
+        "if": "hasPeakValleySpread < 0.5 元/kWh",
+        "then": "hasIRR < 5% AND requires_alternative_revenue",
+        "alternatives": [
+          "需求响应补贴(2-5元/度)",
+          "容量租赁(降基本电费20-40%)",
+          "调频服务(8-12%总投资)"
+        ],
+        "source": "工商储盈利模式分水岭"
+      },
+      {
+        "id": "rule_sodium_storage_viability",
+        "label": "钠电储能可行性判断",
+        "if": "application.energy_density_requirement > 160 Wh/kg",
+        "then": "sodium_ion_not_suitable",
+        "sweet_spot": "大规模储能（对能量密度不敏感）"
+      }
+    ]
+  },
+  "abox": {
+    "description": "事实数据层：储能项目经济参数、收益来源数据",
+    "revenue_streams_data": [
+      {
+        "id": "RS_PeakValley",
+        "class": "RevenueStream",
+        "type": "PeakValleyArbitrage",
+        "unit_price": "0.5-0.8元/kWh"
+      },
+      {
+        "id": "RS_DR",
+        "class": "RevenueStream",
+        "type": "DemandResponseSubsidy",
+        "unit_price": "2-5元/kWh"
+      },
+      {
+        "id": "RS_Capacity",
+        "class": "RevenueStream",
+        "type": "CapacityLeasing",
+        "benefit": "降基本电费20-40%"
+      },
+      {
+        "id": "RS_Ancillary",
+        "class": "RevenueStream",
+        "type": "AncillaryServices",
+        "benefit": "调频收入8-12%总投资"
+      }
+    ],
+    "source_documents": [
+      "工商储盈利模式分水岭",
+      "储能业务服务及数据应用讨论",
+      "钠电拐点：CATL 60GWh大单深度解读",
+      "Handbook of Batteries - Part 4 Safety"
+    ]
+  },
+  "learning_template": {
+    "description": "储能系统领域的学习笔记采集模板",
+    "required_fields": [
+      "储能类型（工商业/电网/户用）",
+      "系统容量/功率",
+      "经济模型参数（IRR/峰谷价差/成本结构）",
+      "技术路线"
+    ],
+    "optional_fields": [
+      "政策依赖",
+      "下游客户",
+      "竞争格局"
+    ],
+    "example": "工商储→钠电→IRR从12%降至4.2%→峰谷价差收窄→转型容量租赁+调频"
+  },
+  "entities": [
+    {
+      "id": "global_storage_market_2025",
+      "name": "2025年全球新型储能市场",
+      "type": "market_overview",
+      "attributes": {
+        "global_new_install": "~300 GWh",
+        "yoy_growth": "+50%",
+        "china_install": "~172 GWh (+61%)",
+        "china_share": "50%+",
+        "us_install": "~40 GWh (+40%)",
+        "europe_install": "~30 GWh (+20-30%)",
+        "australia_install": "~5-8 GWh (+80-120%)",
+        "other_regions": "~40 GWh"
+      },
+      "source": "EESA白皮书2026",
+      "learned_date": "2026-06-16"
+    },
+    {
+      "id": "china_storage_structure_2025",
+      "name": "2025年中国储能装机结构",
+      "type": "market_structure",
+      "attributes": {
+        "grid_side": "137.1 GWh (79%, +113%)",
+        "generation_side": "22.8 GWh (14%, -34%)",
+        "user_side": "12.7 GWh (7%, +53%)",
+        "total": "172.6 GWh (+61%)",
+        "cr5": ">60%",
+        "peak_valley_spread": ">0.8 CNY/kWh (部分省份)"
+      },
+      "source": "EESA白皮书2026",
+      "learned_date": "2026-06-16"
+    },
+    {
+      "id": "storage_cell_iteration",
+      "name": "储能大电芯技术迭代",
+      "type": "technology_roadmap",
+      "attributes": {
+        "gen1": "280-314 Ah",
+        "gen2": "500+ Ah",
+        "gen3": "600+ Ah (初步量产)",
+        "system_level": "6.25+ MWh 电池舱",
+        "status_2026": "314Ah与600Ah+并行",
+        "liquid_cooling": "成为大型储能标准配置",
+        "grid_forming": "构网型储能成为研发热点"
+      },
+      "source": "EESA白皮书2026",
+      "learned_date": "2026-06-16"
+    },
+    {
+      "id": "sodium_ion_storage_cost",
+      "name": "钠离子电池储能成本趋势",
+      "type": "cost_curve",
+      "attributes": {
+        "2024_cost": "0.55-0.60 元/Wh",
+        "2025_cost": "0.40-0.45 元/Wh",
+        "2026_forecast": "0.35-0.40 元/Wh",
+        "cost_reduction": "-25% YoY",
+        "overseas_order": "海四达钠星 ≥1 GWh (4年)",
+        "status": "产业化破晓"
+      },
+      "source": "EESA白皮书2026",
+      "learned_date": "2026-06-16"
+    },
+    {
+      "id": "vanadium_flow_storage_2025",
+      "name": "全钒液流电池储能进展",
+      "type": "technology_progress",
+      "attributes": {
+        "lcoe": "0.5 元/kWh (从0.8下降)",
+        "production_line": "开封3GW产线部分投产",
+        "hybrid_mode": "全钒+锂电混合储能(星辰新能)",
+        "export": "北京普能出口美国",
+        "epc_price": "2.39 元/Wh"
+      },
+      "source": "EESA白皮书2026",
+      "learned_date": "2026-06-16"
+    },
+    {
+      "id": "china_storage_overseas_2025",
+      "name": "中国储能出海2025",
+      "type": "market_data",
+      "attributes": {
+        "total_overseas": "26.21 GWh (前三季度部分统计)",
+        "key_markets": "北美、印度、欧洲",
+        "trend": "从产品输出→技术+标准+品牌系统出海",
+        "production_status": "大储基本满产，排产至2026H1",
+        "aidc_storage": "鹏辉瀚海85Ah AIDC专用电芯已小批量"
+      },
+      "source": "EESA白皮书2026",
+      "learned_date": "2026-06-16"
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+{
+  "domain": "policy_economics",
+  "name": "能源政策与经济学",
+  "description": "碳交易、电价政策、补贴、动力电池回收政策、产业链经济分析",
+  "version": "V2.0",
+  "last_updated": "2026-05-11T13:08:00Z",
+  "ontology_model": "TBox+ABox",
+  "tbox": {
+    "description": "概念定义层：政策工具类型、经济变量、供应链风险因子的TBox定义",
+    "classes": [
+      {
+        "id": "PolicyInstrument",
+        "label": "政策工具",
+        "parent": "Thing",
+        "definition": "政府/监管机构影响产业行为的政策手段",
+        "subclasses": ["CarbonMarket", "ElectricityPricing", "SubsidyPolicy", "RecyclingRegulation"]
+      },
+      {
+        "id": "CarbonMarket",
+        "label": "碳市场",
+        "parent": "PolicyInstrument",
+        "key_mechanisms": ["中国ETS(全国碳市场覆盖电力)", "EU CBAM(对电池出口影响)", "碳足迹核算(欧盟电池法规)"],
+        "cn_expansion": "后续扩至钢铁/水泥/铝"
+      },
+      {
+        "id": "ElectricityPricing",
+        "label": "电价机制",
+        "parent": "PolicyInstrument",
+        "key_factors": ["峰谷价差(鸭子曲线效应)", "分时电价(各省差异)", "两部制电价(基本+电度)"],
+        "storage_arbitrage_window": "2-3年(IRR从12%降至4.2%后的转型期)"
+      },
+      {
+        "id": "SupplyChainRisk",
+        "label": "供应链风险",
+        "parent": "Thing",
+        "definition": "关键电池原材料的地缘政治和市场风险",
+        "key_materials": ["锂", "钴", "镍"],
+        "cn_dominance": "中国掌握全球70%+锂电材料加工能力",
+        "lithium_price_history": "60万→7万→反弹至近20万(2022-2026)"
+      },
+      {
+        "id": "EconomicVariable",
+        "label": "经济变量",
+        "parent": "Thing",
+        "definition": "影响电池产业链的经济参数",
+        "key_variables": ["碳酸锂价格", "电价", "碳价", "补贴强度", "产能利用率"]
+      }
+    ],
+    "properties": [
+      {
+        "id": "hasEffectiveDate",
+        "label": "生效日期",
+        "domain": "PolicyInstrument",
+        "range": "date",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasImpact",
+        "label": "影响量化",
+        "domain": "PolicyInstrument",
+        "range": "string",
+        "cardinality": "1",
+        "description": "政策对行业/企业/技术的量化影响"
+      },
+      {
+        "id": "hasPriceVolatility",
+        "label": "价格波动率",
+        "domain": "SupplyChainRisk",
+        "range": "float",
+        "unit": "%",
+        "cardinality": "1"
+      }
+    ],
+    "rules": [
+      {
+        "id": "rule_lithium_price_policy_coupling",
+        "label": "锂价政策耦合规则",
+        "if": "lithium_price > 200000 元/吨",
+        "then": "alternative_chemistries_viability_improved AND policy_intervention_probability_high",
+        "mechanism": "高价触发钠电替代加速+政府释放储备/放宽开采审批"
+      },
+      {
+        "id": "rule_carbon_border_impact",
+        "label": "碳边境影响规则",
+        "if": "export_target == EU AND battery.carbon_footprint > threshold",
+        "then": "CBAM levy applied AND competitiveness_decreased",
+        "source": "EU CBAM 碳边境调节机制"
+      },
+      {
+        "id": "rule_peak_valley_arbitrage_decline",
+        "label": "峰谷套利衰退规则",
+        "if": "solar_penetration > 30%",
+        "then": "duck_curve_effect_accelerated AND peak_valley_spread_narrowing",
+        "consequence": "储能IRR从12%降至4.2%"
+      }
+    ]
+  },
+  "abox": {
+    "description": "事实数据层：具体政策参数、价格历史、经济指标",
+    "price_history": {
+      "lithium_carbonate": {"peak_2022": 600000, "trough_2024": 70000, "current_2026_05": "~200000", "unit": "元/吨"}
+    },
+    "source_documents": [
+      "工商储盈利模式分水岭",
+      "加拿大贸易部长访华EV投资分析",
+      "碳酸锂价格分析",
+      "蔚来泰星能源合作交流"
+    ],
+    "nev_technology_roadmap_2030": {
+      "id": "NEV_roadmap_2030",
+      "type": "policy_target",
+      "name": "节能与新能源汽车技术路线图2030量化目标",
+      "properties": {
+        "NEV_share_2020_pct": 7,
+        "NEV_share_2025_pct": 15,
+        "NEV_share_2030_pct": 40,
+        "battery_system_cost_target_CNY_per_kWh": 900,
+        "fuel_consumption_2020_L_per_100km": 5,
+        "fuel_consumption_2025_L_per_100km": 4,
+        "fuel_consumption_2030_L_per_100km": 3.2,
+        "energy_density_roadmap": "三元锂→高镍→固态/锂硫/锂空气",
+        "energy_density_2020_Wh_per_kg": 300,
+        "energy_density_2025_Wh_per_kg": 400,
+        "energy_density_2030_Wh_per_kg": 500
+      },
+      "source": "learning_20260531_nas_batch3",
+      "importance": 0.9
+    },
+    "v2g_economics": {
+      "id": "V2G_economics_2030",
+      "type": "economic_analysis",
+      "name": "V2G电动汽车电网互动经济性量化(2030年)",
+      "properties": {
+        "EV_fleet_2030_million": 80,
+        "theoretical_storage_power_GW": 730,
+        "daily_storage_capacity_GWh": 550,
+        "matching_wind_solar_capacity_TW": 0.2,
+        "orderly_charging_cost_CNY_per_year": 10,
+        "V2G_annual_value_CNY_per_kW": "80-350",
+        "capacity_value_gt_energy_value": true,
+        "retired_battery_cost_vs_new_pct": 50,
+        "V2G_extra_cycle_degradation_issue": true,
+        "uncertainty": "中国发电容量供大于求→容量价值存在不确定性"
+      },
+      "source": "learning_20260531_nas_batch3",
+      "importance": 0.9
+    },
+    "battery_system_cost_900": {
+      "id": "battery_system_cost_900",
+      "type": "cost_target",
+      "name": "动力电池系统成本目标900元/kWh(2030年)",
+      "properties": {
+        "target_year": 2030,
+        "cost_target_CNY_per_kWh": 900,
+        "interim_2020_target": "系统260Wh/kg, 成本1元/Wh以下",
+        "NIO_benchmark": "CATL PF50 BUS PHEV 成本从2.39降至1.65 RMB/Wh",
+        "cost_structure": {
+          "cell_BOM": 0.65,
+          "MFG": 0.151,
+          "unit": "RMB/Wh"
+        },
+        "note": "2016国家目标→2030年落地,中间需跨越体系创新(固态/锂硫)和规模效应"
+      },
+      "source": "learning_20260531_nas_batch3_batch7",
+      "importance": 0.85
+    }
+  },
+  "learning_template": {
+    "description": "能源政策领域的学习笔记采集模板",
+    "required_fields": ["政策/事件名称", "生效/发生时间", "影响对象（行业/企业/技术）", "量化影响（价格/成本/利润率变化）"],
+    "optional_fields": ["政策文件出处", "地缘因素", "与已知政策的叠加效应"],
+    "example": "碳边境调节→2026实施→影响对EU电池出口→碳足迹核算成本增加"
+  }
+}

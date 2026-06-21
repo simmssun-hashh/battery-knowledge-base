@@ -1,0 +1,14 @@
+*.pyc
+__pycache__/
+*.log
+*.bak
+*.swp
+.vscode/
+.idea/
+.venv/
+*.tar.gz
+*.zip
+*.sqlite3
+*.db
+*.bin
+*.pickle

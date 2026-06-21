@@ -1,0 +1,1050 @@
+{
+  "domain": "battery_technology",
+  "name": "电池技术",
+  "description": "电芯材料、电化学机理、模组/PACK设计、BMS、热管理的底层技术知识",
+  "version": "V2.5",
+  "last_updated": "2026-06-18T14:38:00Z",
+  "ontology_model": "TBox+ABox",
+  "tbox": {
+    "description": "概念定义层：电池技术领域所有核心类的形式化定义，包含层级关系、属性和规则约束",
+    "classes": [
+      {
+        "id": "BatteryChemistry",
+        "label": "电池化学体系",
+        "parent": "Thing",
+        "definition": "电池正负极+电解液构成的电化学体系类型",
+        "subclasses": [
+          "CathodeMaterial",
+          "AnodeMaterial",
+          "ElectrolyteSystem"
+        ]
+      },
+      {
+        "id": "CathodeMaterial",
+        "parent": "BatteryChemistry",
+        "definition": "正极活性材料，决定电池能量密度和热稳定性上限",
+        "instances": [
+          "LCO",
+          "NCM",
+          "NCA",
+          "LFP",
+          "LMO"
+        ],
+        "key_properties": [
+          "capacity_mAh_g",
+          "nominal_voltage_V",
+          "conductivity_S_cm",
+          "diffusion_coefficient_cm2_s",
+          "thermal_stability_rank"
+        ]
+      },
+      {
+        "id": "AnodeMaterial",
+        "parent": "BatteryChemistry",
+        "definition": "负极活性材料，影响首效和倍率性能",
+        "instances": [
+          "Graphite",
+          "HardCarbon",
+          "Silicon",
+          "LTO"
+        ],
+        "key_properties": [
+          "capacity_mAh_g",
+          "nominal_voltage_V",
+          "volume_expansion_percent"
+        ]
+      },
+      {
+        "id": "ElectrochemicalPhenomenon",
+        "parent": "Thing",
+        "definition": "电池运行中的电化学物理过程",
+        "subclasses": [
+          "SEIFormation",
+          "LithiumPlating",
+          "ElectrolyteDecomposition",
+          "JahnTellerDistortion",
+          "TransitionMetalDissolution"
+        ]
+      },
+      {
+        "id": "SEIFormation",
+        "parent": "ElectrochemicalPhenomenon",
+        "definition": "负极表面电解液还原分解形成的固体电解质界面膜",
+        "key_attributes": [
+          "formation_potential_V",
+          "thickness_nm",
+          "composition_layers",
+          "ionic_conductivity",
+          "electronic_insulation"
+        ]
+      },
+      {
+        "id": "LithiumPlating",
+        "parent": "ElectrochemicalPhenomenon",
+        "definition": "锂离子在负极表面以金属态析出而非嵌入石墨层间",
+        "triggers": [
+          "low_temperature",
+          "high_rate_charging",
+          "overcharge",
+          "anode_overhang_effect"
+        ],
+        "consequence": "枝晶生长→刺穿隔膜→内短路→热失控"
+      },
+      {
+        "id": "CharacterizationMethod",
+        "parent": "Thing",
+        "definition": "电池电化学性能测试与表征手段",
+        "instances": [
+          "EIS",
+          "CV",
+          "GITT",
+          "PITT",
+          "DSC_TG",
+          "XRD",
+          "SEM_TEM",
+          "DRT",
+          "NLEIS",
+          "GEIS"
+        ],
+        "key_properties": [
+          "what_it_measures",
+          "test_duration",
+          "destructive_or_not"
+        ]
+      },
+      {
+        "id": "BMSAlgorithm",
+        "parent": "Thing",
+        "definition": "电池管理系统核心算法",
+        "instances": [
+          "CoulombCounting",
+          "KalmanFilter",
+          "EKF",
+          "UKF",
+          "NeuralNetwork",
+          "GPT_based"
+        ],
+        "key_properties": [
+          "estimation_target",
+          "accuracy",
+          "computational_cost",
+          "convergence_guarantee"
+        ]
+      },
+      {
+        "id": "ThermalManagementMethod",
+        "parent": "Thing",
+        "definition": "电池热管理技术路线",
+        "instances": [
+          "LiquidCooling",
+          "AirCooling",
+          "Refrigerant",
+          "PhaseChangeMaterial"
+        ],
+        "key_properties": [
+          "cooling_capacity_W",
+          "temperature_uniformity",
+          "system_complexity",
+          "cost"
+        ]
+      },
+      {
+        "id": "PhysicalLaw",
+        "parent": "Thing",
+        "definition": "支配电池电化学行为的底层物理方程",
+        "instances": [
+          "NernstEquation",
+          "ButlerVolmer",
+          "FickDiffusion",
+          "TafelEquation",
+          "CottrellEquation",
+          "RandlesSevcik"
+        ],
+        "key_properties": [
+          "formula",
+          "application_scenario",
+          "key_output"
+        ]
+      },
+      {
+        "id": "ReactiveIntermediates",
+        "parent": "ElectrochemicalPhenomenon",
+        "definition": "电池界面反应中的活性中间体：碳正离子/碳负离子/自由基/卡宾，SEI成膜与电解液分解的核心参与者",
+        "subclasses": [
+          "CarbocationIntermediate",
+          "CarbanionIntermediate",
+          "FreeRadicalIntermediate",
+          "CarbeneIntermediate"
+        ],
+        "key_properties": [
+          "lifetime_s",
+          "generation_potential_V",
+          "stability_rank",
+          "battery_zone"
+        ]
+      },
+      {
+        "id": "CarbocationIntermediate",
+        "parent": "ReactiveIntermediates",
+        "definition": "碳正离子(C⁺)：三配位碳+空p轨道，正极>4.3V溶剂氧化产物，Lewis酸催化重排→电解液老化",
+        "key_attributes": [
+          "generation:SET_oxidation>4.3V",
+          "stability:3°>2°>1°",
+          "pathway:PF5_catalyzed_rearrangement",
+          "outcome:CEI_growth+solvent_drying"
+        ]
+      },
+      {
+        "id": "CarbanionIntermediate",
+        "parent": "ReactiveIntermediates",
+        "definition": "碳负离子(C⁻)：三配位碳+孤对电子，EC还原开环产物等价物，LEDC/SEI无机相碳源",
+        "key_attributes": [
+          "generation:EC_reduction<0.8V",
+          "stability:-I_substituents",
+          "pathway:Li+_pairing→LEDC_precipitation",
+          "pKa_alpha_C_H~35"
+        ]
+      },
+      {
+        "id": "FreeRadicalIntermediate",
+        "parent": "ReactiveIntermediates",
+        "definition": "自由基(C·)：7电子物种，EC还原自由基阴离子→开环自由基→二聚/链转移→SEI有机聚合物层",
+        "key_attributes": [
+          "generation:SET_reduction_0.5-1.5V",
+          "BDE_CH3-H_439kJ_mol",
+          "steady_state_conc_10nM",
+          "termination:combination_vs_disproportionation"
+        ]
+      },
+      {
+        "id": "CarbeneIntermediate",
+        "parent": "ReactiveIntermediates",
+        "definition": "卡宾(:CR₂)：二价碳6电子物种，热失控>200°C时碳酸酯α-消除产物，C-H插入→自由基链爆炸→热失控不可逆",
+        "key_attributes": [
+          "generation:thermal_alpha_elimination>200C",
+          "singlet_vs_triplet_dE_38kJ_mol",
+          "pathway:C-H_insertion→radical_amplification",
+          "role:thermal_runaway_trigger"
+        ]
+      },
+      {
+        "id": "PhononThermalProperty",
+        "parent": "PhysicalLaw",
+        "definition": "声子热学性质：Debye温度/热膨胀Grüneisen参数/声子热导率—支配电芯热管理的第一性物理",
+        "subclasses": [
+          "DebyeTemperature",
+          "GruneisenParameter",
+          "PhononThermalConductivity"
+        ],
+        "source": "Kittel Ch5 Phonons II: Thermal Properties"
+      },
+      {
+        "id": "DebyeTemperature",
+        "parent": "PhononThermalProperty",
+        "definition": "声子谱截止频率的温度等价参数θ_D=ℏω_D/k_B，决定低温比热和声子硬度",
+        "key_equation": "C_V=(12π⁴/5)Nk_B(T/θ_D)³ (T≪θ_D)"
+      },
+      {
+        "id": "GruneisenParameter",
+        "parent": "PhononThermalProperty",
+        "definition": "γ=-d(ln ω)/d(ln V)，表征非谐性强度与热膨胀—材料热-力耦合的单一标量判据",
+        "key_equation": "α=γ·C_V·κ_T/(3V)"
+      },
+      {
+        "id": "PhononThermalConductivity",
+        "parent": "PhononThermalProperty",
+        "definition": "声子气体模型κ=(1/3)C_V·v_s·ℓ，受Umklapp/边界/缺陷三种散射限制",
+        "key_equation": "κ=(1/3)C_V v_s ℓ"
+      }
+    ],
+    "properties": [
+      {
+        "id": "hasDiffusionCoefficient",
+        "label": "扩散系数",
+        "domain": "CathodeMaterial",
+        "range": "float",
+        "unit": "cm²/s",
+        "cardinality": "1",
+        "description": "Li+离子在正极材料晶格中的固态扩散系数，决定倍率性能"
+      },
+      {
+        "id": "hasBandGap",
+        "label": "带隙",
+        "domain": "CathodeMaterial",
+        "range": "float",
+        "unit": "eV",
+        "cardinality": "1",
+        "description": "决定材料的电子导电性：~0eV=金属性，>3eV=绝缘体"
+      },
+      {
+        "id": "hasConductivity",
+        "label": "电子导电率",
+        "domain": "CathodeMaterial",
+        "range": "float",
+        "unit": "S/cm",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasThermalStabilityRank",
+        "label": "热稳定性排序",
+        "domain": "CathodeMaterial",
+        "range": "integer",
+        "description": "热稳定性排序：LFP(最安全) > LMO > NCM > NCA > LCO(最差)"
+      },
+      {
+        "id": "hasCapacity",
+        "label": "理论克容量",
+        "domain": "CathodeMaterial|AnodeMaterial",
+        "range": "float",
+        "unit": "mAh/g",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasMaxVoltage",
+        "label": "上限电压",
+        "domain": "CathodeMaterial",
+        "range": "float",
+        "unit": "V",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasVolumeExpansion",
+        "label": "体积膨胀率",
+        "domain": "AnodeMaterial",
+        "range": "float",
+        "unit": "%",
+        "cardinality": "1"
+      }
+    ],
+    "rules": [
+      {
+        "id": "rule_diffusion_rate_performance",
+        "description": "扩散系数决定倍率性能上限",
+        "if": "material.hasDiffusionCoefficient < 1e-12 cm²/s",
+        "then": "requires_nano_sizing AND requires_carbon_coating",
+        "examples": [
+          "LFP: D≈1e-14→必须纳米化+碳包覆",
+          "NCM: D≈1e-9→不需特殊处理"
+        ]
+      },
+      {
+        "id": "rule_conductivity_additive",
+        "description": "电子导电性决定导电剂需求",
+        "if": "material.hasBandGap > 2 eV",
+        "then": "requires_significant_conductive_additive",
+        "examples": [
+          "LCO: 带隙≈0→几乎不需导电剂",
+          "LFP: 带隙≈3.7eV→需大量导电剂"
+        ]
+      },
+      {
+        "id": "rule_thermal_stability_voltage_tradeoff",
+        "description": "高电压材料=低热稳定性（通用规律）",
+        "if": "material.hasMaxVoltage > 4.0V",
+        "then": "thermal_stability_decreased AND requires_electrolyte_oxidation_protection",
+        "mechanism": "高电压下正极表面过渡金属催化电解液氧化"
+      }
+    ]
+  },
+  "abox": {
+    "description": "事实数据层：具体材料参数、物理常数和文献来源",
+    "cathode_materials": [
+      {
+        "id": "LCO",
+        "class": "CathodeMaterial",
+        "hasCapacity": 274,
+        "hasMaxVoltage": 4.2,
+        "hasDiffusionCoefficient": "1e-9~1e-8",
+        "hasBandGap": 0,
+        "hasConductivity": "1e-2",
+        "hasThermalStabilityRank": 5
+      },
+      {
+        "id": "NCM811",
+        "class": "CathodeMaterial",
+        "hasCapacity": 276,
+        "hasMaxVoltage": 4.2,
+        "hasDiffusionCoefficient": "1e-9~1e-8",
+        "hasBandGap": 0,
+        "hasConductivity": "1e-3",
+        "hasThermalStabilityRank": 3
+      },
+      {
+        "id": "NCA",
+        "class": "CathodeMaterial",
+        "hasCapacity": 279,
+        "hasMaxVoltage": 4.2,
+        "hasThermalStabilityRank": 4
+      },
+      {
+        "id": "LFP",
+        "class": "CathodeMaterial",
+        "hasCapacity": 170,
+        "hasMaxVoltage": 3.7,
+        "hasDiffusionCoefficient": "1e-14~1e-13",
+        "hasBandGap": 3.7,
+        "hasConductivity": "1e-9",
+        "hasThermalStabilityRank": 1
+      },
+      {
+        "id": "LMO",
+        "class": "CathodeMaterial",
+        "hasCapacity": 148,
+        "hasMaxVoltage": 4.2,
+        "hasDiffusionCoefficient": "1e-11~1e-9",
+        "hasBandGap": 0.5,
+        "hasConductivity": "1e-4",
+        "hasThermalStabilityRank": 2
+      }
+    ],
+    "anode_materials": [
+      {
+        "id": "Graphite",
+        "class": "AnodeMaterial",
+        "hasCapacity": 372,
+        "hasDiffusionCoefficient": "1e-8~1e-7",
+        "hasVolumeExpansion": 10
+      },
+      {
+        "id": "HardCarbon",
+        "class": "AnodeMaterial",
+        "hasCapacity": 250450,
+        "hasVolumeExpansion": 15
+      },
+      {
+        "id": "Silicon",
+        "class": "AnodeMaterial",
+        "hasCapacity": 4200,
+        "hasVolumeExpansion": 300
+      },
+      {
+        "id": "LTO",
+        "class": "AnodeMaterial",
+        "hasCapacity": 170,
+        "hasVolumeExpansion": 0.2
+      },
+      {
+        "id": "LithiumMetal",
+        "class": "AnodeMaterial",
+        "hasCapacity": 3860,
+        "hasDiffusionCoefficient": "1e-12~1e-11",
+        "hasVolumeExpansion": 999,
+        "hasCoulombicEfficiency": "99.5~99.9 (liquid), 99.95+ (solid-state target)",
+        "hasLi_Li_plus_potential": "-3.040 V vs SHE",
+        "hasDendriteThresholdCurrent": "J* ≈ 1~10 mA/cm² (Chazalviel Sand model)",
+        "hasSEI_thickness": "20~50 nm (native), 100~500 nm (cycled)",
+        "hasMeltingPoint": "180.5 °C",
+        "hasDensity": "0.534 g/cm³",
+        "hasCrystalStructure": "BCC (Im-3m), a=3.51 Å",
+        "dangerousFailureMode": "枝晶短路+热失控 (T_onset_ARC=80~120°C vs carbonate electrolyte)",
+        "improvementStrategies": [
+          "CO₂电解液添加剂",
+          "LiAsF₆替代LiPF₆",
+          "LiF-rich SEI设计",
+          "3D集流体",
+          "固态电解质界面层",
+          "锂合金(LiAl/LiₓPb)"
+        ],
+        "source": "Handbook of Battery Materials Ch4 (Yamaki & Tobishima, 1999) + 深读要点 2026-05-18"
+      }
+    ],
+    "physical_constants": {
+      "RT_over_F_25C": "0.025693 V",
+      "Tafel_slope_typical": "120 mV/dec (α≈0.5, single e⁻ transfer)",
+      "Tafel_slope_fast": "60 mV/dec (multi-step or 2e⁻ transfer)",
+      "Tafel_slope_degraded": ">200 mV/dec (SEI/passivation layer control)",
+      "Faraday_constant": "96485 C/mol",
+      "reversible_delta_Ep": "59/n mV",
+      "Li_Li_plus_std_potential": "-3.05 V vs SHE (most negative among metals)",
+      "water_window": "1.23 V (thermodynamic limit for aqueous batteries)"
+    },
+    "source_documents": [
+      "电化学方法原理与应用（Bard & Faulkner）",
+      "固体物理导论（Kittel 8th Ed.）",
+      "March高等有机化学（7th Ed.）",
+      "Handbook of Battery Materials（Besenhard 1999）",
+      "Handbook of Batteries（Linden & Reddy 3rd Ed.）",
+      "锂电池基础科学问题系列（I-VII）",
+      "锂离子电池正极材料技术发展与应用分析（1-4）",
+      "ATL电池基本原理培训",
+      {
+        "date": "2026-05-12",
+        "source": "Kittel 固体物理导论 第8版 第1章 晶体结构",
+        "type": "deep_reading",
+        "entities_added": [
+          "crystal_structures"
+        ],
+        "file": "2026-05-12_固体物理导论_Ch1_晶体结构_深读要点.md"
+      }
+    ],
+    "crystal_structures": {
+      "description": "电极材料晶体结构参数（来源：Kittel第8版Ch1 + 电池材料文献）",
+      "layered_R3m_O3": {
+        "space_group": "R3̄m",
+        "prototype": "α-NaFeO₂",
+        "examples": [
+          "LiCoO₂",
+          "NCM",
+          "NCA"
+        ],
+        "lattice_params_LiCoO2": {
+          "a": 2.816,
+          "c": 14.08,
+          "unit": "Å",
+          "c_over_a": 4.99
+        },
+        "Li_channel": "2D（a-b平面间扩散）",
+        "coordination": {
+          "Li": "八面体 3a位",
+          "TM": "八面体 3b位"
+        },
+        "packing": "O3型氧层堆垛 ABCABC",
+        "key_issue": "深度脱锂c轴崩塌>3%，(104)面电解液副反应"
+      },
+      "spinel_Fd3m": {
+        "space_group": "Fd3̄m",
+        "prototype": "MgAl₂O₄",
+        "examples": [
+          "LiMn₂O₄",
+          "LiNi₀.₅Mn₁.₅O₄"
+        ],
+        "lattice_params_LMO": {
+          "a": 8.24,
+          "unit": "Å",
+          "crystal_system": "立方"
+        },
+        "Li_channel": "3D（8a→16c→8a 四面体路径）",
+        "coordination": {
+          "Li": "四面体 8a位",
+          "Mn": "八面体 16d位"
+        },
+        "key_issue": "Mn³+ Jahn-Teller畸变→立方→四方→c/a+16%→颗粒破裂"
+      },
+      "olivine_Pnma": {
+        "space_group": "Pnma",
+        "prototype": "Mg₂SiO₄",
+        "examples": [
+          "LiFePO₄"
+        ],
+        "lattice_params_LFP": {
+          "a": 10.33,
+          "b": 6.01,
+          "c": 4.69,
+          "unit": "Å"
+        },
+        "Li_channel": "1D（沿b轴[010]方向一维通道）",
+        "coordination": {
+          "Li": "八面体 4a位",
+          "Fe": "八面体 4c位"
+        },
+        "key_issue": "1D通道被反位缺陷堵塞→倍率受限，但结构热稳定性最高"
+      },
+      "packing_fractions": {
+        "fcc_hcp": 0.74,
+        "bcc": 0.68,
+        "sc": 0.524,
+        "diamond": 0.34,
+        "relevance": "层状正极氧亚晶格为O3-hcp衍生堆积，堆积比率~0.74；脱锂后氧层滑移→堆积变化→结构不可逆"
+      },
+      "source": "Kittel Ch1 + 电池材料晶体学",
+      "learned_date": "2026-05-12"
+    },
+    "electrochemical_fundamentals": {
+      "description": "热力学与动力学基础参数（来源：Besenhard Ch1 深读 2026-05-14）",
+      "thermodynamics": {
+        "Gibbs_energy_voltage": "ΔG = −nFE",
+        "Nernst_equation_25C": "E = E⁰ − (0.0592/n)·lg(Q)",
+        "thermodynamic_efficiency": "η_thermo = ΔG/ΔH",
+        "entropy_voltage_coefficient": "(∂E/∂T)_p = ΔS/nF",
+        "LCO_thermo_efficiency": 0.92,
+        "LiS_thermo_efficiency": 0.87
+      },
+      "kinetics": {
+        "Butler_Volmer": "i = i₀[exp(αₐFη/RT) − exp(−α_cFη/RT)]",
+        "Tafel_anodic": "η = (RT/αₐF)·ln(i/i₀)",
+        "Tafel_cathodic": "η = −(RT/α_cF)·ln(i/i₀)",
+        "overpotential_decomposition": "η_total = η_act + η_conc + η_ohm",
+        "concentration_overpotential": "η_conc = (RT/nF)·ln(1 − i/i_L)"
+      },
+      "heat_generation": {
+        "total_heat": "Q_total = I·(E_OCV − E_work) + I·T·(∂E/∂T)",
+        "irreversible_heat": "I·η_total (polarization heat, dominates at high rate)",
+        "reversible_heat": "I·T·(∂E/∂T) (entropy heat, noticeable at low rate / rest)",
+        "SEI_decomposition_onset": "80-120°C",
+        "thermal_runaway_window": "正极释氧温度 − SEI分解温度 (>80°C required)"
+      },
+      "exchange_current_density": {
+        "graphite_Li_insertion": "1e-3~1e-2 A/cm² (高活性)",
+        "LCO_Li_insertion": "1e-4~1e-3 A/cm² (中活性)",
+        "LFP_Li_insertion": "1e-5~1e-4 A/cm² (低活性 → 必须纳米化)",
+        "Li_metal_deposition": "1e-2~1e-1 A/cm² (极高活性)"
+      },
+      "solid_state_diffusion": {
+        "characteristic_time": "τ = R²/D_s",
+        "LCO_Ds": "1e-9~1e-8 cm²/s",
+        "NCM811_Ds": "1e-10~1e-9 cm²/s",
+        "LFP_Ds": "1e-14~1e-13 cm²/s → critical particle size <100 nm for 10C",
+        "graphite_Ds": "1e-7~1e-6 cm²/s"
+      },
+      "solid_electrolytes": {
+        "description": "固态电解质五大家族及其关键参数 - 来源：Bard & Faulkner 电化学方法 Ch15 固体电化学",
+        "families": {
+          "LLZO_garnet": {
+            "formula": "Li₇La₃Zr₂O₁₂",
+            "sigma_ion_S_cm": "1×10⁻³",
+            "Ea_eV": 0.3,
+            "t_ion": 0.9999,
+            "electrochemical_window_V": 6,
+            "advantage": "对Li金属热力学稳定",
+            "fatal_flaw": "晶界阻抗主导总电阻，需热压烧结1200°C",
+            "battery_fitness": "高（需解决界面工程）"
+          },
+          "LGPS_sulfide": {
+            "formula": "Li₁₀GeP₂S₁₂",
+            "sigma_ion_S_cm": "1.2×10⁻²",
+            "Ea_eV": 0.25,
+            "t_ion": 0.999,
+            "electrochemical_window_V": 2.5,
+            "advantage": "最高室温离子电导率，冷压可成型",
+            "fatal_flaw": "空气水解释放H₂S，对Li金属不稳定",
+            "battery_fitness": "中（需缓冲隔离层）"
+          },
+          "LiPON_thin_film": {
+            "formula": "Li_xPO_yN_z",
+            "sigma_ion_S_cm": "2×10⁻⁶",
+            "Ea_eV": 0.55,
+            "t_ion": 1.0,
+            "advantage": "对Li完美稳定，玻璃态无晶界→天然无枝晶",
+            "fatal_flaw": "电导率太低，仅适用于薄膜电池（μm级）",
+            "battery_fitness": "薄膜电池专用"
+          },
+          "LATP_NASICON": {
+            "formula": "Li₁₊ₓAlₓTi₂₋ₓ(PO₄)₃",
+            "sigma_ion_S_cm": "7×10⁻⁴",
+            "Ea_eV": 0.35,
+            "advantage": "空气稳定，原料成本低",
+            "fatal_flaw": "Ti⁴⁺被Li金属还原→界面退化",
+            "battery_fitness": "低（对Li不稳定）"
+          },
+          "PEO_polymer": {
+            "formula": "PEO-LiTFSI",
+            "sigma_ion_S_cm": "1×10⁻⁴ (60°C)",
+            "Ea_eV": 0.8,
+            "conductivity_mechanism": "链段运动辅助Li⁺跳跃，非Arrhenius→WLF方程",
+            "advantage": "柔性可加工，与电极界面接触好",
+            "fatal_flaw": "室温电导率极低，氧化窗口仅3.8V",
+            "battery_fitness": "中（需60-80°C运行）"
+          }
+        },
+        "key_concepts": {
+          "brick_layer_model": "晶界电阻主导总电阻的等效电路模型：σ_total=1/(R_bulk+R_gb)，晶界厚度δ_gb~1-10nm",
+          "space_charge_layer": "晶界核心正电荷→相邻区域Li⁺耗尽→有效载流子浓度降低→空间电荷层阻抗",
+          "wagner_dc_polarization": "离子阻塞电极法测t_ion：稳态仅电子传导→t_ion=1-I_∞/I_0",
+          "haven_ratio": "H_R≈0.3-0.7（固体中离子跳跃非完全随机），修正Nernst-Einstein：σ=nz²e²D×H_R/kT",
+          "chemical_diffusion_wagner": "混合导体中D_chem=D_ion×W×(∂ln_a/∂ln_c)，W为Wagner因子→正极需电子导电网络维持扩散",
+          "solid_state_interfaces": "三层界面问题：化学界面(热力学稳定性)、电化学界面(空间电荷层)、力学界面(接触与体积变化8-15%)",
+          "arrhenius_decomposition": "总活化能E_a=E_m(迁移能)+E_f(缺陷形成能)→晶体0.3-0.4eV，玻璃0.5-0.6eV，聚合物0.8-1.2eV"
+        },
+        "source": "Bard & Faulkner, Electrochemical Methods 2nd Ed. Ch15 (2026-05-27学习)",
+        "cross_references": [
+          "Ch13嵌入电极应用→嵌入电极是混合导体，Ch15给出D_chem定量框架",
+          "Ch12嵌入反应电化学→液/固态嵌入动力学差异：无溶剂化步骤",
+          "Battery Handbook Ch12→液态vs固态设计参数差异",
+          "Battery Materials Ch8→PEO聚合物电解质WLF非Arrhenius行为"
+        ]
+      }
+    },
+    "phonon_properties": [
+      {
+        "id": "LFP_Debye",
+        "class": "DebyeTemperature",
+        "material": "LFP",
+        "value_K": 680,
+        "tolerance": 20,
+        "implication": "高θ_D→低温比热小→相同产热温升快(低温热响应悖论)"
+      },
+      {
+        "id": "NMC811_Debye",
+        "class": "DebyeTemperature",
+        "material": "NMC811",
+        "value_K": 450,
+        "tolerance": 40,
+        "implication": "θ_D比LFP低34%→低温热容大→热缓冲好但热稳定性差"
+      },
+      {
+        "id": "Graphite_Debye",
+        "class": "DebyeTemperature",
+        "material": "Graphite",
+        "value_K": 1850,
+        "tolerance": 100,
+        "implication": "极高θ_D→面内sp²共价键声子极硬→室温比热已近Dulong-Petit极限"
+      },
+      {
+        "id": "LFP_Gruneisen",
+        "class": "GruneisenParameter",
+        "material": "LFP",
+        "value": 1.2,
+        "expansion_coefficient_10e6_perK": "9-12",
+        "implication": "低非谐性→小热膨胀→正极颗粒循环稳定性好"
+      },
+      {
+        "id": "NMC811_Gruneisen",
+        "class": "GruneisenParameter",
+        "material": "NMC811",
+        "value": 1.8,
+        "expansion_coefficient_10e6_perK": "13-16",
+        "implication": "高非谐性→大各向异性膨胀→晶界应力集中→二次颗粒开裂根因"
+      },
+      {
+        "id": "Graphite_anisotropy",
+        "class": "GruneisenParameter",
+        "material": "Graphite",
+        "value_a_axis": 0.8,
+        "value_c_axis": 1.5,
+        "expansion_a": -1,
+        "expansion_c": 27,
+        "implication": "c轴膨胀为a轴34倍→锂嵌入层离→孤立死锂→容量衰减"
+      },
+      {
+        "id": "PhononThermalConductivity_Bottleneck",
+        "class": "PhononThermalConductivity",
+        "electrode_out_of_plane_W_per_mK": "0.3-1.5",
+        "separator_electrolyte_W_per_mK": "0.1-0.3",
+        "implication": "电芯法向热瓶颈在隔膜+电解液串联层→提升正极材料κ对电芯整体κ改善<20%",
+        "five_material_kappa": {
+          "LFP": "0.5-1.5",
+          "NMC": "1.0-3.0",
+          "LLZO": "1.0-2.5",
+          "LGPS": "0.3-0.8",
+          "Electrolyte_LP30": "0.1-0.2"
+        }
+      },
+      {
+        "id": "ThermalRunaway_PhononFeedback",
+        "class": "PhononThermalProperty",
+        "description": "Umklapp过程声子正反馈：T↑→U过程↑→κ↓→局部T↑↑→声子密度↑→κ↓↓→自加速",
+        "critical_temperature_windows": {
+          "-40_to_-20C": "边界散射主导→锂析出风险",
+          "60_to_80C": "U过程显著→κ降至室温60%→加速老化阈值",
+          "120_to_150C": "非谐性急剧增强→隔膜熔融前传热能力已崩塌",
+          "above_200C": "声子+电子+化学三重热源→所有传热机制失效"
+        }
+      }
+    ],
+    "electrolyte_chemistry": {
+      "description": "电解液化学机理（来源：March高等有机化学Ch9碳负离子与缩合反应深读 2026-06-01）",
+      "carbanion_stability": {
+        "id": "CarbanionStability",
+        "definition": "碳负离子稳定性四因素：吸电子基（诱导效应σ*）、共振离域、芳香性、溶剂效应",
+        "key_data": {
+          "DMC_pKa": 29,
+          "EC_pKa": "30+",
+          "cyclopentadiene_pKa": 16,
+          "stabilization_aromatic": "~25 kcal/mol"
+        },
+        "battery_implication": "电解液溶剂pKa全部>29→分解非质子驱动而是电子转移驱动"
+      },
+      "enolate_SEI_pathway": {
+        "id": "EnolateSEIPathway",
+        "definition": "烯醇负离子化学决定SEI有机/无机比例——O-烷基化→聚醚型（弹性）vs C-烷基化→Li₂CO₃（致密）",
+        "kinetic_vs_thermodynamic": {
+          "kinetic_path": "低温/大电流→疏松SEI→循环衰减快",
+          "thermodynamic_path": "高温/小电流→致密SEI→首次不可逆容量大但寿命长"
+        }
+      },
+      "claisen_ester_exchange": {
+        "id": "ClaisenEsterExchange",
+        "definition": "PF₅（LiPF₆热分解产物，Lewis酸）催化碳酸酯间酯交换→电解液组分随老化漂移",
+        "mechanism": "EMC+DEC→DMC+EMC（重分布）",
+        "onset_temp": "60°C以上加速",
+        "battery_impact": "DMC/DEC比例上升→粘度/介电常数/离子电导率漂移→EIS模型参数失准"
+      },
+      "michael_addition_polymerization": {
+        "id": "MichaelAdditionPolymerization",
+        "definition": "VC/FEC的阴离子聚合SEI成膜机理——C=C双键作为'聚合手柄'，单电子还原→Michael型1,4-加成→poly(VC)高分子膜",
+        "mechanism": "VC+e⁻→[VC]·⁻→(Michael加成)[VC-VC]·⁻→链增长→poly(VC)",
+        "vc_vs_fec": {
+          "VC_reduction_potential": "~1.0V vs Li/Li⁺",
+          "FEC_reduction_potential": "~1.2-1.4V vs Li/Li⁺（F降低LUMO~0.2eV）",
+          "FEC_ion_conductivity": "略低于VC膜（F取代影响Li⁺传导）"
+        },
+        "additive_screening_rule": "候选添加剂需有共轭C=C聚合手柄→无则直接pass"
+      }
+    },
+    "module_design": {
+      "description": "模组设计与制造相关知识",
+      "module_classification": {
+        "entity_id": "Module_classification_CATL",
+        "label": "CATL模组分类体系",
+        "structure_types": [
+          "大面涂胶_FC50/FC60F",
+          "侧板涂胶_FC60_57_64Ah",
+          "外框机械锁付_风冷/储能"
+        ],
+        "function_types": [
+          "外置CSC_E-Bus",
+          "CSC一体化_E-Car_PHEV2/Job2"
+        ],
+        "fc60_platform_type": "侧板涂胶+外置CSC",
+        "source": "2026-06-18 NAS D11 Module设计制造"
+      },
+      "module_590_1P12S": {
+        "entity_id": "Module_CATL_590_1P12S",
+        "label": "CATL 590标准模组 1P12S (GAC-A18, 156Ah)",
+        "dimensions_mm": "590×225×109",
+        "configuration": "1P12S",
+        "nominal_voltage_V": 44.04,
+        "capacity_Ah": 156,
+        "energy_Wh": 6870.24,
+        "cell_to_module_efficiency": 0.9104,
+        "gravimetric_density_Wh_per_kg": 226.62,
+        "volumetric_density_Wh_per_L": 588.05,
+        "structure_weight_kg": 2.716,
+        "total_weight_kg": 30.316,
+        "endplate": "Al6063-T6_220.4×89×22mm",
+        "sideplate": "Al5083-O_2mm_wrap_laser_weld",
+        "cell_spacing_mm": 1,
+        "buffer": "MPP_1.3mm",
+        "bonding": "大面40%+侧面40%结构胶",
+        "cooling": "水冷",
+        "source": "2026-06-18 NAS D11 Module设计制造"
+      },
+      "electrical_safety_design": {
+        "entity_id": "Module_electrical_safety_design",
+        "standard": "GB/T 16935.1",
+        "creepage_required_mm": 6.35,
+        "creepage_actual_min_mm": 11.09,
+        "clearance_required_mm": 2.63,
+        "clearance_actual_min_mm": 15,
+        "blue_film_edge_mm": 8,
+        "source": "2026-06-18 NAS D11 Module设计制造"
+      },
+      "assembly_process_590": {
+        "entity_id": "Module_assembly_process_590",
+        "direction": "正装(top-down)",
+        "steps": [
+          "电芯正装",
+          "贴MPP缓冲垫",
+          "两端绝缘罩+端板",
+          "侧板涂胶",
+          "安装侧板2mm包边",
+          "激光焊接",
+          "带加压夹具烘烤",
+          "贴底部绝缘膜",
+          "绝缘阻抗测试≥500MΩ",
+          "装线束隔离板+焊Busbar",
+          "EOL测试",
+          "安装上盖"
+        ],
+        "critical_issues": [
+          "烘烤加压防电芯下蹄",
+          "端部绝缘罩翘起防外翻",
+          "Busbar焊接铝巴≥1mm"
+        ],
+        "source": "2026-06-18 NAS D11 Module设计制造"
+      },
+      "fc60_platform": {
+        "entity_id": "FC60_platform_pack_evolution",
+        "cell_platforms": [
+          "LFP_57Ah",
+          "LFP_64Ah",
+          "NCM_50Ah_FC50",
+          "NCM_60Ah_FC60F"
+        ],
+        "pack_C_box": "1P72S_6×1P12S_13.8kWh_1060×630×225mm",
+        "pack_B_box": "1P48S_6×1P8S_9.2kWh_820×630×225mm",
+        "system_config": "1P168S_C+2B_96.7kWh_2.5C_73.5Wh/kg",
+        "cooling_heating": "水冷+水热一体机",
+        "material_evolution": "钣金162kg→复合材料154kg_+5Wh/kg",
+        "source": "2026-06-18 NAS D11 Module设计制造"
+      }
+    }
+  },
+  "separator_components": {
+    "description": "隔膜组件 — 不参与电化学反应的安全物理防线（2026-05-28 从Handbook of Batteries Ch16深读提炼）",
+    "base_materials": [
+      {
+        "id": "PE_Separator",
+        "material": "聚乙烯(PE)隔膜",
+        "process": "湿法（增塑剂萃取→双向拉伸）",
+        "melting_point_C": "130-135",
+        "shutdown_mechanism": "微孔在熔点热熔闭合→离子通道切断",
+        "porosity_pct": "40-55",
+        "tortuosity": "2-3",
+        "strength": "穿刺强度300-400 gf (25μm)",
+        "weakness": "热收缩15-20%(@130°C)→大面积内短路风险",
+        "application": "消费电子/动力电池基膜"
+      },
+      {
+        "id": "PP_Separator",
+        "material": "聚丙烯(PP)隔膜",
+        "process": "干法（β→α晶型转变→单向拉伸成孔）",
+        "melting_point_C": "165",
+        "shutdown_mechanism": "无低温shutdown→165°C直接破膜",
+        "porosity_pct": "35-45",
+        "tortuosity": "3-5",
+        "strength": "MD/TD各向异性10倍→TD撕裂强度低",
+        "weakness": "shutdown温度过高(165°C)→可能在热失控后",
+        "application": "PP/PE/PP三层膜外层(高温骨架)"
+      },
+      {
+        "id": "PP_PE_PP_Trilayer",
+        "material": "PP/PE/PP三层复合隔膜",
+        "design_philosophy": "PE芯层提供130°C shutdown + PP外层提供165°C结构完整性",
+        "shutdown_window_C": "131-167（36°C宽窗口）",
+        "advantage": "热熔断器设计——PE保险丝+PP外壳",
+        "application": "动力电池/储能电池"
+      }
+    ],
+    "ceramic_coatings": [
+      {
+        "id": "Al2O3_Coating",
+        "material": "氧化铝涂层",
+        "particle_size_um": "0.3-0.8",
+        "hardness_GPa": "15-20",
+        "density_g_cm3": "3.95",
+        "functions": [
+          "热尺寸锚定→热收缩从15%降至<2%",
+          "枝晶物理阻挡→硬度远超锂金属0.6MPa",
+          "浸润增强→表面-OH与碳酸酯C=O氢键"
+        ],
+        "application": "动力电池标配"
+      },
+      {
+        "id": "Boehmite_Coating",
+        "material": "勃姆石(γ-AlOOH)涂层",
+        "density_g_cm3": "3.0",
+        "advantage": "密度<Al₂O₃+对辊压低损伤",
+        "application": "高端动力电池(LG新能源等)"
+      },
+      {
+        "id": "MgOH2_Coating",
+        "material": "氢氧化镁涂层",
+        "function": "阻燃→>330°C分解释水吸热",
+        "weakness": "吸湿性强→水分控制难",
+        "application": "高安全储能电池"
+      }
+    ],
+    "key_parameters": {
+      "Gurley_number": {
+        "definition": "100mL空气在规定压力下通过1平方英寸隔膜的时间(sec)",
+        "range": "100-400 sec/100mL",
+        "relationship": "Gurley ∝ τ²·L/(ε·d_pore)",
+        "engineering_significance": "<100=自放电风险，>400=倍率性能严重下降",
+        "uniformity_requirement": "CV<10%→不均匀Gurley=局部热点=热失控链"
+      },
+      "MacMullin_number": {
+        "definition": "N_m = σ₀/σ_eff = τ²/ε",
+        "typical": "PP(ε=0.40,τ=3)→N_m≈22.5",
+        "significance": "隔膜有效电导率=本体电解液/N_m",
+        "contribution_to_cell_R": "~10%（正极>电解液>SEI>隔膜≈集流体）"
+      },
+      "puncture_strength": {
+        "unit": "gf",
+        "consumer_min": "200",
+        "EV_min": "400",
+        "test_method": "Φ1mm半球针,50mm/min"
+      },
+      "thermal_shrinkage": {
+        "test_condition": "90°C/1h",
+        "PE_uncoated": "MD 15-20%, TD 10-15%",
+        "ceramic_coated": "MD<3%, TD<2%",
+        "failure_threshold": ">10%→大面积正负极边缘裸露"
+      }
+    },
+    "failure_modes": [
+      {
+        "mode": "热收缩大面积内短路",
+        "trigger": "滥用过热→隔膜收缩→边缘裸露",
+        "prevention": "陶瓷涂层锚定+PP/PE/PP三层"
+      },
+      {
+        "mode": "枝晶穿刺微短路",
+        "trigger": "低温充电/大倍率→锂枝晶生长",
+        "prevention": "陶瓷涂层硬度阻挡+N/P比优化"
+      },
+      {
+        "mode": "自放电/软短路",
+        "trigger": "pinhole通孔→电子微漏电",
+        "prevention": "Hi-pot检测<1 pinhole/m²"
+      },
+      {
+        "mode": "氧化/电解液侵蚀",
+        "trigger": "正极释氧+HF攻击聚合物链",
+        "prevention": "陶瓷涂层隔离+水分<20ppm"
+      },
+      {
+        "mode": "不均匀电流局部热点",
+        "trigger": "Gurley CV>20%→局部过流",
+        "prevention": "Gurley CV<10%"
+      }
+    ],
+    "fast_charge_challenge": {
+      "description": "4C/6C快充→负极锂离子浓度梯度→局部析锂→枝晶穿刺指数上升",
+      "current_limit": "~800次4C快充后穿刺保持率>90%",
+      "future_solution": "ZrO₂超硬涂层/无纺布+陶瓷+PE多层",
+      "timeframe": "3-5年产业化"
+    },
+    "source": "Handbook of Batteries Ch16, Linden & Reddy 3rd Ed.; 2026-05-28深读"
+  },
+  "learning_template": {
+    "description": "电池技术领域的学习笔记采集模板",
+    "required_fields": [
+      "材料/体系名称",
+      "关键参数（容量/电压/扩散系数/导电率/热稳定性）",
+      "物理机理",
+      "工程意义"
+    ],
+    "optional_fields": [
+      "表征方法",
+      "与其他材料对比",
+      "产业化状态"
+    ],
+    "example": "正极材料→LFP→扩散系数1e-14 cm²/s→1D通道→必须纳米化+碳包覆"
+  },
+  "entities": [
+    {
+      "id": "nas_ternary_diving_model",
+      "name": "NAS三元材料常温循环跳水三阶段模型",
+      "type": "degradation_model",
+      "attributes": {
+        "material": "Ni50体系",
+        "stage1": "0~800圈: SEI生长主导, 衰减~0.02%/圈",
+        "stage2": "800~1000圈: 颗粒微裂纹, CE偏离",
+        "stage3": ">1000圈: 大面积开裂, 衰减突变至~0.2%/圈",
+        "early_warning_dQdV": "正极峰左移",
+        "early_warning_CE": "单圈<0.9985",
+        "root_cause": "Ohzuku机理: LiNiO₂脱锂x>0.75→NiO₂形成→晶格崩塌"
+      },
+      "source": "NAS技术文档 Day7",
+      "learned_date": "2026-06-13"
+    },
+    {
+      "id": "wang_chaoyang_acb_fcb_lcb",
+      "name": "Wang Chaoyang ACB/FCB/LCB三体系电池技术",
+      "type": "battery_architecture",
+      "attributes": {
+        "acb": "镍箔内部加热→-30°C续航80%, 海拉尔-40°C验证",
+        "fcb": "40°C操作温度消除析锂→6C充电2000圈",
+        "lcb": "220-240Wh/kg→3000-4000圈→>100万公里",
+        "applications": "低温/快充/长寿命电池的工程级方案",
+        "status": "已在部分场景验证"
+      },
+      "source": "NAS技术文档 Day9",
+      "learned_date": "2026-06-16"
+    },
+    {
+      "id": "ohzuku_liniO2_threshold",
+      "name": "Ohzuku LiNiO₂脱锂崩塌阈值",
+      "type": "safety_threshold",
+      "attributes": {
+        "threshold": "x > 0.75 (脱锂量超过75%)",
+        "mechanism": "LiNiO₂脱锂→NiO₂形成→不可逆层间距收缩→晶格崩塌→释氧",
+        "significance": "三元材料安全的金标准, 与PDF#5 R值铁律并列",
+        "applies_to": "NCM/NCA高镍体系"
+      },
+      "source": "Handbook of Battery Materials Ch14 (Ohzuku过充保护氧化物正极)",
+      "learned_date": "2026-06-15"
+    }
+  ]
+}

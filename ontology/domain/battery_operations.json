@@ -1,0 +1,515 @@
+{
+  "domain": "battery_operations",
+  "name": "电池运营",
+  "description": "BaaS电池即服务、换电体系、电池资产管理、梯次利用、残值评估",
+  "version": "V2.1",
+  "last_updated": "2026-06-16T01:57:00Z",
+  "ontology_model": "TBox+ABox",
+  "tbox": {
+    "description": "概念定义层：电池运营领域的核心业务对象、关系和决策规则",
+    "classes": [
+      {
+        "id": "BatteryAsset",
+        "label": "电池资产",
+        "parent": "Thing",
+        "definition": "作为独立资产的电池包，可跨车追踪、独立估值、金融化",
+        "key_properties": [
+          "asset_id",
+          "chemistry",
+          "rated_capacity_kWh",
+          "manufacturing_date",
+          "current_SOH"
+        ]
+      },
+      {
+        "id": "BaaSService",
+        "label": "电池即服务",
+        "parent": "Thing",
+        "definition": "用户租赁电池而非购买的商业模式",
+        "subclasses": [
+          "BatterySwapService",
+          "BatteryUpgradeService",
+          "BatteryMaintenanceService"
+        ]
+      },
+      {
+        "id": "BatterySwapStation",
+        "label": "换电站",
+        "parent": "Thing",
+        "definition": "换电网络节点，管理电池资产池和充电调度",
+        "key_properties": [
+          "station_id",
+          "battery_inventory_count",
+          "swap_frequency",
+          "avg_SOC_distribution"
+        ]
+      },
+      {
+        "id": "CascadeApplication",
+        "label": "梯次利用场景",
+        "parent": "Thing",
+        "definition": "退役动力电池在储能等低倍率场景的二次应用",
+        "instances": [
+          "通讯基站备电",
+          "低速车",
+          "家庭储能",
+          "工商业储能"
+        ],
+        "screening_criteria": [
+          "SOH >= 60%",
+          "internal_resistance < 2x initial",
+          "no_thermal_history"
+        ]
+      },
+      {
+        "id": "SOHPredictionModel",
+        "label": "SOH预测模型",
+        "parent": "Thing",
+        "definition": "基于物理/数据/混合方法的电池健康状态预测算法",
+        "instances": [
+          "PhysicsBased",
+          "LSTM",
+          "CNN_LSTM",
+          "HybridPhysicsAI",
+          "BatteryGPT"
+        ],
+        "key_properties": [
+          "input_data_type",
+          "RMSE_percent",
+          "min_data_requirement",
+          "computational_cost"
+        ]
+      },
+      {
+        "id": "ResidualValueModel",
+        "label": "残值评估模型",
+        "parent": "Thing",
+        "definition": "基于SOH衰减曲线+市场残值率+使用年限的电池残值计算模型",
+        "key_factors": [
+          "chemistry_type",
+          "cycle_history",
+          "temperature_history",
+          "DOD_distribution"
+        ],
+        "uncertainties": [
+          "技术快速迭代",
+          "原材料价格波动",
+          "梯次市场需求变化"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "id": "hasSOH",
+        "label": "健康状态",
+        "domain": "BatteryAsset",
+        "range": "float",
+        "unit": "%",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasCycleCount",
+        "label": "循环次数",
+        "domain": "BatteryAsset",
+        "range": "integer",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasInternalResistance",
+        "label": "内阻",
+        "domain": "BatteryAsset",
+        "range": "float",
+        "unit": "mΩ",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasSwapFrequency",
+        "label": "换电频率",
+        "domain": "BatterySwapStation",
+        "range": "float",
+        "unit": "次/天",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasDegradationRate",
+        "label": "年衰减率",
+        "domain": "BatteryAsset",
+        "range": "float",
+        "unit": "%/年",
+        "cardinality": "1",
+        "typical": {
+          "LFP": "2-3%/年",
+          "NCM": "2-4%/年"
+        }
+      }
+    ],
+    "rules": [
+      {
+        "id": "rule_cascade_screening",
+        "label": "梯次利用筛选规则",
+        "if": "battery.hasSOH < 80% AND battery.hasSOH >= 60% AND battery.no_thermal_history",
+        "then": "classify_as CascadeCandidate",
+        "note": "SOH<60%→回收，而非梯次利用"
+      },
+      {
+        "id": "rule_swap_battery_monitoring",
+        "label": "换电电池监测规则",
+        "if": "battery.in_service == true AND battery.mode == swap",
+        "then": "requires_battery_level_monitoring AND requires_cross_vehicle_history_tracking",
+        "source": "GB/T 45688 换电7项特殊适配"
+      },
+      {
+        "id": "rule_residual_value_threshold",
+        "label": "残值快速估值规则",
+        "if": "battery.hasSOH < 80%",
+        "then": "residual_value_rate < 50% of new"
+      }
+    ]
+  },
+  "abox": {
+    "description": "事实数据层：运营模式参数、SOH模型基准、残值估值数据",
+    "soh_models_benchmark": [
+      {
+        "id": "BatteryGPT",
+        "class": "SOHPredictionModel",
+        "RMSE_percent": 0.213,
+        "min_data": "30%早期数据",
+        "input": "充电V/I/T",
+        "params": "42M",
+        "note": "生成式AI自回归预测全生命周期"
+      },
+      {
+        "id": "LSTM_baseline",
+        "class": "SOHPredictionModel",
+        "RMSE_percent": 2.58,
+        "min_data": "30%早期数据",
+        "note": "传统时序基线"
+      },
+      {
+        "id": "HybridPhysicsAI",
+        "class": "SOHPredictionModel",
+        "RMSE_percent": "~5",
+        "min_data": "前100循环",
+        "note": "物理框架+数据优化"
+      }
+    ],
+    "source_documents": [
+      "面向换电体系的动力电池产品定义与设计",
+      "BatteryGPT：基于生成式预训练的电池SOH早期预测方法研究",
+      "GB/T 45688-2025 换电模式7项特殊适配",
+      "营运车业务方案讨论",
+      "面向AI时代的运营技术开发与落地方案：VoltAI"
+    ],
+    "active_retirement_standard": {
+      "name": "主动退役标准",
+      "class": "BatteryRetirementPolicy",
+      "description": "基于累积应力预测替代固定阈值触发，临质保窗口=最后识别窗口",
+      "trigger": "累积应力偏离正常批次幅度",
+      "key_window": "临质保电池",
+      "closure_loop": [
+        "算法识别",
+        "实物验证(拆解)",
+        "闭环召回"
+      ],
+      "learned_date": "2026-05-26",
+      "source_doc": "EewNd3YIXocpmaxETlxc7wA7nrU"
+    },
+    "BatteryGPT": {
+      "name": "BatteryGPT SOH模型",
+      "soh_accuracy_target": {
+        "controlled_rmse": 0.5,
+        "real_vehicle_mae": 1.0
+      },
+      "method_pipeline": "Tokenization→GPT自回归→ConvLSTM SOH",
+      "baas_binding": "SOH精度=BaaS定价数学地基",
+      "learned_date": "2026-05-26"
+    }
+  },
+  "learning_template": {
+    "description": "电池运营领域的学习笔记采集模板",
+    "required_fields": [
+      "运营模式/体系",
+      "关键指标/参数",
+      "与现有系统的差异/适配",
+      "收益/成本影响"
+    ],
+    "optional_fields": [
+      "技术风险",
+      "政策依据",
+      "竞品对标"
+    ],
+    "example": "换电体系→45688适配→电池级监测替代车辆级→需改造数据归属+历史追踪逻辑"
+  },
+  "entities": [
+    {
+      "id": "single_crystal_ncm_spec",
+      "type": "material_specification",
+      "name": "单晶三元材料技术规范",
+      "properties": {
+        "D10_min_um": 2,
+        "D50_range_um": [
+          5,
+          15
+        ],
+        "D90_max_um": 30,
+        "Dmin_um": 0.1,
+        "Dmax_um": 60,
+        "BET_max_m2g": 1.0,
+        "tap_density_min_gcm3": 1.8,
+        "pH_range": [
+          10.0,
+          12.5
+        ],
+        "first_discharge_capacity_min_mAhg": 180,
+        "first_efficiency_min_pct": 86,
+        "cycle_to_80pct_min": 500,
+        "magnetic_impurity_max_per_kg": 50
+      },
+      "source": "kuihua_baodian_part1",
+      "standards": [
+        "YS/T 798",
+        "GB/T 23365",
+        "GB/T 23366"
+      ]
+    },
+    {
+      "id": "cell_cycle_storage_thresholds",
+      "type": "performance_threshold",
+      "name": "电芯循环与存储寿命门槛",
+      "properties": {
+        "cycle_25C_to_95SOH": 500,
+        "cycle_25C_to_70SOH": 1500,
+        "cycle_45C_to_70SOH": 1000,
+        "storage_25C_to_70SOH_years": 15,
+        "storage_45C_to_70SOH_years": 2.5,
+        "storage_55C_to_70SOH_years": 1.2,
+        "expansion_thickness_max": "0.1*T",
+        "expansion_width_max_mm": 7.5,
+        "expansion_height_max_mm": 4.8,
+        "DCR_increase_max_pct": 50
+      },
+      "source": "kuihua_baodian_part1",
+      "standards": [
+        "GB/T 31484-2015"
+      ]
+    },
+    {
+      "id": "self_discharge_K_value",
+      "type": "quality_metric",
+      "name": "电芯自放电K值管控",
+      "properties": {
+        "CATL_LFP_173Ah_25C_40SOC": {
+          "0_15d_mVh": 0.015,
+          "15_30d_mVh": 0.012,
+          "30_60d_mVh": 0.005
+        },
+        "REPT_LFP_142_166Ah_25C_17SOC": {
+          "0_15d_mVh": 0.02,
+          "15_30d_mVh": 0.017,
+          "30_60d_mVh": 0.01
+        }
+      },
+      "source": "kuihua_baodian_part1"
+    },
+    {
+      "id": "cell_voltage_tolerance",
+      "type": "quality_metric",
+      "name": "电芯压差管控标准",
+      "properties": {
+        "NCM_delivery_mV": 20,
+        "LFP_NIO_batch_mV": 5,
+        "LFP_Xiaopeng_batch_mV": 3.5,
+        "pack_factory_mV": 30,
+        "vehicle_online_mV": 50,
+        "NCM_driving_max_mV": 300,
+        "LFP_driving_fault_trigger": "Vmax∈[3.25,3.35] & I<5A*60s & Vdiff>150mV"
+      },
+      "source": "kuihua_baodian_part1"
+    },
+    {
+      "id": "manufacturing_environment_humidity",
+      "type": "process_parameter",
+      "name": "正极材料制造环境湿度控制",
+      "properties": {
+        "standard_humidity_max_pct": 10,
+        "high_nickel_humidity_max_pct": 6,
+        "temperature_max_C": 40,
+        "affected_processes": [
+          "配混料",
+          "粉体破碎",
+          "过筛",
+          "除磁",
+          "包装",
+          "混批",
+          "成品过筛",
+          "成品除磁"
+        ]
+      },
+      "source": "kuihua_baodian_part1"
+    },
+    {
+      "id": "separator_mechanical_specs",
+      "type": "material_specification",
+      "name": "隔膜力学性能底线",
+      "properties": {
+        "dry_uniaxial": {
+          "MD_MPa": 110,
+          "TD_MPa": 10,
+          "puncture_N_um": 0.133
+        },
+        "dry_biaxial": {
+          "MD_MPa": 100,
+          "TD_MPa": 25,
+          "puncture_N_um": 0.133
+        },
+        "wet_biaxial": {
+          "MD_MPa": 100,
+          "TD_MPa": 60,
+          "puncture_N_um": 0.204
+        }
+      },
+      "source": "kuihua_baodian_part1",
+      "standards": [
+        "GB/T 36363"
+      ]
+    },
+    {
+      "id": "slurry_quality_specs",
+      "type": "process_parameter",
+      "name": "浆料质量控制参数",
+      "properties": {
+        "cathode_viscosity_MPa_s": [
+          1500,
+          8000
+        ],
+        "anode_viscosity_MPa_s": [
+          1000,
+          6000
+        ],
+        "viscosity_range_max": 1000,
+        "NCM_solid_content_pct": [
+          60,
+          80
+        ],
+        "anode_solid_content_pct": [
+          40,
+          55
+        ],
+        "solid_content_range_max_pct": 1,
+        "fineness_um_max": 50
+      },
+      "source": "kuihua_baodian_part1"
+    },
+    {
+      "id": "electrolyte_purity_spec",
+      "type": "material_specification",
+      "name": "电解液纯度要求",
+      "properties": {
+        "H2O_max_ppm": 20,
+        "HF_max_ppm": 50,
+        "metal_impurity_each_max_ppm": 1
+      },
+      "source": "kuihua_baodian_part1"
+    },
+    {
+      "id": "lithium_excess_sintering",
+      "type": "process_knowledge",
+      "name": "正极烧结锂过量5%的三重原因",
+      "properties": {
+        "excess_pct": 5,
+        "reasons": [
+          "化学平衡推动→提高产率",
+          "补偿前驱体投料偏差",
+          "化成SEI形成提供锂源→提高首效"
+        ]
+      },
+      "source": "kuihua_baodian_part1"
+    },
+    {
+      "id": "nio_aftermarket_fault_statistics",
+      "type": "field_data",
+      "name": "NIO电池包售后故障统计(截至2022-03)",
+      "properties": {
+        "total_packs": 127895,
+        "total_faults": 929,
+        "PPM": 7264,
+        "top3_faults": {
+          "static_voltage_divergence": {"count": 371, "pct": 39.9},
+          "CSC_hardware_failure": {"count": 272, "pct": 29.3},
+          "HVIL_fault": {"count": 54, "pct": 5.8}
+        },
+        "CSC_AFE6811_batch_issue": "1932批次芯片随机Particle→3年收敛(2018-2021)",
+        "insulation_failure_root_causes": [
+          "电芯漏液(铝壳嵌锂→铝锂合金腐蚀)",
+          "防爆阀破损进水",
+          "冷板漏水",
+          "水管卡扣松脱"
+        ],
+        "relay_failure_cause": "双线圈继电器保持力小→12V瞬间掉电→带载断开"
+      },
+      "source": "learning_20260531_nas_batch1",
+      "importance": 0.95
+    },
+    {
+      "id": "ioniq5_fastcharge_performance",
+      "type": "benchmark_data",
+      "name": "Hyundai IONIQ 5快充性能对标(AVL 2021-12)",
+      "properties": {
+        "architecture": "800V 180s2p",
+        "cell": "NMC811/G 57.6Ah 282Wh/kg 0.75kg",
+        "pack_energy": "72.6 kWh",
+        "nominal_voltage": "657V",
+        "fastcharge_max_power": "220kW",
+        "soc_10to80_time": "20分47秒",
+        "soc_10to80_avg_power": "146.7kW",
+        "vs_Taycan_10to80_time": "29分04秒",
+        "vs_ModelY_10to80_time": "39分00秒",
+        "DC_charge_efficiency": "97.5%",
+        "AC_charge_efficiency": "93.2%",
+        "front_motor_disconnect_strategy": "前轴可脱开, 正常模式71.2%时间仅后驱"
+      },
+      "source": "learning_20260531_nas_batch1",
+      "importance": 0.9
+    },
+    {
+      "id": "npd_thermal_safety_benchmark",
+      "type": "benchmark_data",
+      "name": "NPD 4695圆柱 vs Tesla 21700热安全对标",
+      "properties": {
+        "NPD_energy_density_Wh_per_kg": 287.5,
+        "Tesla_energy_density_Wh_per_kg": 260,
+        "NPD_capacity_Ah": 36,
+        "NPD_weight_kg": 0.463,
+        "NPD_thermal_runaway_onset_C": 143,
+        "Tesla_thermal_runaway_onset_C": 125.1,
+        "NPD_self_heating_Tonset_C": 102,
+        "NPD_venting_direction": "负极朝下(反射结构导向相邻电芯→需修改)",
+        "Tesla_venting_direction": "正极朝上(填充阻断→不导向相邻电芯)",
+        "Tesla_thermal_mitigation": [
+          "全面填充(电芯间隙+模组壳体间隙)→绝氧+隔热",
+          "铝丝Busbar易熔断→切断短路电路",
+          "泄气阀朝上+填充阻断→高温气流不导向相邻电芯"
+        ],
+        "NPD_CTP_risk": "无Block→无隔火层→热扩散阻隔全靠电芯间隙灌封胶+泄气通道"
+      },
+      "source": "learning_20260531_nas_batch1",
+      "importance": 0.9
+    },
+    {
+      "id": "voltai_architecture_2026",
+      "type": "project_architecture",
+      "name": "VoltAI：面向AI时代的电池智能操作系统",
+      "properties": {
+        "architecture_chain": ["Infra", "MCP", "Ontology", "RAG", "Agent", "Workflow", "GUI/API"],
+        "soh_target_pct": 0.5,
+        "battery_volume_million": 1.2,
+        "fault_cases_count": 10000,
+        "key_domains": ["battery_operations", "battery_safety", "energy_internet"],
+        "core_agents": ["安全监控Agent1", "寿命预测Agent2", "运营优化Agent3", "用户交互Agent4"],
+        "commercial_targets": ["售后保险市场", "储能市场", "具身智能市场"]
+      },
+      "source": "WJugdOYIMoKvHFxw7L9cNezCnwg",
+      "importance": 1.0
+    }
+  ]
+}

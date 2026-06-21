@@ -1,0 +1,90 @@
+{
+  "total_files": 86,
+  "generated_time": "2026-04-19T14:34:10.196708",
+  "categories": {},
+  "latest_files": [
+    {
+      "name": "2026-04-18_加拿大贸易部长访华EV投资分析.md",
+      "path": "/home/node/.openclaw/workspace/knowledge_sync/2026-04-18_加拿大贸易部长访华EV投资分析.md",
+      "modified": "2026-04-19T00:47:41.843623",
+      "size": 9071
+    },
+    {
+      "name": "系统定时任务架构_20260419.md",
+      "path": "/home/node/.openclaw/workspace/knowledge_sync/系统定时任务架构_20260419.md",
+      "modified": "2026-04-19T00:35:03.298612",
+      "size": 13368
+    },
+    {
+      "name": "电池安全国家标准_20260419.md",
+      "path": "/home/node/.openclaw/workspace/knowledge_sync/电池安全国家标准_20260419.md",
+      "modified": "2026-04-19T00:31:54.369402",
+      "size": 12010
+    },
+    {
+      "name": "新能源汽车高端化趋势_20260418.md",
+      "path": "/home/node/.openclaw/workspace/knowledge_sync/新能源汽车高端化趋势_20260418.md",
+      "modified": "2026-04-18T00:34:23.441322",
+      "size": 7858
+    },
+    {
+      "name": "换电电池技术体系_20260418.md",
+      "path": "/home/node/.openclaw/workspace/knowledge_sync/换电电池技术体系_20260418.md",
+      "modified": "2026-04-18T00:33:41.117014",
+      "size": 11897
+    },
+    {
+      "name": "动力电池基础知识_20260418.md",
+      "path": "/home/node/.openclaw/workspace/knowledge_sync/动力电池基础知识_20260418.md",
+      "modified": "2026-04-18T00:32:41.704581",
+      "size": 8830
+    },
+    {
+      "name": "新能源汽车后市场趋势_20260417.md",
+      "path": "/home/node/.openclaw/workspace/knowledge_sync/新能源汽车后市场趋势_20260417.md",
+      "modified": "2026-04-17T00:37:31.282816",
+      "size": 6396
+    },
+    {
+      "name": "动力电池基础知识_20260417.md",
+      "path": "/home/node/.openclaw/workspace/knowledge_sync/动力电池基础知识_20260417.md",
+      "modified": "2026-04-17T00:35:20.849819",
+      "size": 15644
+    },
+    {
+      "name": "换电电池技术体系_20260417.md",
+      "path": "/home/node/.openclaw/workspace/knowledge_sync/换电电池技术体系_20260417.md",
+      "modified": "2026-04-17T00:32:45.600617",
+      "size": 9401
+    },
+    {
+      "name": "多智能体配置规范_20260416.md",
+      "path": "/home/node/.openclaw/workspace/knowledge_sync/多智能体配置规范_20260416.md",
+      "modified": "2026-04-16T00:34:23.886133",
+      "size": 7048
+    }
+  ],
+  "important_topics": {
+    "国家标准": [
+      "整车相关_part1.md",
+      "电芯材料设计_part9.md",
+      "电池系统技术规范_Part7_系统_核心知识点汇总.md",
+      "电池系统技术规范_Part3_电气_part1.md",
+      "电池系统技术规范_Part3_电气_part7.md",
+      "电池系统技术规范_Part4_BMS_part1.md",
+      "电池安全国家标准_20260419.md"
+    ],
+    "产业趋势": [
+      "2026中国电动汽车百人会论坛综述.md"
+    ],
+    "安全标准": [
+      "2026中国电动汽车百人会论坛综述.md",
+      "电芯材料设计_part2.md",
+      "电池系统技术规范_Part7_系统_part1.md",
+      "电池系统技术规范_Part9_储存运输保养.md"
+    ],
+    "技术突破": [
+      "2026-04-18_加拿大贸易部长访华EV投资分析.md"
+    ]
+  }
+}

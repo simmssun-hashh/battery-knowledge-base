@@ -1,0 +1,1606 @@
+{
+  "domain": "battery_system",
+  "name": "电池系统设计技术规范",
+  "description": "从材料到回收的电池系统全生命周期技术规范，涵盖模组、电气、BMS、热管理、机械、系统六大领域",
+  "version": "V2.1",
+  "last_updated": "2026-05-17T21:10:00Z",
+  "ontology_model": "TBox+ABox",
+  "tbox": {
+    "description": "概念定义层：电池系统全生命周期的TBox类层级、属性和工程规则",
+    "classes": [
+      {
+        "id": "BatterySystemComponent",
+        "label": "电池系统组件",
+        "parent": "Thing",
+        "definition": "电池系统从电芯到整包的层级组件",
+        "subclasses": [
+          "Cell",
+          "Module",
+          "Pack",
+          "RESS",
+          "BMS",
+          "BDU",
+          "CoolingPlate",
+          "ThermalInsulation"
+        ]
+      },
+      {
+        "id": "Cell",
+        "parent": "BatterySystemComponent",
+        "definition": "电池包储存和输出电能的最小单元",
+        "key_attributes": [
+          "nominal_voltage",
+          "thermal_runaway_temp",
+          "chemistry_type"
+        ]
+      },
+      {
+        "id": "Module",
+        "parent": "BatterySystemComponent",
+        "definition": "电芯串并联组装的集合体，含机械/热管理/BMS/高低压子系统"
+      },
+      {
+        "id": "Pack",
+        "parent": "BatterySystemComponent",
+        "definition": "对外输出电能的完整电池单元，含模组/BMS/箱体/冷却/线缆"
+      },
+      {
+        "id": "RESS_Component",
+        "label": "可充电储能系统",
+        "parent": "BatterySystemComponent",
+        "definition": "电池模组+箱体+BMS主从板+高低压电气+热管理的系统总成"
+      },
+      {
+        "id": "BMS_Component",
+        "label": "电池管理系统",
+        "parent": "BatterySystemComponent",
+        "definition": "监控电压/电流/绝缘/温度，计算SOC/SOH/SOP，执行热管理策略和故障防护"
+      },
+      {
+        "id": "SystemDesignConstraint",
+        "label": "系统设计约束",
+        "parent": "Thing",
+        "definition": "电池系统设计的强制性工程约束",
+        "subclasses": [
+          "ThermalConstraint",
+          "ElectricalConstraint",
+          "MechanicalConstraint"
+        ]
+      },
+      {
+        "id": "SafetyStandard_System",
+        "label": "安全标准(系统级)",
+        "parent": "Thing",
+        "definition": "适用于电池系统层级的安全标准",
+        "instances": [
+          "GB38031",
+          "GB31467",
+          "ISO26262"
+        ]
+      },
+      {
+        "id": "BatteryAI",
+        "label": "电池AI算法",
+        "parent": "Thing",
+        "definition": "应用于电池寿命预测和安全监控的AI模型",
+        "instances": [
+          "BatteryGPT"
+        ],
+        "key_properties": [
+          "model_architecture",
+          "input_data",
+          "output_metrics",
+          "deployment_target"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "id": "hasMaxCellTemp",
+        "label": "电芯最高温度",
+        "domain": "ThermalConstraint",
+        "range": "float",
+        "unit": "°C",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasCoolingTempDiff",
+        "label": "冷却温差",
+        "domain": "ThermalConstraint",
+        "range": "float",
+        "unit": "°C",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasInsulationResistance",
+        "label": "绝缘电阻",
+        "domain": "ElectricalConstraint",
+        "range": "float",
+        "unit": "MΩ",
+        "cardinality": "1",
+        "voltage_dependent": {
+          "400V": "≥500MΩ",
+          "800V": "≥1000MΩ"
+        }
+      },
+      {
+        "id": "hasLeakRate",
+        "label": "泄漏率",
+        "domain": "MechanicalConstraint",
+        "range": "float",
+        "unit": "cc/min@3bar",
+        "cardinality": "1"
+      }
+    ],
+    "rules": [
+      {
+        "id": "rule_thermal_propagation_prevention",
+        "label": "热蔓延防护规则",
+        "if": "cell.thermal_runaway == true",
+        "then": "contain_within_single_cell AND no_propagation_to_adjacent",
+        "required_time": "24h(GB38031早期)→2h(GB38031-2025)"
+      },
+      {
+        "id": "rule_hierarchy_building",
+        "label": "系统层级构建规则",
+        "chain": "cell --part_of--> module --part_of--> pack --part_of--> RESS",
+        "constraint": "上层组件继承下层组件的所有安全约束"
+      },
+      {
+        "id": "rule_cooling_plate_lifetime",
+        "label": "液冷板耐久规则",
+        "test_requirements": "热循环2000次(10-90°C) + 压力循环50000次(30-125kPa)",
+        "leak_acceptance": "≤1.0cc/min@3bar"
+      },
+      {
+        "id": "rule_BMS_protection_hierarchy",
+        "label": "BMS保护层级规则",
+        "protections": [
+          "过放→过充→过温→过流→绝缘降低"
+        ],
+        "action": "任一保护触发→分级响应(预警→限功率→断高压)"
+      }
+    ]
+  },
+  "abox": {
+    "description": "事实数据层：电池系统实体、标准、约束参数、学习日志",
+    "entities": [
+      [
+        {
+          "id": "cell",
+          "name": "电芯",
+          "definition": "电动车电池包储存和输出电能的最小单元",
+          "attributes": {
+            "nominal_voltage": "50%SOC处的开路电压",
+            "thermal_runaway_temp": {
+              "LFP": "90℃",
+              "NCM": "80℃"
+            }
+          },
+          "relations": [
+            "part_of:module",
+            "monitored_by:BMS"
+          ]
+        },
+        {
+          "id": "module",
+          "name": "模组",
+          "definition": "由多个电芯串并联组装成的集合体，包括机械子系统、热管理子系统、电池管理系统和高低压电器子系统",
+          "attributes": {
+            "components": [
+              "电芯",
+              "机械子系统",
+              "热管理子系统",
+              "BMS",
+              "高低压电器"
+            ],
+            "function": "承接电芯和电池包的标准化结构单元"
+          },
+          "relations": [
+            "part_of:pack",
+            "contains:cell"
+          ]
+        },
+        {
+          "id": "pack",
+          "name": "电池包",
+          "definition": "具有从外部获得电能并可对外输出电能的单元，包括电池单体、电池管理模块、电池箱及相应附件",
+          "attributes": {
+            "components": [
+              "模组",
+              "BMS",
+              "箱体",
+              "冷却部件",
+              "连接线缆"
+            ],
+            "nominal_voltage_calc": "电芯额定电压×串联节数"
+          },
+          "relations": [
+            "part_of:RESS",
+            "contains:module"
+          ]
+        },
+        {
+          "id": "RESS",
+          "name": "可充电储能系统",
+          "definition": "由动力电池模组、电池箱体、电池管理系统主从板、高低压电气、电池热管理等组成的系统总成",
+          "attributes": {
+            "functions": [
+              "接收储存电能",
+              "对外输出电能"
+            ],
+            "charge_sources": [
+              "车载充电机",
+              "电机制动能量回收",
+              "外置充电装置"
+            ]
+          },
+          "relations": [
+            "powers:electric_drivetrain",
+            "contains:pack"
+          ]
+        },
+        {
+          "id": "BMS",
+          "name": "电池管理系统",
+          "definition": "电池系统的大脑，通过监控电池包总电压、电流、绝缘状况、电芯温度、电芯电压和热管理系统工作状况，计算SOC/SOH/SOP状态",
+          "attributes": {
+            "functions": [
+              "SOC计算",
+              "SOH计算",
+              "SOP计算",
+              "热管理策略匹配",
+              "故障防护"
+            ],
+            "monitors": [
+              "总电压",
+              "电流",
+              "绝缘",
+              "电芯温度",
+              "电芯电压"
+            ],
+            "protections": [
+              "过放电",
+              "过充电",
+              "过温度",
+              "过流",
+              "绝缘降低"
+            ]
+          },
+          "relations": [
+            "manages:cell",
+            "communicates_with:VCU"
+          ]
+        },
+        {
+          "id": "BDU",
+          "name": "电池高压盒",
+          "definition": "Battery Distribution Unit，包含继电器、保险丝、电流传感器等高压配电组件",
+          "attributes": {
+            "components": [
+              "继电器",
+              "保险丝",
+              "电流传感器",
+              "预充电阻"
+            ],
+            "max_temp": "105℃",
+            "temp_rise_limit": "55℃"
+          },
+          "relations": [
+            "part_of:pack",
+            "controls:high_voltage"
+          ]
+        },
+        {
+          "id": "cooling_plate",
+          "name": "液冷板",
+          "definition": "布置在电池模组底部或侧面，给电池降温或加热的换热器",
+          "types": [
+            {
+              "name": "口琴管式",
+              "pros": [
+                "重量轻",
+                "成本低"
+              ],
+              "cons": [
+                "承重差",
+                "均流设计难"
+              ]
+            },
+            {
+              "name": "冲压板式",
+              "pros": [
+                "流道设计自由",
+                "承重好"
+              ],
+              "cons": [
+                "重量较重",
+                "成本高"
+              ]
+            }
+          ],
+          "test_requirements": {
+            "thermal_cycles": "2000次（10℃-90℃-10℃）",
+            "pressure_cycles": "50000次（30kPa-125kPa）",
+            "leak_rate": "≤1.0cc/min@3bar"
+          }
+        },
+        {
+          "id": "thermal_insulation",
+          "name": "防火隔热垫",
+          "definition": "电芯发生热失控后的隔热零件",
+          "materials": [
+            {
+              "name": "气凝胶",
+              "thermal_conductivity": "0.013W/m·K"
+            },
+            {
+              "name": "陶瓷硅复合材料",
+              "resistance": "≥30min@1500℃"
+            },
+            {
+              "name": "金云母板",
+              "function": "抗冲击+耐高温复合"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "id": "GB38031",
+          "name": "GB 38031",
+          "title": "电动汽车动力蓄电池安全要求",
+          "category": "安全标准",
+          "scope": [
+            "热扩散",
+            "机械安全",
+            "电气安全"
+          ]
+        },
+        {
+          "id": "GB31467",
+          "name": "GB/T 31467",
+          "title": "电动汽车用锂离子动力蓄电池包和系统",
+          "parts": [
+            "高功率应用",
+            "高能量应用",
+            "安全性要求"
+          ]
+        },
+        {
+          "id": "ISO26262",
+          "name": "ISO 26262",
+          "title": "道路车辆功能安全",
+          "ASIL_levels": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        }
+      ],
+      {
+        "thermal": {
+          "max_cell_temp": "50℃",
+          "cooling_temp_diff": "≤3℃",
+          "heating_temp_diff": "≤10℃",
+          "thermal_propagation_prevention": "24h无热蔓延"
+        },
+        "electrical": {
+          "class_A_voltage": "≤30VAC or ≤60VDC",
+          "class_B_voltage": "30-1000VAC or 60-1500VDC",
+          "insulation_resistance_400V": "≥500MΩ",
+          "insulation_resistance_800V": "≥1000MΩ"
+        },
+        "mechanical": {
+          "sealing_surface_width": "≥7.5mm",
+          "module_mount_height": "12-18mm",
+          "underbody_clearance": "≥15mm",
+          "leak_test_pressure": "3.5kPa",
+          "leak_limit_single": "≤40Pa",
+          "leak_limit_whole": "≤100Pa"
+        }
+      },
+      [
+        {
+          "id": "batterygpt",
+          "name": "BatteryGPT",
+          "category": "生成式AI电池预测算法",
+          "definition": "首次将生成式AI引入电池SOH预测，通过GPT自回归生成全生命周期充电V/I/T轨迹，再用CNN+LSTM估算SOH",
+          "innovation": "从直接预测转向生成未来，利用GPT因果注意力机制捕捉长期时序依赖",
+          "architecture": {
+            "stage1": "Tokenization - 电压/电流/温度离散化映射到Token空间，数据压缩10倍",
+            "stage2": "GPT自回归生成 - 输入早期5%-30%数据，预测后续至寿命终点",
+            "stage3": "CNN+LSTM估算SOH - CNN提取空间特征，LSTM处理时序演化"
+          },
+          "performance": {
+            "rmse_soh": "0.213% (仅用30%早期数据，较LSTM提升91.8%)",
+            "mape_knee": "2.30% (提升92.6%)",
+            "mape_eol": "1.18% (提升54.6%)",
+            "model_size": "42M参数",
+            "inference_time": "<100ms (GPU)"
+          },
+          "input_requirements": [
+            "充电电压曲线",
+            "充电电流曲线",
+            "温度数据"
+          ],
+          "deployment": {
+            "cloud": "云端实时推理+OTA更新",
+            "edge": "车端BMS芯片部署"
+          },
+          "applications": [
+            "电池安全监控与延寿（延长整包寿命10-15%）",
+            "梯次利用分选（残值提升20%+）",
+            "电池研发加速（研发周期缩短30-50%）"
+          ],
+          "open_source": "https://github.com/ReparkHjc/BatteryGPT",
+          "data_source": "MIT数据集",
+          "relations": [
+            "implements:SOH_prediction",
+            "complements:physics_AI_hybrid",
+            "deploys_to:BMS"
+          ]
+        },
+        {
+          "id": "physics_ai_hybrid",
+          "name": "物理+AI融合方法",
+          "category": "混合建模电池预测算法",
+          "definition": "以电化学物理模型（菲克定律、欧姆定律、Butler-Volmer方程）提供机理框架，AI优化关键参数",
+          "three_step_path": [
+            "物理模型建立基础框架（SEI膜生长、锂析出、电解液消耗）",
+            "实测数据反向优化参数（前100循环优化SEI生长速率、锂析出阈值）",
+            "模型压缩与车端部署（云端完整模型+车端压缩模型+OTA持续学习）"
+          ],
+          "performance": {
+            "accuracy": "±5%（较纯物理模型±20%大幅提升）",
+            "rd_cycle_reduction": "30-50%",
+            "cost_reduction": "40%+"
+          },
+          "boundary": "可预测渐进式寿命衰减，无法预测突发性热失控事故",
+          "relations": [
+            "complements:batterygpt",
+            "deploys_to:BMS"
+          ]
+        }
+      ],
+      {
+        "description": "电池资产运营与调度对象模型（基于Palantir Ontology最佳实践设计）",
+        "entities": [
+          {
+            "id": "swap_station",
+            "name": "换电站",
+            "definition": "电池交换站点，具备电池仓、充电设施、BMS通信能力",
+            "attributes": {
+              "station_id": "站点唯一标识",
+              "location": "地理位置",
+              "slot_count": "电池仓数量",
+              "inventory": "当前库存电池型号及数量"
+            },
+            "relations": [
+              "contains:battery_pack",
+              "generates:dispatch_demand"
+            ]
+          },
+          {
+            "id": "logistics_truck",
+            "name": "物流车",
+            "definition": "用于电池转运的物流车辆，可装载多个电池木箱",
+            "attributes": {
+              "truck_id": "车辆唯一标识",
+              "max_crates": "最大装载木箱数",
+              "current_location": "当前位置",
+              "status": "空闲/运输中"
+            },
+            "relations": [
+              "transports:battery_crate",
+              "fulfills:dispatch_task"
+            ]
+          },
+          {
+            "id": "nio_vehicle",
+            "name": "蔚来车辆",
+            "definition": "用于车辆转运模式的蔚来汽车，通过换电动作转移电池",
+            "attributes": {
+              "vehicle_id": "车辆唯一标识",
+              "is_internal": "是否内部车辆",
+              "is_employee_car": "是否员工车（需积分补偿）",
+              "current_battery": "当前装载电池"
+            },
+            "relations": [
+              "carries:battery_pack",
+              "fulfills:dispatch_task"
+            ]
+          },
+          {
+            "id": "battery_crate",
+            "name": "电池木箱",
+            "definition": "电池物流转运的标准化包装容器",
+            "attributes": {
+              "crate_id": "木箱唯一标识",
+              "max_packs": "最大装载电池数",
+              "current_packs": "当前装载电池数"
+            },
+            "relations": [
+              "contains:battery_pack",
+              "loaded_on:logistics_truck"
+            ]
+          },
+          {
+            "id": "service_center",
+            "name": "服务中心",
+            "definition": "电池维修服务中心，接收故障电池进行修理",
+            "attributes": {
+              "center_id": "中心唯一标识",
+              "location": "地理位置",
+              "repair_capability": "维修能力等级"
+            },
+            "relations": [
+              "receives:battery_pack",
+              "originates_from:dispatch_plan"
+            ]
+          },
+          {
+            "id": "dispatch_demand",
+            "name": "调度需求",
+            "definition": "触发电池调度的原始需求，包括故障需求和健康配置需求",
+            "types": [
+              {
+                "name": "health_demand",
+                "source": "电池故障诊断",
+                "direction": "换电站→服务中心/工厂"
+              },
+              {
+                "name": "config_demand",
+                "source": "站点配置优化",
+                "direction": "按需调整各站电池型号配比"
+              }
+            ],
+            "attributes": {
+              "demand_id": "需求唯一标识",
+              "source_type": "故障/配置",
+              "value_score": "调度价值量化评分",
+              "expiry_time": "需求失效时间"
+            }
+          },
+          {
+            "id": "dispatch_plan",
+            "name": "调度方案",
+            "definition": "全局最优的电池调度计划，平衡调度价值和调度成本",
+            "attributes": {
+              "plan_id": "方案唯一标识",
+              "objective": "优化目标（成本/时效/价值）",
+              "total_value": "总调度价值",
+              "total_cost": "总调度成本",
+              "status": "草稿/已发布/执行中/已完成"
+            },
+            "relations": [
+              "covers:dispatch_demand",
+              "has:dispatch_task"
+            ]
+          },
+          {
+            "id": "dispatch_task",
+            "name": "调度任务",
+            "definition": "调度方案拆解后的原子指令，分配给具体执行人或车辆",
+            "attributes": {
+              "task_id": "任务唯一标识",
+              "mode": "物流转运/车辆转运",
+              "status": "待执行/执行中/已完成",
+              "deadline": "截止时间"
+            },
+            "relations": [
+              "fulfilled_by:logistics_truck",
+              "fulfilled_by:nio_vehicle"
+            ]
+          }
+        ]
+      },
+      {
+        "upper_cover": [
+          {
+            "material": "DC04/DC06钢板",
+            "thickness": "0.6-1.0mm"
+          },
+          {
+            "material": "SMC",
+            "thickness": "2.5-3.0mm"
+          },
+          {
+            "material": "PP+30%GF",
+            "thickness": "-"
+          }
+        ],
+        "lower_cover": [
+          {
+            "material": "HC340/590DP",
+            "thickness": "1.0-2.0mm"
+          },
+          {
+            "material": "HC420/780DP",
+            "thickness": "1.0-2.0mm"
+          }
+        ],
+        "support_beam": [
+          {
+            "material": "6061-T6铝型材",
+            "thickness": "1.5-4.0mm"
+          },
+          {
+            "material": "HC420/780DP钢",
+            "thickness": "-"
+          }
+        ]
+      },
+      {
+        "description": "电芯关键材料技术要求（源自Part I-电芯材料&电芯设计规范）",
+        "materials": [
+          {
+            "name": "镍钴锰酸锂单晶正极材料",
+            "standard": "YS/T 798",
+            "particle_size": {
+              "D10": "≥2μm",
+              "D50": "5-15μm",
+              "D90": "≤30μm",
+              "Dmin": "≥0.1μm",
+              "Dmax": "≤60μm"
+            },
+            "physical_properties": {
+              "specific_surface_area": "≤1.0 m²/g",
+              "tap_density": "≥1.8 g/cm³",
+              "pH": "10.0-12.5",
+              "appearance": "灰黑色粉末，颜色均一，无结块，无夹杂物"
+            },
+            "electrochemical_performance": {
+              "first_discharge_capacity": "≥180 mAh/g",
+              "first_efficiency": "≥86%",
+              "platform_capacity_ratio_10th": "≥60%",
+              "platform_capacity_ratio_100th": "≥50%",
+              "cycle_life_80percent": "≥500次"
+            },
+            "consistency": {
+              "Cpk_requirement": "≥1.33（成分/理化/电化学）",
+              "magnetic_impurity": "≤50个/kg"
+            }
+          },
+          {
+            "name": "单水氢氧化锂",
+            "packaging": {
+              "crystal_type": "内衬PE袋，外套PP袋或2-3层纸袋",
+              "powder_type": "内衬铝塑复合袋充氮气保护，外套塑料覆膜袋"
+            },
+            "storage": {
+              "environment": "干燥、无酸腐蚀、防潮",
+              "shelf_life": "≤6个月"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ev_battery_field_study",
+        "type": "research_report",
+        "name": "实车电池衰减数据研究(29,700+ EVs)",
+        "domain": "battery_degradation",
+        "attributes": {
+          "data_source": "Geotab(22700)+P3/Aviloo(7000+)",
+          "annual_degradation_range": "1.5%-3.0%",
+          "key_factors": [
+            "快充频率",
+            "SOC极端暴露",
+            "高温环境",
+            "使用强度"
+          ],
+          "calendar_aging_correction": "实验室预测比实车慢30-50%"
+        }
+      },
+      {
+        "id": "powertrain_architecture",
+        "type": "knowledge_area",
+        "name": "新能源汽车动力系统构型",
+        "domain": "vehicle_powertrain",
+        "attributes": {
+          "six_architectures": [
+            "串联",
+            "并联(PX)",
+            "混联",
+            "功率分流",
+            "插电PHEV",
+            "增程"
+          ],
+          "px_configs": "P0→P4",
+          "pure_ev_integration": "三合一→多合一"
+        }
+      },
+      {
+        "id": "cell_material_and_design",
+        "type": "knowledge_area",
+        "name": "电芯材料与电芯设计规范",
+        "domain": "cell_engineering",
+        "attributes": {
+          "six_chemistry_systems": [
+            "LCO",
+            "LMO",
+            "NCM",
+            "NCA",
+            "LFP",
+            "LTO"
+          ],
+          "three_form_factors": [
+            "方形",
+            "软包",
+            "圆柱(4680)"
+          ],
+          "manufacturing_steps": [
+            "涂布→冷压→分条→卷绕→组装→焊接→注液→化成"
+          ]
+        }
+      },
+      {
+        "id": "thermal_management",
+        "name": "电池热管理系统",
+        "category": "engineering_system",
+        "knowledge": {
+          "max_temp": "50℃",
+          "delta_T_cooling": "≤3℃",
+          "delta_T_heating": "≤10℃",
+          "insulation_ncm": "-5℃ target, ≤2.5℃/h",
+          "insulation_lfp": "5℃ target, ≤1.67℃/h",
+          "coolant": "50% ethylene glycol, -35 grade, 3281J/kg℃",
+          "flow_resistance": "≤60kPa @25℃ 20L/min"
+        },
+        "learned_date": "2026-04-28"
+      },
+      {
+        "id": "liquid_cooling_plate",
+        "name": "液冷板",
+        "category": "component",
+        "knowledge": {
+          "types": [
+            "口琴管式(low cost/light/simple)",
+            "冲压板式(flexible channel/high load)",
+            "挤压板式(mature process/stiff)",
+            "吹胀式(low power only)"
+          ],
+          "heat_transfer_coeff": "~200W/K flat, ~350W/K cylindrical",
+          "flow_uniformity": "≤3% per cell projection",
+          "airtightness": "≤1cc/min @3bar",
+          "burst_pressure": "10bar"
+        },
+        "learned_date": "2026-04-28"
+      },
+      {
+        "id": "thermal_runaway_protection",
+        "name": "热失控防护",
+        "category": "safety_system",
+        "knowledge": {
+          "materials": [
+            "金云母(耐冲击)",
+            "气凝胶(0.013W/mK)",
+            "陶瓷硅复合材料(1500℃火焰)"
+          ],
+          "fire_test": "1500℃乙炔焰 + 0.7MPa, ≥30min",
+          "thermal_conductivity": "≤0.1W/mK @25-300℃"
+        },
+        "learned_date": "2026-04-28"
+      },
+      {
+        "id": "mechanical_design",
+        "name": "机械结构设计",
+        "category": "engineering_system",
+        "knowledge": {
+          "nvh": "电池包模态≥35Hz",
+          "enclosure_processes": [
+            "铸铝",
+            "型材拼焊(FSW/CMT/MIG/TIG)",
+            "钣金拼焊",
+            "铆接+FDS"
+          ],
+          "seal_width": "≥7.5mm",
+          "mount_height": "12-18mm",
+          "protection": "IP68(1.5m/24h), 盐雾720h, 球击120KN"
+        },
+        "learned_date": "2026-04-28"
+      },
+      {
+        "id": "hv_safety_system",
+        "name": "高压安全系统",
+        "category": "safety_system",
+        "knowledge": {
+          "active_discharge": "<3s to 60VDC",
+          "passive_discharge": "<1min to 60VDC",
+          "insulation_min": ">5MΩ system, >2.5MΩ pack",
+          "touch_current": "AC≤3.5mA, DC≤10mA",
+          "equipotential": "<5mΩ",
+          "crash_safety": "<3s, Pyrofuse<3ms"
+        },
+        "learned_date": "2026-04-28"
+      },
+      {
+        "id": "battery_logistics",
+        "name": "电池存储运输保养",
+        "category": "operations",
+        "knowledge": {
+          "storage_temp": "5-30℃ recommended",
+          "soc_long_term": "50-60%",
+          "soc_transport": "20-30%",
+          "maintenance_cycle": "3-month top-up, 6-month full cycle"
+        },
+        "learned_date": "2026-04-28"
+      },
+      {
+        "id": "aftermarket_repair",
+        "name": "售后维修体系",
+        "category": "operations",
+        "knowledge": {
+          "tier1": "区域中心: ≥400㎡, 充放电/气密/均衡设备",
+          "tier2": "片区网点: ≥100㎡",
+          "personnel": "≥3 certified",
+          "equipment": "充放电15万/气密5万/均衡2万"
+        },
+        "learned_date": "2026-04-28"
+      },
+      {
+        "id": "battery_recycling",
+        "name": "电池回收利用",
+        "category": "lifecycle",
+        "knowledge": {
+          "retirement_criteria": "余能<70%, 压差>150mV, 温差>8℃",
+          "pack_reuse": "余能≥65%, 温差≤4℃",
+          "module_reuse": "余能≥65%, 温差≤3℃",
+          "cell_reuse": "余能≥70%, 内阻≤1.2x"
+        },
+        "learned_date": "2026-04-28"
+      },
+      {
+        "id": "pack_production_line",
+        "name": "PACK生产线",
+        "category": "manufacturing",
+        "knowledge": {
+          "capacity": "3JPH, ~15000 packs/year",
+          "stations": [
+            "涂胶",
+            "模组入箱",
+            "激光焊接",
+            "BDU安装",
+            "气密测试",
+            "EOL测试"
+          ],
+          "quality": "OEE≥85%, 一次合格率≥98%",
+          "control": "SIEMENS 1500 PLC + MES"
+        },
+        "learned_date": "2026-04-28"
+      },
+      {
+        "id": "ctc_skateboard",
+        "name": "CTC滑板底盘",
+        "category": "technology",
+        "knowledge": {
+          "weight_reduction": "10%",
+          "range_increase": "14%",
+          "cost_reduction": "12% per Wh",
+          "definition": "非承载车身+线传转向/制动+电池底盘一体化",
+          "players": [
+            "Rivian",
+            "Arrival",
+            "Canoo",
+            "REE",
+            "悠跑"
+          ]
+        },
+        "learned_date": "2026-04-28"
+      },
+      {
+        "id": "lithium_resource_market",
+        "name": "锂资源市场",
+        "category": "market_dynamics",
+        "definition": "碳酸锂等锂资源的价格形成机制、供需格局和产业链权力分配",
+        "attributes": {
+          "price_2026_apr": "18万元/吨（10个月+120%）",
+          "global_shortage": "8万吨LCE（大摩预测）",
+          "demand_growth": "赣锋+30%/天齐200万吨全球需求",
+          "supply_constraints": [
+            "津巴布韦配额限制",
+            "澳洲柴油荒",
+            "江西停产换证"
+          ],
+          "cost_impact_per_vehicle": "单车锂成本3000→8000+元",
+          "price_forecast": "15-20万元/吨（赣锋李良彬）"
+        },
+        "relations": [
+          "drives_cost_of:cell",
+          "affects_valuation_of:baas_asset"
+        ],
+        "learned_date": "2026-04-29"
+      },
+      {
+        "id": "battery_cost_paradigm_shift",
+        "name": "电池成本范式转移",
+        "category": "industry_trend",
+        "definition": "新能源产业从制造驱动到资源驱动的成本逻辑转变",
+        "attributes": {
+          "old_paradigm": "技术进步→电池降价→渗透率提升（确定性的工程问题）",
+          "new_paradigm": "资源博弈→成本波动→不确定性管理（博弈问题）",
+          "power_shift": "制造端议价权→资源端议价权",
+          "valuation_impact": "DCF模型失效，转向实物期权定价",
+          "key_players_with_mines": [
+            "宁德时代（宜春锂云母）",
+            "比亚迪（盐湖提锂）"
+          ]
+        },
+        "relations": [
+          "driven_by:lithium_resource_market",
+          "impacts:pack_design",
+          "impacts:baas_asset"
+        ],
+        "learned_date": "2026-04-29"
+      },
+      {
+        "id": "energy_storage_demand",
+        "name": "储能需求",
+        "category": "market_dynamics",
+        "definition": "电网级储能对锂资源的刚性需求，正在改变锂的需求结构",
+        "attributes": {
+          "growth_rate": "增速超动力电池",
+          "demand_characteristic": "比车更刚性（车可不买，电网必须储能）",
+          "strategic_upgrade": "从工业金属→能源金属",
+          "apr_production": "206.5GWh（同比+58%）",
+          "may_forecast": "218.8GWh（同比+63%）"
+        },
+        "relations": [
+          "drives_demand_of:lithium_resource_market",
+          "complements:ev_battery_field_study"
+        ],
+        "learned_date": "2026-04-29"
+      },
+      {
+        "id": "battery_swap_standard",
+        "name": "换电标准统一",
+        "category": "industry_dynamics",
+        "definition": "换电模式规模化必须解决的电池包尺寸/接口/BMS通信协议的行业统一问题",
+        "attributes": {
+          "bottleneck": "电池包尺寸/接口/通信协议各不相同",
+          "paths": [
+            "监管强制标准",
+            "市场自发联盟",
+            "场景分化先行"
+          ],
+          "current_status": "多标准并存，技术兼容方案先行"
+        },
+        "relations": [
+          "constrains:swap_station"
+        ],
+        "learned_date": "2026-04-30"
+      },
+      {
+        "id": "technical_compatibility",
+        "name": "技术兼容路线",
+        "category": "engineering_approach",
+        "definition": "通过机械臂自适应抓取等工程手段兼容不同尺寸电池包，蔚来5代站VGA机械臂100kWh-42kWh",
+        "attributes": {
+          "example": "蔚来5代站VGA可伸缩机械臂",
+          "compatibility_range": "100kWh ↔ 42kWh",
+          "strategy": "用技术兼容化解标准不统一僵局"
+        },
+        "relations": [
+          "enabled_by:nio_5th_gen_station",
+          "works_around:battery_swap_standard"
+        ],
+        "learned_date": "2026-04-30"
+      },
+      {
+        "id": "energy_replenishment_tripartite",
+        "name": "补能三分天下",
+        "category": "industry_trend",
+        "definition": "家充+公充+换电三种补能方式互补共存，换电份额从5%提升至15-20%",
+        "attributes": {
+          "home_charging": "有固定车位，成本最低",
+          "public_charging": "覆盖面广，高峰排队严重",
+          "battery_swap": "3分钟换电 vs 30分钟快充",
+          "swap_market_share": "5% → 15-20%"
+        },
+        "relations": [
+          "includes:battery_swap"
+        ],
+        "learned_date": "2026-04-30"
+      },
+      [
+        {
+          "id": "sodium_ion_battery",
+          "name": "钠离子电池",
+          "definition": "以钠离子为电荷载体的二次电池，2026年CATL量产装车，能量密度90-160Wh/kg，三条材料路线按场景切分",
+          "attributes": {
+            "commercialization_year": 2026,
+            "first_vehicle": "长安启源A06",
+            "global_capacity_2026": ">50GWh(CATL ~40GWh)",
+            "energy_density_range": "90-160Wh/kg",
+            "storage_penetration_2026": "5-8%",
+            "storage_penetration_2028": ">20%"
+          },
+          "relations": [
+            "competes_with:LFP_storage",
+            "replaces:lead_acid",
+            "applications:储能,两轮车,A00车"
+          ]
+        },
+        {
+          "id": "hard_carbon_anode",
+          "name": "硬碳负极",
+          "definition": "钠电专属负极，石墨不储钠(Na+0.102nm vs Li+0.076nm), 生物质路线成本3-5万/吨",
+          "attributes": {
+            "specific_capacity": "250-350mAh/g",
+            "cost_straw": "3万/吨",
+            "cost_bamboo": "3-4万/吨",
+            "cost_coconut": "8-12万/吨",
+            "sei_chemistry": "无机物(NaF,Na2CO3)",
+            "key_manufacturers": "佰思格,杉杉,贝特瑞"
+          },
+          "relations": [
+            "used_in:sodium_ion_battery",
+            "different_from:graphite_anode"
+          ]
+        },
+        {
+          "id": "na_layered_oxide_cathode",
+          "name": "层状氧化物正极(钠电)",
+          "definition": "钠电动力路线正极，NaxMO2层状结构，140-160Wh/kg",
+          "attributes": {
+            "energy_density": "140-160Wh/kg",
+            "structure": "NaxMO2(M=Fe/Mn/Ni/Cu)",
+            "challenge": "空气湿度敏感",
+            "key_manufacturers": "CATL,中科海钠"
+          },
+          "relations": [
+            "used_in:sodium_ion_battery_power"
+          ]
+        },
+        {
+          "id": "na_polyanion_cathode",
+          "name": "聚阴离子正极(钠电)",
+          "definition": "钠电储能路线正极，框架结构，10000+次循环，550°C热分解",
+          "attributes": {
+            "energy_density": "90-120Wh/kg",
+            "cycle_life": ">10000次",
+            "thermal_decomp": ">550°C",
+            "types": "NaFePO4/Na2FeP2O7/Na2Fe2(SO4)3"
+          },
+          "relations": [
+            "used_in:sodium_ion_battery_storage",
+            "competes_with:LFP"
+          ]
+        },
+        {
+          "id": "na_prussian_blue_cathode",
+          "name": "普鲁士蓝正极(钠电)",
+          "definition": "钠电低成本路线，室温合成但结晶水难除，首效70-80%，待突破",
+          "attributes": {
+            "energy_density": "120-140Wh/kg",
+            "first_cycle_efficiency": "70-80%",
+            "blocker": "结晶水ppm级去除",
+            "status": "研发中"
+          },
+          "relations": [
+            "used_in:sodium_ion_battery_future"
+          ]
+        }
+      ],
+      {
+        "id": "flash_charge",
+        "name": "闪充/快充技术",
+        "definition": "高倍率充电技术，通过提升充电功率缩短补能时间，但受限于析锂边界和热管理能力",
+        "attributes": {
+          "key_metrics": [
+            "峰值功率",
+            "功率维持时间",
+            "可用SOC窗口",
+            "温度适应范围"
+          ],
+          "typical_rates": [
+            "2C",
+            "3C",
+            "4C",
+            "5C",
+            "10C及以上"
+          ],
+          "thermal_load": "产热量∝I²，5C充电热负荷是1C的25倍"
+        },
+        "relations": [
+          "constrained_by:lithium_plating",
+          "managed_by:BMS",
+          "limited_by:thermal_management"
+        ]
+      },
+      {
+        "id": "lithium_plating",
+        "name": "析锂",
+        "definition": "充电电流过大时锂离子来不及嵌入石墨层间，在负极表面以金属锂枝晶形式析出，可刺穿隔膜导致内短路",
+        "attributes": {
+          "trigger_factors": [
+            "充电倍率过高",
+            "低温充电",
+            "高SOC充电(SOC>60%)"
+          ],
+          "risk_characteristics": {
+            "low_temp": "2C即可触发析锂",
+            "high_temp": "5C反而安全",
+            "time_to_failure": "几十个循环内可从健康到安全隐患"
+          },
+          "mechanism": "锂离子嵌入速度<充电电流供给速度→表面析出→枝晶生长→刺穿隔膜→内短路→热失控"
+        },
+        "relations": [
+          "constrains:flash_charge",
+          "monitored_by:BMS_plating_detection"
+        ]
+      },
+      {
+        "id": "battery_thermal_management",
+        "name": "电池热管理",
+        "definition": "控制电池工作在安全温度范围内，包含冷却、加热、均温和保温策略",
+        "attributes": {
+          "safety_boundaries": {
+            "55°C": "工作温度上限-工程红线",
+            "55-60°C": "SEI加速重构增厚、内阻上升",
+            "60-80°C": "隔膜热收缩、微短路风险",
+            "80°C+": "LiPF₆显著分解产HF、热失控级联"
+          },
+          "cooling_methods": [
+            "源头减热(全极耳/固液混合/磷酸锰铁锂)",
+            "多面液冷(效率+50-500%)",
+            "相变材料+液冷复合",
+            "浸没式冷却(0.67°C温差/介质:氟化液硅油GTL酯/PFAS法规推碳氢赛道/高流速反超水冷/工程挑战:密封+低温流动+材料相容性/GB38031-2025驱动/商用车先落地)"
+          ],
+          "smart_control": [
+            "±1°C精度传感器",
+            "实时EIS诊断",
+            "AI预测控制MPC",
+            "路况天气预规划"
+          ]
+        },
+        "relations": [
+          "protects:cell",
+          "enables:flash_charge",
+          "part_of:BMS"
+        ]
+      },
+      {
+        "id": "SOH_estimation",
+        "name": "SOH精确估算",
+        "definition": "电池健康状态精确估算，当前行业车端误差±3%，目标±0.5%，是BMS制定充电策略的核心输入",
+        "attributes": {
+          "current_accuracy": "±3%（行业普遍水平）",
+          "target_accuracy": "±0.5%（精算级）",
+          "impact": "SOH误差±3%→BMS策略偏差10-15%→恶性循环（测量不准→策略偏差→加速老化→更不准）",
+          "methods": [
+            "BatteryGPT",
+            "物理+AI融合",
+            "云端+车端协同"
+          ]
+        },
+        "relations": [
+          "inputs_to:BMS",
+          "enables:safe_flash_charge",
+          "required_by:BaaS_asset_valuation"
+        ]
+      },
+      {
+        "id": "electrolyte_lithium_salt",
+        "name": "电解液锂盐热稳定性",
+        "definition": "电解液中锂盐的热分解特性直接影响电池安全边界",
+        "attributes": {
+          "LiPF6": {
+            "decomposition_temp": "80°C",
+            "byproduct": "HF(氢氟酸，腐蚀正极/SEI)",
+            "status": "当前主流"
+          },
+          "LiTFSI": {
+            "decomposition_temp": "纯态350°C+，碳酸酯溶剂中140-270°C",
+            "byproduct": "不产HF",
+            "status": "下一代选项"
+          }
+        },
+        "relations": [
+          "affects:thermal_runaway_temperature",
+          "determines:electrolyte_safety_margin"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "type": "contains",
+        "description": "包含关系",
+        "examples": [
+          "pack contains module",
+          "module contains cell"
+        ]
+      },
+      {
+        "type": "monitored_by",
+        "description": "被监控",
+        "examples": [
+          "cell monitored_by BMS"
+        ]
+      },
+      {
+        "type": "complies_with",
+        "description": "符合标准",
+        "examples": [
+          "pack complies_with GB38031"
+        ]
+      },
+      {
+        "type": "depends_on",
+        "description": "依赖",
+        "examples": [
+          "thermal_management depends_on cooling_plate"
+        ]
+      },
+      {
+        "type": "implements",
+        "description": "实现/执行",
+        "examples": [
+          "batterygpt implements SOH_prediction"
+        ]
+      },
+      {
+        "type": "complements",
+        "description": "互补",
+        "examples": [
+          "batterygpt complements physics_ai_hybrid"
+        ]
+      },
+      {
+        "from": "ev_battery_field_study",
+        "to": "baas_asset",
+        "type": "informs_operation"
+      },
+      {
+        "from": "powertrain_architecture",
+        "to": "cell_material_and_design",
+        "type": "upstream_of"
+      },
+      {
+        "from": "cell_material_and_design",
+        "to": "module_design",
+        "type": "upstream_of"
+      },
+      {
+        "from": "lithium_resource_market",
+        "to": "cell",
+        "type": "drives_cost_of"
+      },
+      {
+        "from": "lithium_resource_market",
+        "to": "baas_asset",
+        "type": "affects_valuation_of"
+      },
+      {
+        "from": "battery_cost_paradigm_shift",
+        "to": "lithium_resource_market",
+        "type": "driven_by"
+      },
+      {
+        "from": "battery_cost_paradigm_shift",
+        "to": "pack",
+        "type": "impacts"
+      },
+      {
+        "from": "energy_storage_demand",
+        "to": "lithium_resource_market",
+        "type": "drives_demand_of"
+      },
+      {
+        "from": "energy_storage_demand",
+        "to": "ev_battery_field_study",
+        "type": "complements"
+      },
+      {
+        "id": "flash_charge_constrained_by_plating",
+        "source": "flash_charge",
+        "target": "lithium_plating",
+        "type": "constrained_by"
+      },
+      {
+        "id": "flash_charge_managed_by_bms",
+        "source": "flash_charge",
+        "target": "BMS",
+        "type": "managed_by"
+      },
+      {
+        "id": "soh_inputs_to_bms",
+        "source": "SOH_estimation",
+        "target": "BMS",
+        "type": "inputs_to"
+      },
+      {
+        "id": "thermal_management_limits_flash_charge",
+        "source": "battery_thermal_management",
+        "target": "flash_charge",
+        "type": "limits"
+      },
+      {
+        "id": "electrolyte_affects_thermal",
+        "source": "electrolyte_lithium_salt",
+        "target": "battery_thermal_management",
+        "type": "affects"
+      }
+    ],
+    "knowledge_learning_log": {
+      "last_learning_date": "2026-05-07",
+      "learned_documents": [
+        "BatteryGPT：基于生成式预训练的电池SOH早期预测方法研究",
+        "苏度SUDO复兴岛二期厂房规划方案 - 整改意见",
+        "Palantir本体论研究",
+        "Power本体论设计（基于Palantir Ontology最佳实践）",
+        "从材料到回收之电池系统开发设计技术规范-Part I---电芯材料&电芯设计",
+        "面向换电体系的动力电池产品定义与设计",
+        "动力电池10年技术发展",
+        "文献调研：基于实车数据的电池衰减数据研究：30,000+ EVs",
+        "从材料到回收之电池系统开发设计技术规范-Part 0---整车相关",
+        "从材料到到回收之电池系统开发设计技术规范-Part I---电芯材料&电芯设计",
+        "毛泽东选集（四卷，含实践论/矛盾论/论持久战/反对本本主义等158篇核心著作）"
+      ],
+      "total_learned": 13,
+      "2026-05-05_incremental": {
+        "document": "钠电拐点：CATL 60GWh大单深度解读",
+        "domain": "sodium_ion_battery_industrialization",
+        "key_concepts": [
+          "CATL×海博思创3年60GWh钠电储能订单（=2025全球出货量6.7倍）",
+          "钠离子半径1.02Å vs Li+ 0.76Å（大38%）→能量密度120-160Wh/kg",
+          "钠电正极三路线：层状氧化物/聚阴离子/普鲁士蓝",
+          "硬碳负极8-12万元/吨→需降至5万以下实现成本竞争力",
+          "钠电理论成本比LFP低30-40%，量产初期实际低10-15%",
+          "循环寿命实验室3000-5000次 vs LFP已验证6000-8000次",
+          "低温性能优势：-20°C正常充放电",
+          "储能是钠电唯一规模化突破口（对能量密度不敏感）",
+          "60GWh供应链需求：硬碳6-8万吨/年（当前<3万吨）",
+          "钠电与锂电互补：锂电→乘用车，钠电→大规模储能",
+          "2026-2028是钠电最关键三年",
+          "中国钠电专利占全球70%+"
+        ]
+      },
+      "2026-05-02_incremental": {
+        "document": "工商储盈利模式分水岭——峰谷价差没了，项目还怎么赚钱？",
+        "domain": "energy_storage_market",
+        "key_concepts": [
+          "峰谷价差结构性收窄（鸭子曲线）",
+          "工商储IRR模型崩塌（12%→4.2%）",
+          "需求响应补贴（2-5元/度）",
+          "容量租赁模式（基本电费降20-40%）",
+          "辅助服务（调频收入8-12%总投资）",
+          "虚拟电厂聚合（100×100MWh=10GWh）",
+          "LFP衰减真实成本（年2-3%/第5年仅85%）",
+          "电力市场改革窗口期（2-3年）"
+        ]
+      },
+      "2026-05-06_incremental": {
+        "document": "毛泽东选集（四卷）",
+        "domain": "maoism_philosophy_methodology",
+        "key_concepts": [
+          "实践论：实践→认识→再实践→再认识，实践是检验真理的唯一标准",
+          "矛盾论：对立统一规律，普遍性与特殊性，主要矛盾与矛盾的主要方面",
+          "论持久战：三阶段论（防御→相持→反攻），全面分析矛盾双方特点",
+          "反对本本主义：没有调查就没有发言权，马克思主义必须与中国实际结合",
+          "方法论十项原则：实事求是/调查研究/抓主要矛盾/实践标准/集中优势/战略战术/群众路线/独立自主/批评自我批评/惩前毖后",
+          "论十大关系：社会主义建设十大方面的协调平衡",
+          "实事求是：一切从实际出发，理论联系实际"
+        ]
+      },
+      "2026-05-07_incremental": {
+        "document": "宁德时代钠电池量产装车——钠电商业化元年来了",
+        "entities_added": [
+          "sodium_ion_battery",
+          "hard_carbon_anode",
+          "na_layered_oxide_cathode",
+          "na_polyanion_cathode",
+          "na_prussian_blue_cathode"
+        ],
+        "key_insights": [
+          "三条路线按场景切分",
+          "硬碳成本纠正3-4万/吨",
+          "Na+溶剂化能低→低温优势",
+          "石墨不储钠→负极独立",
+          "OCV-SOC极平→BMS需Kalman滤波"
+        ]
+      }
+    },
+    "source_documents": [
+      {
+        "part": "Part II - 模组篇",
+        "doc_id": "doxcnoWhs1wxPLfcK8DEL8csOxh",
+        "length": 103724
+      },
+      {
+        "part": "Part III - 电气属性篇",
+        "doc_id": "Muc4dadC9oOMhMxI2NIcB24pnhd",
+        "length": 94692
+      },
+      {
+        "part": "Part IV - BMS篇",
+        "doc_id": "VeR6dYJMXo5zjyxY3FJcuTzknlV",
+        "length": 177345
+      },
+      {
+        "part": "Part V - 热属性与热安全篇",
+        "doc_id": "WXcYdFMpcoDJ1gxPA83cx5whnGc",
+        "length": 119618
+      },
+      {
+        "part": "Part VI - 机械属性篇",
+        "doc_id": "Vmt6d4n8oofPEFxLt8TciyJ4nOU",
+        "length": 135861
+      },
+      {
+        "part": "Part VII - 系统篇",
+        "doc_id": "WoUXdAVckoWjUIx8Ml8c1lkSnNb",
+        "length": 126287
+      }
+    ],
+    "learned_documents": [
+      "电池模组设计技术规范",
+      "CTP技术演进",
+      {
+        "date": "2026-04-27",
+        "title": "Part III - 电气属性",
+        "key_entities": [
+          "BDU",
+          "fuse_selection",
+          "copper_busbar",
+          "creepage_clearance",
+          "precharge_circuit"
+        ]
+      },
+      "Part V 热属性与热安全",
+      "Part VI 机械属性",
+      "Part VII 系统",
+      "Part VIII 高压安全",
+      "Part IX 储存运输保养",
+      "Part X 售后维修",
+      "Part XI 回收利用",
+      "Part XII PACK线技术任务书",
+      {
+        "date": "2026-04-29",
+        "title": "锂价暴涨120%，新能源真正的成本战争才刚开始",
+        "key_entities": [
+          "lithium_resource_market",
+          "battery_cost_paradigm_shift",
+          "energy_storage_demand"
+        ],
+        "source": "飞书云盘docx/孙建庆创作"
+      },
+      {
+        "date": "2026-05-05",
+        "title": "钠电拐点：CATL 60GWh大单深度解读",
+        "key_entities": [
+          "sodium_ion_battery",
+          "60GWh_mega_order",
+          "hard_carbon_anode",
+          "energy_storage_market",
+          "CATL_Haibo_Sichuang_partnership"
+        ],
+        "source": "飞书云盘docx/孙建庆创作"
+      }
+    ],
+    "incremental_learning": {
+      "last_session": "daily_incremental_learning",
+      "2026-05-08_incremental": {
+        "document": "2026 电池高精度SOH项目立项申请",
+        "domain": "battery_soh_project_engineering",
+        "key_entities": [
+          "battery_SOH",
+          "BatteryGPT",
+          "high_precision_SOH_model",
+          "120M_in_service_batteries",
+          "600B_asset_value",
+          "SOH_accuracy_0.5_percent_target",
+          "MIT_data_reproduction",
+          "NIO_real_vehicle_adaptation",
+          "GPU_cloud_deployment",
+          "ROI_11.12",
+          "project_budget_376K",
+          "expected_return_4.19M"
+        ],
+        "milestones": [
+          "M1: MIT data preprocessing (weeks 1-2)",
+          "M2: BatteryGPT reproduction (weeks 3-4)",
+          "M3: NIO real-vehicle adaptation (weeks 5-9)",
+          "M4: Model training and deployment (weeks 10-18)",
+          "M5: Per-chemistry optimization + patents (weeks 19-28)",
+          "M6: Validation and tech report (weeks 29-32)"
+        ],
+        "risks": [
+          "论文参数缺失→已验证可复现",
+          "NIO数据质量不达预期(高)→数据清洗+1周评估",
+          "电池包级聚合(中)→均值+最小SOH双输出",
+          "化学体系泛化(低)→NCM/LFP分体系训练",
+          "收益不达预期→降级方案±1.5%/251万"
+        ],
+        "strategic_significance": "从供应商寿命曲线查表→自主可控SOH基座能力，600亿资产需精算级评估",
+        "source": "飞书云盘docx/孙建庆"
+      },
+      "2026-05-09_incremental": {
+        "date": "2026-05-09",
+        "document": "闪充数字内卷正在掏空行业根基",
+        "entities_added": [
+          "flash_charge",
+          "lithium_plating",
+          "battery_thermal_management",
+          "SOH_estimation",
+          "electrolyte_lithium_salt"
+        ],
+        "relations_added": 5,
+        "core_insight": "闪充数字竞赛从实验室最优工况到用户真实体验存在系统性能差距，析锂边界/热管理/SOH精度是闪充安全的三大支柱"
+      },
+      "2026-05-11_OTA_lockin_report": {
+        "date": "2026-05-11",
+        "document": "OTA锁电报告V2大修改",
+        "domain": "battery_safety_bms_control",
+        "entities_added": [
+          "ota_lockin_strategy",
+          "bms_charge_limit_control",
+          "user_facing_safety_communication"
+        ],
+        "relations_added": 3,
+        "core_insight": "BMS OTA锁电是安全与用户体验的平衡术，通信策略决定了用户接受度"
+      },
+      "2026-05-17_toolbook_batch_learning": {
+        "date": "2026-05-12_to_05-17",
+        "period": "5部工具书交叉序列深读(Ch1-Ch4多章)",
+        "documents": [
+          "固体物理导论Ch1晶体结构/Ch2波的衍射与倒格子/Ch3晶体结合与弹性常量",
+          "March高等有机化学Ch1定域化学键/Ch2离域化学键/Ch4立体化学与构象分析",
+          "电化学方法Ch1电极过程概述/Ch2电位与电池热力学/Ch3电极反应动力学",
+          "Handbook of Battery Materials Ch1热力学/Ch2碳负极材料",
+          "Handbook of Batteries Ch1电池基本原理"
+        ],
+        "entities_added": [
+          "crystal_structure_measurement_xrd",
+          "reciprocal_lattice_ewald_sphere",
+          "crystal_binding_bulk_modulus",
+          "localized_bond_electrolyte_design",
+          "delocalized_bonding_conjugation",
+          "stereochemistry_electrolyte_conformation",
+          "nernst_equation_practical_applications",
+          "butler_volmer_kinetics_tuning",
+          "carbon_anode_mcmb_hard_carbon",
+          "thermodynamics_gibbs_free_energy_voltage"
+        ],
+        "relations_added": 15,
+        "cross_book_synthesis": [
+          "固体物理晶体结构→March化学键→电化学方法能斯特方程: 正极电压起源的物理-化学-电化学三视角",
+          "March离域键+立体化学→电解液设计: 共轭效应决定溶剂抗氧化性, 构象影响Li+配位",
+          "Handbook碳负极+固体物理弹性常量: 石墨嵌锂膨胀与晶格应力的热力学耦合"
+        ],
+        "core_insight": "五边形知识模型(热力学上限/动力学下限/晶体约束/界面化学/系统工程)从Ch1扉页进入Ch2-Ch4实质交叉阶段"
+      },
+      "2026-05-17_LFP_compaction_density_deep_dive": {
+        "date": "2026-05-17",
+        "document": "磷酸铁锂加工费暴涨1500元——高压实从技术指标到定价权的质变分析",
+        "domain": "battery_cathode_material_engineering",
+        "entities_added": [
+          "lfp_compaction_density",
+          "cathode_quality_tiering",
+          "compaction_density_pricing_power",
+          "energy_storage_large_cell_300ah",
+          "four_step_cathode_process_synergy",
+          "solid_phase_sintering_temp_control",
+          "carbon_coating_thickness_uniformity",
+          "one_particle_morphology_d50_control",
+          "press_density_evolution_2_2_to_2_65"
+        ],
+        "relations_added": 10,
+        "knowledge_sources": [
+          "MEMORY.md: LFP Pnma结构/1D扩散/D~10^-14 /带隙3.7eV/碳包覆/压实密度2.2-2.65 (固体物理+电化学方法+March有机)",
+          "knowledge_sync: 正极材料技术发展/离子输运维度效应/缺陷化学调控",
+          "行业日报: 加工费暴涨1500元/吨, 中信建投169万吨需求预测"
+        ],
+        "key_mechanisms": [
+          "LFP橄榄石Pnma→Li+仅沿[010]b轴1D扩散→D=10^-14~10^-13 cm²/s→必须纳米化到<100nm",
+          "纳米化→比表面积增大→压实困难→需一次颗粒形貌控制(D50<1μm)+碳包覆(3-5nm均匀)+烧结温控(±2°C)",
+          "压实密度(2.2→2.65)十年四环节协同: 前驱体合成→固相烧结→气流粉碎→碳包覆 → 非单点突破",
+          "储能大电芯300Ah+→极片面积翻10倍→压实密度差0.1→能量密度差2-3%→100MWh站成本差150万元",
+          "LFP从标准品走向品质分层: 高压实供应商拿溢价权, 通用品供应商变价格接受者"
+        ],
+        "core_insight": "压实密度从实验室参数变成产业链定价锚——大电芯需求爆发+高质量供给不足=结构性涨价, 一致性(连续100批量产能力)才是真壁垒"
+      }
+    }
+  }
+}

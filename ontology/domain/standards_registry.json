@@ -1,0 +1,333 @@
+{
+  "domain": "standards_registry",
+  "name": "标准法规索引",
+  "description": "已学全部动力电池/新能源汽车相关GB/T/IEC标准索引，关联到具体领域文件",
+  "version": "V2.0",
+  "last_updated": "2026-05-11T13:08:00Z",
+  "ontology_model": "TBox+ABox",
+  "tbox": {
+    "description": "概念定义层：标准分类体系、标准间关系类型",
+    "classes": [
+      {
+        "id": "Standard",
+        "label": "标准",
+        "parent": "Thing",
+        "definition": "电池/新能源汽车相关的国家或国际技术标准",
+        "subclasses": [
+          "强制性国标",
+          "推荐性国标",
+          "国际标准"
+        ],
+        "key_properties": [
+          "standard_id",
+          "name",
+          "type",
+          "implement_date",
+          "domain",
+          "replaces"
+        ]
+      },
+      {
+        "id": "StandardThreshold",
+        "label": "标准阈值",
+        "parent": "Thing",
+        "definition": "标准中定义的量化判定阈值",
+        "key_properties": [
+          "parameter",
+          "value",
+          "unit",
+          "applicable_chemistry",
+          "test_condition"
+        ]
+      },
+      {
+        "id": "StandardRelation",
+        "label": "标准间关系",
+        "parent": "Thing",
+        "definition": "标准之间的引用、替代、互补关系",
+        "instances": [
+          "replaces(替代)",
+          "references(引用)",
+          "complements(互补)",
+          "extends(扩展)",
+          "derives_from(派生)"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "id": "hasImplementDate",
+        "label": "实施日期",
+        "domain": "Standard",
+        "range": "date",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasThresholdValue",
+        "label": "阈值",
+        "domain": "StandardThreshold",
+        "range": "float",
+        "cardinality": "1"
+      },
+      {
+        "id": "replacesStandard",
+        "label": "替代标准",
+        "domain": "Standard",
+        "range": "Standard",
+        "cardinality": "0..1"
+      }
+    ],
+    "rules": [
+      {
+        "id": "rule_mandatory_compliance",
+        "label": "强制合规规则",
+        "if": "standard.type == '强制性国标'",
+        "then": "compliance_mandatory AND non_compliance_illegal"
+      },
+      {
+        "id": "rule_standard_family_resolution",
+        "label": "标准体系冲突解决",
+        "if": "standard_A.replaces == standard_B",
+        "then": "standard_B.valid_until == standard_A.implement_date",
+        "example": "GB 38031-2025替代GB 38031-2020→2026-07-01起2020版失效"
+      },
+      {
+        "id": "rule_enterprise_threshold_priority",
+        "label": "企业阈值优先规则",
+        "if": "manufacturer_defined_threshold EXISTS",
+        "then": "use manufacturer_defined_threshold OVER appendix_B_default",
+        "source": "GB/T 44500-2024"
+      }
+    ]
+  },
+  "abox": {
+    "description": "事实数据层：已学标准的完整信息和阈值",
+    "standards": [
+      {
+        "id": "GB_38031-2025",
+        "class": "Standard",
+        "type": "强制性国标",
+        "name": "电动汽车用动力蓄电池安全要求",
+        "hasImplementDate": "2026-07-01",
+        "replacesStandard": "GB_38031-2020",
+        "key_requirements": [
+          "2小时不起火不爆炸",
+          "热扩散试验",
+          "针刺/过充/过放/外部短路"
+        ]
+      },
+      {
+        "id": "GB_T_44500-2024",
+        "class": "Standard",
+        "type": "推荐性国标",
+        "name": "新能源汽车运行安全性能检验规程",
+        "hasImplementDate": "2025-03-01",
+        "key_requirements": [
+          "动力蓄电池安全（充电+放电）",
+          "驱动电机安全",
+          "电控系统安全",
+          "电气安全（绝缘+电位均衡）"
+        ],
+        "notes": "年检标准。非营运小型6年内免检，6-10年每2年1次。企业技术文件阈值优先"
+      },
+      {
+        "id": "GB_T_45688-2025",
+        "class": "Standard",
+        "type": "推荐性国标",
+        "name": "新能源汽车运行安全性能动态监测预警",
+        "hasImplementDate": "2025-12-01",
+        "key_requirements": [
+          "12项故障监测",
+          "12项隐患模型",
+          "三级故障+两级隐患",
+          "换电7项特殊适配"
+        ]
+      },
+      {
+        "id": "GB_T_32960.3",
+        "class": "Standard",
+        "type": "推荐性国标",
+        "name": "电动汽车远程服务与管理系统技术规范",
+        "notes": "附录A.6 故障报警数据项（45688引用）"
+      },
+      {
+        "id": "GB_7258-2017",
+        "class": "Standard",
+        "type": "强制性国标",
+        "name": "机动车运行安全技术条件",
+        "hasImplementDate": "2018-01-01",
+        "key_requirements": [
+          "高压安全（标记/遮栏/等电位）",
+          "导线绝缘耐温100/125℃",
+          "客车电池异常报警+5min不起火"
+        ]
+      },
+      {
+        "id": "CN_NEV_standards_2020",
+        "class": "StandardSystem",
+        "type": "国家体系",
+        "name": "中国新能源汽车国家标准体系(2020版)",
+        "hasCategory": {
+          "基础通用": [
+            "GB/T 18384安全要求",
+            "GB/T 31498碰撞后安全"
+          ],
+          "车载储能系统": [
+            "GB 38031电池安全",
+            "GB/T 31484寿命",
+            "GB/T 31485安全",
+            "GB/T 31486电性能"
+          ],
+          "充电系统与接口": [
+            "GB/T 20234连接器",
+            "GB/T 27930通信协议"
+          ],
+          "电驱系统": [
+            "GB/T 18488驱动电机",
+            "GB/T 29307可靠性"
+          ],
+          "整车": [
+            "GB 18352排放",
+            "GB 27999能耗"
+          ]
+        },
+        "source": "learning_20260531_nas_batch2",
+        "importance": 0.9
+      },
+      {
+        "id": "NIO_enterprise_standards",
+        "class": "StandardSystem",
+        "type": "企业标准清单",
+        "name": "NIO电池系统企业标准清单",
+        "hasStandards": [
+          "NIO-EP-TR-0030 BMS设计及测试规范(2019)",
+          "QBS-GS-0004-01-2021 电池系统安全设计标准",
+          "QBS-DS-0001-01-2021 电池系统热管理系统设计规范",
+          "QBS-TS-0003-01-2021 电池系统循环寿命测试规范",
+          "NIO-TP.20.002-2019 可靠性及寿命规范 V2.0"
+        ],
+        "notes": "NIO企业标准超越国标部分: Pyrofuse 3ms+5ms时序、IP6K9K附加、碰撞后TE<0.2J、循环后螺栓扭矩检查、15年30万km服务寿命等",
+        "source": "learning_20260531_nas_batch1",
+        "importance": 0.95
+      },
+      {
+        "standard_id": "GB/T16935",
+        "name": "GB/T 16935.1 (IEC 60664-1) 低压系统内设备的绝缘配合",
+        "type": "推荐性国标",
+        "domain": "electrical_safety",
+        "description": "爬电距离与电气间隙设计的核心标准。模组设计参考此标准确定最小爬电距离(污染等级3/材料组别Ⅲb/平台电压403.2V)和电气间隙(2700VDC耐压+4000m海拔修正)。",
+        "importance": 0.9,
+        "key_thresholds": {
+          "creepage_403V_pollution3_groupIII": "6.35mm",
+          "clearance_2700VDC_4000m": "2.63mm",
+          "altitude_correction_4000m": 1.29
+        },
+        "source": "2026-06-18 NAS D11 Module设计制造",
+        "cross_ref": [
+          "模组爬电距离校核",
+          "FC60平台电气设计"
+        ]
+      }
+    ],
+    "standard_thresholds": [
+      {
+        "id": "TH_NCM_charge_max_temp",
+        "class": "StandardThreshold",
+        "parameter": "充电最高温度(NCM)",
+        "value": 60,
+        "unit": "°C",
+        "standard": "GB_T_44500"
+      },
+      {
+        "id": "TH_LFP_charge_max_temp",
+        "class": "StandardThreshold",
+        "parameter": "充电最高温度(LFP)",
+        "value": 65,
+        "unit": "°C",
+        "standard": "GB_T_44500"
+      },
+      {
+        "id": "TH_NCM_charge_max_voltage",
+        "class": "StandardThreshold",
+        "parameter": "充电最高电压(NCM)",
+        "value": 4.5,
+        "unit": "V",
+        "standard": "GB_T_44500"
+      },
+      {
+        "id": "TH_LFP_charge_max_voltage",
+        "class": "StandardThreshold",
+        "parameter": "充电最高电压(LFP)",
+        "value": 3.85,
+        "unit": "V",
+        "standard": "GB_T_44500"
+      },
+      {
+        "id": "TH_voltage_range",
+        "class": "StandardThreshold",
+        "parameter": "电压极差(同类型)",
+        "value": 0.3,
+        "unit": "V",
+        "standard": "GB_T_44500"
+      },
+      {
+        "id": "TH_DC_insulation",
+        "class": "StandardThreshold",
+        "parameter": "直流绝缘",
+        "value": 100,
+        "unit": "Ω/V",
+        "standard": "GB_T_44500"
+      },
+      {
+        "id": "TH_AC_insulation",
+        "class": "StandardThreshold",
+        "parameter": "交流绝缘",
+        "value": 1,
+        "unit": "MΩ",
+        "standard": "GB_T_44500"
+      },
+      {
+        "id": "TH_equipotential_platform",
+        "class": "StandardThreshold",
+        "parameter": "电位均衡(平台)",
+        "value": 0.1,
+        "unit": "Ω",
+        "standard": "GB_T_44500"
+      },
+      {
+        "id": "TH_equipotential_parts",
+        "class": "StandardThreshold",
+        "parameter": "电位均衡(部件)",
+        "value": 0.2,
+        "unit": "Ω",
+        "standard": "GB_T_44500"
+      }
+    ],
+    "known_gaps": [
+      "GB/T 31484/31485/31486 系列（循环寿命/安全/电性能）尚未系统学习",
+      "GB/T 34014/34015/33598 系列（回收/编码/梯次利用）尚未系统学习",
+      "GB/T 38698 系列（拆解规范）尚未系统学习",
+      "IEC 62660/62619/62933 系列（国际标准）尚未系统学习"
+    ],
+    "source_documents": []
+  },
+  "learning_template": {
+    "description": "标准法规领域的学习笔记采集模板",
+    "required_fields": [
+      "标准号",
+      "全称",
+      "类型（强制/推荐）",
+      "实施日期",
+      "关键阈值",
+      "适用对象",
+      "与已知标准的关系（互补/引用/替代/冲突）"
+    ],
+    "optional_fields": [
+      "过渡期",
+      "起草单位",
+      "国际对标",
+      "对运营系统的落地要求"
+    ],
+    "example": "GB/T 44500→推荐性→2025-03-01→三元60°C/LFP65°C→年检用→与45688互补(年检快照vs在线预警)"
+  }
+}

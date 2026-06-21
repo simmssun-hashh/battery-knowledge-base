@@ -1,0 +1,3920 @@
+{
+  "updated": "2026-06-20T14:31:20.137692+00:00",
+  "total_entities": 242,
+  "entities": {
+    "onto_battery_operations_BatteryGPT": {
+      "entity_data": {
+        "id": "BatteryGPT",
+        "class": "SOHPredictionModel",
+        "RMSE_percent": 0.213,
+        "min_data": "30%早期数据",
+        "input": "充电V/I/T",
+        "params": "42M",
+        "note": "生成式AI自回归预测全生命周期"
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "soh_models_benchmark",
+      "text": "BatteryGPT SOHPredictionModel"
+    },
+    "onto_battery_operations_LSTM_baseline": {
+      "entity_data": {
+        "id": "LSTM_baseline",
+        "class": "SOHPredictionModel",
+        "RMSE_percent": 2.58,
+        "min_data": "30%早期数据",
+        "note": "传统时序基线"
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "soh_models_benchmark",
+      "text": "LSTM_baseline SOHPredictionModel"
+    },
+    "onto_battery_operations_HybridPhysicsAI": {
+      "entity_data": {
+        "id": "HybridPhysicsAI",
+        "class": "SOHPredictionModel",
+        "RMSE_percent": "~5",
+        "min_data": "前100循环",
+        "note": "物理框架+数据优化"
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "soh_models_benchmark",
+      "text": "HybridPhysicsAI SOHPredictionModel"
+    },
+    "onto_battery_operations_面向换电体系的动力电池产品定义与设计": {
+      "entity_data": {
+        "value": "面向换电体系的动力电池产品定义与设计"
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "source_documents",
+      "text": "面向换电体系的动力电池产品定义与设计 面向换电体系的动力电池产品定义与设计"
+    },
+    "onto_battery_operations_BatteryGPT：基于生成式预训练的电池SOH早期预测方法研究": {
+      "entity_data": {
+        "value": "BatteryGPT：基于生成式预训练的电池SOH早期预测方法研究"
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "source_documents",
+      "text": "BatteryGPT：基于生成式预训练的电池SOH早期预测方法研究 BatteryGPT：基于生成式预训练的电池SOH早期预测方法研究"
+    },
+    "onto_battery_operations_GB/T 45688-2025 换电模式7项特殊适配": {
+      "entity_data": {
+        "value": "GB/T 45688-2025 换电模式7项特殊适配"
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "source_documents",
+      "text": "GB/T 45688-2025 换电模式7项特殊适配 GB/T 45688-2025 换电模式7项特殊适配"
+    },
+    "onto_battery_operations_营运车业务方案讨论": {
+      "entity_data": {
+        "value": "营运车业务方案讨论"
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "source_documents",
+      "text": "营运车业务方案讨论 营运车业务方案讨论"
+    },
+    "onto_battery_operations_面向AI时代的运营技术开发与落地方案：VoltAI": {
+      "entity_data": {
+        "value": "面向AI时代的运营技术开发与落地方案：VoltAI"
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "source_documents",
+      "text": "面向AI时代的运营技术开发与落地方案：VoltAI 面向AI时代的运营技术开发与落地方案：VoltAI"
+    },
+    "onto_battery_operations_BatteryAsset": {
+      "entity_data": {
+        "id": "BatteryAsset",
+        "label": "电池资产",
+        "parent": "Thing",
+        "definition": "作为独立资产的电池包，可跨车追踪、独立估值、金融化",
+        "key_properties": [
+          "asset_id",
+          "chemistry",
+          "rated_capacity_kWh",
+          "manufacturing_date",
+          "current_SOH"
+        ]
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "tbox_class",
+      "text": "BatteryAsset 作为独立资产的电池包，可跨车追踪、独立估值、金融化 asset_id chemistry rated_capacity_kWh manufacturing_date current_SOH"
+    },
+    "onto_battery_operations_BaaSService": {
+      "entity_data": {
+        "id": "BaaSService",
+        "label": "电池即服务",
+        "parent": "Thing",
+        "definition": "用户租赁电池而非购买的商业模式",
+        "subclasses": [
+          "BatterySwapService",
+          "BatteryUpgradeService",
+          "BatteryMaintenanceService"
+        ]
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "tbox_class",
+      "text": "BaaSService 用户租赁电池而非购买的商业模式 BatterySwapService BatteryUpgradeService BatteryMaintenanceService"
+    },
+    "onto_battery_operations_BatterySwapStation": {
+      "entity_data": {
+        "id": "BatterySwapStation",
+        "label": "换电站",
+        "parent": "Thing",
+        "definition": "换电网络节点，管理电池资产池和充电调度",
+        "key_properties": [
+          "station_id",
+          "battery_inventory_count",
+          "swap_frequency",
+          "avg_SOC_distribution"
+        ]
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "tbox_class",
+      "text": "BatterySwapStation 换电网络节点，管理电池资产池和充电调度 station_id battery_inventory_count swap_frequency avg_SOC_distribution"
+    },
+    "onto_battery_operations_CascadeApplication": {
+      "entity_data": {
+        "id": "CascadeApplication",
+        "label": "梯次利用场景",
+        "parent": "Thing",
+        "definition": "退役动力电池在储能等低倍率场景的二次应用",
+        "instances": [
+          "通讯基站备电",
+          "低速车",
+          "家庭储能",
+          "工商业储能"
+        ],
+        "screening_criteria": [
+          "SOH >= 60%",
+          "internal_resistance < 2x initial",
+          "no_thermal_history"
+        ]
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "tbox_class",
+      "text": "CascadeApplication 退役动力电池在储能等低倍率场景的二次应用 通讯基站备电 低速车 家庭储能 工商业储能"
+    },
+    "onto_battery_operations_SOHPredictionModel": {
+      "entity_data": {
+        "id": "SOHPredictionModel",
+        "label": "SOH预测模型",
+        "parent": "Thing",
+        "definition": "基于物理/数据/混合方法的电池健康状态预测算法",
+        "instances": [
+          "PhysicsBased",
+          "LSTM",
+          "CNN_LSTM",
+          "HybridPhysicsAI",
+          "BatteryGPT"
+        ],
+        "key_properties": [
+          "input_data_type",
+          "RMSE_percent",
+          "min_data_requirement",
+          "computational_cost"
+        ]
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "tbox_class",
+      "text": "SOHPredictionModel 基于物理/数据/混合方法的电池健康状态预测算法 input_data_type RMSE_percent min_data_requirement computational_cost PhysicsBased LSTM CNN_LSTM HybridPhysicsAI BatteryGPT"
+    },
+    "onto_battery_operations_ResidualValueModel": {
+      "entity_data": {
+        "id": "ResidualValueModel",
+        "label": "残值评估模型",
+        "parent": "Thing",
+        "definition": "基于SOH衰减曲线+市场残值率+使用年限的电池残值计算模型",
+        "key_factors": [
+          "chemistry_type",
+          "cycle_history",
+          "temperature_history",
+          "DOD_distribution"
+        ],
+        "uncertainties": [
+          "技术快速迭代",
+          "原材料价格波动",
+          "梯次市场需求变化"
+        ]
+      },
+      "domain": "battery_operations",
+      "domain_label": "电池运营",
+      "category": "tbox_class",
+      "text": "ResidualValueModel 基于SOH衰减曲线+市场残值率+使用年限的电池残值计算模型"
+    },
+    "onto_battery_safety_NCM_safety": {
+      "entity_data": {
+        "id": "NCM_safety",
+        "class": "BatteryChemistry",
+        "label": "三元",
+        "hasMaxChargeTemp": 60,
+        "hasMaxDischargeTemp": 60,
+        "hasMaxVoltage": 4.5,
+        "hasMinVoltage": 1.8,
+        "hasVoltageRangeLimit": 0.3
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "chemistry_thresholds",
+      "text": "NCM_safety BatteryChemistry 三元 hasMaxVoltage:4.5"
+    },
+    "onto_battery_safety_LFP_safety": {
+      "entity_data": {
+        "id": "LFP_safety",
+        "class": "BatteryChemistry",
+        "label": "磷酸铁锂",
+        "hasMaxChargeTemp": 65,
+        "hasMaxDischargeTemp": 65,
+        "hasMaxVoltage": 3.85,
+        "hasMinVoltage": 1.5,
+        "hasVoltageRangeLimit": 0.3
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "chemistry_thresholds",
+      "text": "LFP_safety BatteryChemistry 磷酸铁锂 hasMaxVoltage:3.85"
+    },
+    "onto_battery_safety_GB_38031-2025": {
+      "entity_data": {
+        "id": "GB_38031-2025",
+        "class": "SafetyStandard",
+        "type": "强制性国标",
+        "name": "电动汽车用动力蓄电池安全要求",
+        "hasThermalRunawayDelay": 2,
+        "implement_date": "2026-07-01",
+        "replaces": "GB 38031-2020",
+        "key_requirements": [
+          "2小时不起火不爆炸",
+          "热扩散试验(报警≤5min, 烟气5min不进乘员舱)",
+          "针刺90%深度/过充/过放(SOC=0%→1I1/30min)/外部短路",
+          "底部撞击测试(30mm半球/10kg/150J) —2025新增",
+          "快充循环后安全测试(仅快充能力产品) —2025新增",
+          "温度冲击先高温后低温(UN R100协调)",
+          "内部加热触发(热扩散触发新方法)"
+        ],
+        "new_in_2025": [
+          "底部撞击测试",
+          "快充循环后安全测试",
+          "内部加热触发热失控",
+          "烟气安全(包级+整车级)",
+          "统一形式判定规则(多回路均需短路测试)"
+        ]
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "standards",
+      "text": "GB_38031-2025 SafetyStandard 2026-07-01 GB 38031-2020"
+    },
+    "onto_battery_safety_GB_T_44500-2024": {
+      "entity_data": {
+        "id": "GB_T_44500-2024",
+        "class": "SafetyStandard",
+        "type": "推荐性国标",
+        "name": "新能源汽车运行安全性能检验规程",
+        "implement_date": "2025-03-01",
+        "key_requirements": [
+          "动力蓄电池安全（充电+放电）",
+          "驱动电机安全",
+          "电控系统安全",
+          "电气安全（绝缘+电位均衡）"
+        ],
+        "notes": "年检标准。非营运小型/微客6年内免检，6-10年每2年1次。企业技术文件阈值优先于附录B参考阈值"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "standards",
+      "text": "GB_T_44500-2024 SafetyStandard 2025-03-01"
+    },
+    "onto_battery_safety_GB_T_45688-2025": {
+      "entity_data": {
+        "id": "GB_T_45688-2025",
+        "class": "SafetyStandard",
+        "type": "推荐性国标",
+        "name": "新能源汽车运行安全性能动态监测预警",
+        "implement_date": "2025-12-01",
+        "key_requirements": [
+          "12项故障监测",
+          "12项隐患模型C.1-C.12",
+          "三级故障+两级隐患告警",
+          "换电7项特殊适配",
+          "事故前后30s数据≤1s采样"
+        ]
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "standards",
+      "text": "GB_T_45688-2025 SafetyStandard 2025-12-01"
+    },
+    "onto_battery_safety_battery_max_temperature": {
+      "entity_data": {
+        "value": "battery_max_temperature"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "fault_monitoring_12_items",
+      "text": "battery_max_temperature battery_max_temperature"
+    },
+    "onto_battery_safety_battery_temp_differential": {
+      "entity_data": {
+        "value": "battery_temp_differential"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "fault_monitoring_12_items",
+      "text": "battery_temp_differential battery_temp_differential"
+    },
+    "onto_battery_safety_cell_max_voltage": {
+      "entity_data": {
+        "value": "cell_max_voltage"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "fault_monitoring_12_items",
+      "text": "cell_max_voltage cell_max_voltage"
+    },
+    "onto_battery_safety_cell_min_voltage": {
+      "entity_data": {
+        "value": "cell_min_voltage"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "fault_monitoring_12_items",
+      "text": "cell_min_voltage cell_min_voltage"
+    },
+    "onto_battery_safety_cell_voltage_consistency": {
+      "entity_data": {
+        "value": "cell_voltage_consistency"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "fault_monitoring_12_items",
+      "text": "cell_voltage_consistency cell_voltage_consistency"
+    },
+    "onto_battery_safety_SOC_anomaly": {
+      "entity_data": {
+        "value": "SOC_anomaly"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "fault_monitoring_12_items",
+      "text": "SOC_anomaly SOC_anomaly"
+    },
+    "onto_battery_safety_motor_temperature": {
+      "entity_data": {
+        "value": "motor_temperature"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "fault_monitoring_12_items",
+      "text": "motor_temperature motor_temperature"
+    },
+    "onto_battery_safety_controller_temperature": {
+      "entity_data": {
+        "value": "controller_temperature"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "fault_monitoring_12_items",
+      "text": "controller_temperature controller_temperature"
+    },
+    "onto_battery_safety_DC_DC_temperature": {
+      "entity_data": {
+        "value": "DC_DC_temperature"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "fault_monitoring_12_items",
+      "text": "DC_DC_temperature DC_DC_temperature"
+    },
+    "onto_battery_safety_insulation_resistance": {
+      "entity_data": {
+        "value": "insulation_resistance"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "fault_monitoring_12_items",
+      "text": "insulation_resistance insulation_resistance"
+    },
+    "onto_battery_safety_HVIL_status": {
+      "entity_data": {
+        "value": "HVIL_status"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "fault_monitoring_12_items",
+      "text": "HVIL_status HVIL_status"
+    },
+    "onto_battery_safety_电池级监测（替代车辆级）": {
+      "entity_data": {
+        "value": "电池级监测（替代车辆级）"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "swap_adaptations_GB45688",
+      "text": "电池级监测（替代车辆级） 电池级监测（替代车辆级）"
+    },
+    "onto_battery_safety_跨车历史追踪": {
+      "entity_data": {
+        "value": "跨车历史追踪"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "swap_adaptations_GB45688",
+      "text": "跨车历史追踪 跨车历史追踪"
+    },
+    "onto_battery_safety_换电前中后三阶段突变检测": {
+      "entity_data": {
+        "value": "换电前中后三阶段突变检测"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "swap_adaptations_GB45688",
+      "text": "换电前中后三阶段突变检测 换电前中后三阶段突变检测"
+    },
+    "onto_battery_safety_换电站库存电池离线监测": {
+      "entity_data": {
+        "value": "换电站库存电池离线监测"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "swap_adaptations_GB45688",
+      "text": "换电站库存电池离线监测 换电站库存电池离线监测"
+    },
+    "onto_battery_safety_电池资产ID与VIN解耦": {
+      "entity_data": {
+        "value": "电池资产ID与VIN解耦"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "swap_adaptations_GB45688",
+      "text": "电池资产ID与VIN解耦 电池资产ID与VIN解耦"
+    },
+    "onto_battery_safety_BaaS数据归属": {
+      "entity_data": {
+        "value": "BaaS数据归属"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "swap_adaptations_GB45688",
+      "text": "BaaS数据归属 BaaS数据归属"
+    },
+    "onto_battery_safety_聚集停放电池+车辆双重监测": {
+      "entity_data": {
+        "value": "聚集停放电池+车辆双重监测"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "swap_adaptations_GB45688",
+      "text": "聚集停放电池+车辆双重监测 聚集停放电池+车辆双重监测"
+    },
+    "onto_battery_safety_GB/T 45688-2025 学习笔记": {
+      "entity_data": {
+        "value": "GB/T 45688-2025 学习笔记"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "source_documents",
+      "text": "GB/T 45688-2025 学习笔记 GB/T 45688-2025 学习笔记"
+    },
+    "onto_battery_safety_GB/T 44500-2024 年检规程": {
+      "entity_data": {
+        "value": "GB/T 44500-2024 年检规程"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "source_documents",
+      "text": "GB/T 44500-2024 年检规程 GB/T 44500-2024 年检规程"
+    },
+    "onto_battery_safety_GB 38031-2025 电池安全要求": {
+      "entity_data": {
+        "value": "GB 38031-2025 电池安全要求"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "source_documents",
+      "text": "GB 38031-2025 电池安全要求 GB 38031-2025 电池安全要求"
+    },
+    "onto_battery_safety_ATL电池基本原理培训": {
+      "entity_data": {
+        "value": "ATL电池基本原理培训"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "source_documents",
+      "text": "ATL电池基本原理培训 ATL电池基本原理培训"
+    },
+    "onto_battery_safety_绝缘失效机理与检测算法_CEO文档_2026-05-25": {
+      "entity_data": {
+        "value": "绝缘失效机理与检测算法_CEO文档_2026-05-25"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "source_documents",
+      "text": "绝缘失效机理与检测算法_CEO文档_2026-05-25 绝缘失效机理与检测算法_CEO文档_2026-05-25"
+    },
+    "onto_battery_safety_SafetyEvent": {
+      "entity_data": {
+        "id": "SafetyEvent",
+        "label": "安全事件",
+        "parent": "Thing",
+        "definition": "电池运行中任何偏离正常安全边界的事件",
+        "subclasses": [
+          "ThermalEvent",
+          "ElectricalEvent",
+          "InsulationEvent",
+          "MechanicalEvent",
+          "SamplingEvent"
+        ]
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "tbox_class",
+      "text": "SafetyEvent 电池运行中任何偏离正常安全边界的事件 ThermalEvent ElectricalEvent InsulationEvent MechanicalEvent SamplingEvent"
+    },
+    "onto_battery_safety_ThermalEvent": {
+      "entity_data": {
+        "id": "ThermalEvent",
+        "parent": "SafetyEvent",
+        "definition": "温度相关安全事件",
+        "subclasses": [
+          "OvertemperatureEvent",
+          "TemperatureDifferentialEvent",
+          "ThermalRunawayEvent"
+        ]
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "tbox_class",
+      "text": "ThermalEvent 温度相关安全事件 OvertemperatureEvent TemperatureDifferentialEvent ThermalRunawayEvent"
+    },
+    "onto_battery_safety_ElectricalEvent": {
+      "entity_data": {
+        "id": "ElectricalEvent",
+        "parent": "SafetyEvent",
+        "definition": "电压/电流异常事件",
+        "subclasses": [
+          "OvervoltageEvent",
+          "UndervoltageEvent",
+          "VoltageConsistencyEvent",
+          "SOCAnomalyEvent"
+        ]
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "tbox_class",
+      "text": "ElectricalEvent 电压/电流异常事件 OvervoltageEvent UndervoltageEvent VoltageConsistencyEvent SOCAnomalyEvent"
+    },
+    "onto_battery_safety_InsulationEvent": {
+      "entity_data": {
+        "id": "InsulationEvent",
+        "parent": "SafetyEvent",
+        "definition": "绝缘异常事件",
+        "key_threshold": "DC: <100Ω/V | AC: <1MΩ"
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "tbox_class",
+      "text": "InsulationEvent 绝缘异常事件"
+    },
+    "onto_battery_safety_SafetyStandard": {
+      "entity_data": {
+        "id": "SafetyStandard",
+        "parent": "Thing",
+        "definition": "电池安全相关的国家/国际标准",
+        "subclasses": [
+          "强制性国标",
+          "推荐性国标",
+          "国际标准"
+        ],
+        "key_properties": [
+          "implement_date",
+          "key_thresholds",
+          "replaces_standard"
+        ]
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "tbox_class",
+      "text": "SafetyStandard 电池安全相关的国家/国际标准 implement_date key_thresholds replaces_standard 强制性国标 推荐性国标 国际标准"
+    },
+    "onto_battery_safety_FaultMonitorItem": {
+      "entity_data": {
+        "id": "FaultMonitorItem",
+        "parent": "Thing",
+        "definition": "GB/T 45688 定义的12项实时故障监测项",
+        "key_properties": [
+          "monitor_target",
+          "data_source",
+          "alert_level"
+        ]
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "tbox_class",
+      "text": "FaultMonitorItem GB/T 45688 定义的12项实时故障监测项 monitor_target data_source alert_level"
+    },
+    "onto_battery_safety_HiddenRiskModel": {
+      "entity_data": {
+        "id": "HiddenRiskModel",
+        "parent": "Thing",
+        "definition": "GB/T 45688 定义的12项云端隐患模型(C.1-C.12)",
+        "key_properties": [
+          "category",
+          "calculation_method",
+          "data_window"
+        ]
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "tbox_class",
+      "text": "HiddenRiskModel GB/T 45688 定义的12项云端隐患模型(C.1-C.12) category calculation_method data_window"
+    },
+    "onto_battery_safety_BatteryChemistry": {
+      "entity_data": {
+        "id": "BatteryChemistry",
+        "parent": "Thing",
+        "definition": "电池化学体系类型（引用自battery_technology）",
+        "instances": [
+          "NCM",
+          "LFP"
+        ],
+        "key_properties": [
+          "max_temp_charge_C",
+          "max_temp_discharge_C",
+          "max_voltage_V",
+          "min_voltage_V"
+        ]
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "tbox_class",
+      "text": "BatteryChemistry 电池化学体系类型（引用自battery_technology） max_temp_charge_C max_temp_discharge_C max_voltage_V min_voltage_V NCM LFP"
+    },
+    "onto_battery_safety_AlertLevel": {
+      "entity_data": {
+        "id": "AlertLevel",
+        "parent": "Thing",
+        "definition": "GB/T 45688 告警分级",
+        "instances": [
+          "一级故障(最严重)",
+          "二级故障",
+          "三级故障",
+          "一级隐患",
+          "二级隐患"
+        ],
+        "key_properties": [
+          "action_required",
+          "notification_target"
+        ]
+      },
+      "domain": "battery_safety",
+      "domain_label": "电池安全与监测预警",
+      "category": "tbox_class",
+      "text": "AlertLevel GB/T 45688 告警分级 action_required notification_target 一级故障(最严重) 二级故障 三级故障 一级隐患 二级隐患"
+    },
+    "onto_battery_system_battery_system_entities_0": {
+      "entity_data": {
+        "thermal": {
+          "max_cell_temp": "50℃",
+          "cooling_temp_diff": "≤3℃",
+          "heating_temp_diff": "≤10℃",
+          "thermal_propagation_prevention": "24h无热蔓延"
+        },
+        "electrical": {
+          "class_A_voltage": "≤30VAC or ≤60VDC",
+          "class_B_voltage": "30-1000VAC or 60-1500VDC",
+          "insulation_resistance_400V": "≥500MΩ",
+          "insulation_resistance_800V": "≥1000MΩ"
+        },
+        "mechanical": {
+          "sealing_surface_width": "≥7.5mm",
+          "module_mount_height": "12-18mm",
+          "underbody_clearance": "≥15mm",
+          "leak_test_pressure": "3.5kPa",
+          "leak_limit_single": "≤40Pa",
+          "leak_limit_whole": "≤100Pa"
+        }
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "battery_system_entities_0"
+    },
+    "onto_battery_system_battery_system_entities_1": {
+      "entity_data": {
+        "description": "电池资产运营与调度对象模型（基于Palantir Ontology最佳实践设计）",
+        "entities": [
+          {
+            "id": "swap_station",
+            "name": "换电站",
+            "definition": "电池交换站点，具备电池仓、充电设施、BMS通信能力",
+            "attributes": {
+              "station_id": "站点唯一标识",
+              "location": "地理位置",
+              "slot_count": "电池仓数量",
+              "inventory": "当前库存电池型号及数量"
+            },
+            "relations": [
+              "contains:battery_pack",
+              "generates:dispatch_demand"
+            ]
+          },
+          {
+            "id": "logistics_truck",
+            "name": "物流车",
+            "definition": "用于电池转运的物流车辆，可装载多个电池木箱",
+            "attributes": {
+              "truck_id": "车辆唯一标识",
+              "max_crates": "最大装载木箱数",
+              "current_location": "当前位置",
+              "status": "空闲/运输中"
+            },
+            "relations": [
+              "transports:battery_crate",
+              "fulfills:dispatch_task"
+            ]
+          },
+          {
+            "id": "nio_vehicle",
+            "name": "蔚来车辆",
+            "definition": "用于车辆转运模式的蔚来汽车，通过换电动作转移电池",
+            "attributes": {
+              "vehicle_id": "车辆唯一标识",
+              "is_internal": "是否内部车辆",
+              "is_employee_car": "是否员工车（需积分补偿）",
+              "current_battery": "当前装载电池"
+            },
+            "relations": [
+              "carries:battery_pack",
+              "fulfills:dispatch_task"
+            ]
+          },
+          {
+            "id": "battery_crate",
+            "name": "电池木箱",
+            "definition": "电池物流转运的标准化包装容器",
+            "attributes": {
+              "crate_id": "木箱唯一标识",
+              "max_packs": "最大装载电池数",
+              "current_packs": "当前装载电池数"
+            },
+            "relations": [
+              "contains:battery_pack",
+              "loaded_on:logistics_truck"
+            ]
+          },
+          {
+            "id": "service_center",
+            "name": "服务中心",
+            "definition": "电池维修服务中心，接收故障电池进行修理",
+            "attributes": {
+              "center_id": "中心唯一标识",
+              "location": "地理位置",
+              "repair_capability": "维修能力等级"
+            },
+            "relations": [
+              "receives:battery_pack",
+              "originates_from:dispatch_plan"
+            ]
+          },
+          {
+            "id": "dispatch_demand",
+            "name": "调度需求",
+            "definition": "触发电池调度的原始需求，包括故障需求和健康配置需求",
+            "types": [
+              {
+                "name": "health_demand",
+                "source": "电池故障诊断",
+                "direction": "换电站→服务中心/工厂"
+              },
+              {
+                "name": "config_demand",
+                "source": "站点配置优化",
+                "direction": "按需调整各站电池型号配比"
+              }
+            ],
+            "attributes": {
+              "demand_id": "需求唯一标识",
+              "source_type": "故障/配置",
+              "value_score": "调度价值量化评分",
+              "expiry_time": "需求失效时间"
+            }
+          },
+          {
+            "id": "dispatch_plan",
+            "name": "调度方案",
+            "definition": "全局最优的电池调度计划，平衡调度价值和调度成本",
+            "attributes": {
+              "plan_id": "方案唯一标识",
+              "objective": "优化目标（成本/时效/价值）",
+              "total_value": "总调度价值",
+              "total_cost": "总调度成本",
+              "status": "草稿/已发布/执行中/已完成"
+            },
+            "relations": [
+              "covers:dispatch_demand",
+              "has:dispatch_task"
+            ]
+          },
+          {
+            "id": "dispatch_task",
+            "name": "调度任务",
+            "definition": "调度方案拆解后的原子指令，分配给具体执行人或车辆",
+            "attributes": {
+              "task_id": "任务唯一标识",
+              "mode": "物流转运/车辆转运",
+              "status": "待执行/执行中/已完成",
+              "deadline": "截止时间"
+            },
+            "relations": [
+              "fulfilled_by:logistics_truck",
+              "fulfilled_by:nio_vehicle"
+            ]
+          }
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "battery_system_entities_1 电池资产运营与调度对象模型（基于Palantir Ontology最佳实践设计）"
+    },
+    "onto_battery_system_battery_system_entities_2": {
+      "entity_data": {
+        "upper_cover": [
+          {
+            "material": "DC04/DC06钢板",
+            "thickness": "0.6-1.0mm"
+          },
+          {
+            "material": "SMC",
+            "thickness": "2.5-3.0mm"
+          },
+          {
+            "material": "PP+30%GF",
+            "thickness": "-"
+          }
+        ],
+        "lower_cover": [
+          {
+            "material": "HC340/590DP",
+            "thickness": "1.0-2.0mm"
+          },
+          {
+            "material": "HC420/780DP",
+            "thickness": "1.0-2.0mm"
+          }
+        ],
+        "support_beam": [
+          {
+            "material": "6061-T6铝型材",
+            "thickness": "1.5-4.0mm"
+          },
+          {
+            "material": "HC420/780DP钢",
+            "thickness": "-"
+          }
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "battery_system_entities_2"
+    },
+    "onto_battery_system_battery_system_entities_3": {
+      "entity_data": {
+        "description": "电芯关键材料技术要求（源自Part I-电芯材料&电芯设计规范）",
+        "materials": [
+          {
+            "name": "镍钴锰酸锂单晶正极材料",
+            "standard": "YS/T 798",
+            "particle_size": {
+              "D10": "≥2μm",
+              "D50": "5-15μm",
+              "D90": "≤30μm",
+              "Dmin": "≥0.1μm",
+              "Dmax": "≤60μm"
+            },
+            "physical_properties": {
+              "specific_surface_area": "≤1.0 m²/g",
+              "tap_density": "≥1.8 g/cm³",
+              "pH": "10.0-12.5",
+              "appearance": "灰黑色粉末，颜色均一，无结块，无夹杂物"
+            },
+            "electrochemical_performance": {
+              "first_discharge_capacity": "≥180 mAh/g",
+              "first_efficiency": "≥86%",
+              "platform_capacity_ratio_10th": "≥60%",
+              "platform_capacity_ratio_100th": "≥50%",
+              "cycle_life_80percent": "≥500次"
+            },
+            "consistency": {
+              "Cpk_requirement": "≥1.33（成分/理化/电化学）",
+              "magnetic_impurity": "≤50个/kg"
+            }
+          },
+          {
+            "name": "单水氢氧化锂",
+            "packaging": {
+              "crystal_type": "内衬PE袋，外套PP袋或2-3层纸袋",
+              "powder_type": "内衬铝塑复合袋充氮气保护，外套塑料覆膜袋"
+            },
+            "storage": {
+              "environment": "干燥、无酸腐蚀、防潮",
+              "shelf_life": "≤6个月"
+            }
+          }
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "battery_system_entities_3 电芯关键材料技术要求（源自Part I-电芯材料&电芯设计规范）"
+    },
+    "onto_battery_system_ev_battery_field_study": {
+      "entity_data": {
+        "id": "ev_battery_field_study",
+        "type": "research_report",
+        "name": "实车电池衰减数据研究(29,700+ EVs)",
+        "domain": "battery_degradation",
+        "attributes": {
+          "data_source": "Geotab(22700)+P3/Aviloo(7000+)",
+          "annual_degradation_range": "1.5%-3.0%",
+          "key_factors": [
+            "快充频率",
+            "SOC极端暴露",
+            "高温环境",
+            "使用强度"
+          ],
+          "calendar_aging_correction": "实验室预测比实车慢30-50%"
+        }
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "ev_battery_field_study"
+    },
+    "onto_battery_system_powertrain_architecture": {
+      "entity_data": {
+        "id": "powertrain_architecture",
+        "type": "knowledge_area",
+        "name": "新能源汽车动力系统构型",
+        "domain": "vehicle_powertrain",
+        "attributes": {
+          "six_architectures": [
+            "串联",
+            "并联(PX)",
+            "混联",
+            "功率分流",
+            "插电PHEV",
+            "增程"
+          ],
+          "px_configs": "P0→P4",
+          "pure_ev_integration": "三合一→多合一"
+        }
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "powertrain_architecture"
+    },
+    "onto_battery_system_cell_material_and_design": {
+      "entity_data": {
+        "id": "cell_material_and_design",
+        "type": "knowledge_area",
+        "name": "电芯材料与电芯设计规范",
+        "domain": "cell_engineering",
+        "attributes": {
+          "six_chemistry_systems": [
+            "LCO",
+            "LMO",
+            "NCM",
+            "NCA",
+            "LFP",
+            "LTO"
+          ],
+          "three_form_factors": [
+            "方形",
+            "软包",
+            "圆柱(4680)"
+          ],
+          "manufacturing_steps": [
+            "涂布→冷压→分条→卷绕→组装→焊接→注液→化成"
+          ]
+        }
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "cell_material_and_design"
+    },
+    "onto_battery_system_thermal_management": {
+      "entity_data": {
+        "id": "thermal_management",
+        "name": "电池热管理系统",
+        "category": "engineering_system",
+        "knowledge": {
+          "max_temp": "50℃",
+          "delta_T_cooling": "≤3℃",
+          "delta_T_heating": "≤10℃",
+          "insulation_ncm": "-5℃ target, ≤2.5℃/h",
+          "insulation_lfp": "5℃ target, ≤1.67℃/h",
+          "coolant": "50% ethylene glycol, -35 grade, 3281J/kg℃",
+          "flow_resistance": "≤60kPa @25℃ 20L/min"
+        },
+        "learned_date": "2026-04-28"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "thermal_management"
+    },
+    "onto_battery_system_liquid_cooling_plate": {
+      "entity_data": {
+        "id": "liquid_cooling_plate",
+        "name": "液冷板",
+        "category": "component",
+        "knowledge": {
+          "types": [
+            "口琴管式(low cost/light/simple)",
+            "冲压板式(flexible channel/high load)",
+            "挤压板式(mature process/stiff)",
+            "吹胀式(low power only)"
+          ],
+          "heat_transfer_coeff": "~200W/K flat, ~350W/K cylindrical",
+          "flow_uniformity": "≤3% per cell projection",
+          "airtightness": "≤1cc/min @3bar",
+          "burst_pressure": "10bar"
+        },
+        "learned_date": "2026-04-28"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "liquid_cooling_plate"
+    },
+    "onto_battery_system_thermal_runaway_protection": {
+      "entity_data": {
+        "id": "thermal_runaway_protection",
+        "name": "热失控防护",
+        "category": "safety_system",
+        "knowledge": {
+          "materials": [
+            "金云母(耐冲击)",
+            "气凝胶(0.013W/mK)",
+            "陶瓷硅复合材料(1500℃火焰)"
+          ],
+          "fire_test": "1500℃乙炔焰 + 0.7MPa, ≥30min",
+          "thermal_conductivity": "≤0.1W/mK @25-300℃"
+        },
+        "learned_date": "2026-04-28"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "thermal_runaway_protection"
+    },
+    "onto_battery_system_mechanical_design": {
+      "entity_data": {
+        "id": "mechanical_design",
+        "name": "机械结构设计",
+        "category": "engineering_system",
+        "knowledge": {
+          "nvh": "电池包模态≥35Hz",
+          "enclosure_processes": [
+            "铸铝",
+            "型材拼焊(FSW/CMT/MIG/TIG)",
+            "钣金拼焊",
+            "铆接+FDS"
+          ],
+          "seal_width": "≥7.5mm",
+          "mount_height": "12-18mm",
+          "protection": "IP68(1.5m/24h), 盐雾720h, 球击120KN"
+        },
+        "learned_date": "2026-04-28"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "mechanical_design"
+    },
+    "onto_battery_system_hv_safety_system": {
+      "entity_data": {
+        "id": "hv_safety_system",
+        "name": "高压安全系统",
+        "category": "safety_system",
+        "knowledge": {
+          "active_discharge": "<3s to 60VDC",
+          "passive_discharge": "<1min to 60VDC",
+          "insulation_min": ">5MΩ system, >2.5MΩ pack",
+          "touch_current": "AC≤3.5mA, DC≤10mA",
+          "equipotential": "<5mΩ",
+          "crash_safety": "<3s, Pyrofuse<3ms"
+        },
+        "learned_date": "2026-04-28"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "hv_safety_system"
+    },
+    "onto_battery_system_battery_logistics": {
+      "entity_data": {
+        "id": "battery_logistics",
+        "name": "电池存储运输保养",
+        "category": "operations",
+        "knowledge": {
+          "storage_temp": "5-30℃ recommended",
+          "soc_long_term": "50-60%",
+          "soc_transport": "20-30%",
+          "maintenance_cycle": "3-month top-up, 6-month full cycle"
+        },
+        "learned_date": "2026-04-28"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "battery_logistics"
+    },
+    "onto_battery_system_aftermarket_repair": {
+      "entity_data": {
+        "id": "aftermarket_repair",
+        "name": "售后维修体系",
+        "category": "operations",
+        "knowledge": {
+          "tier1": "区域中心: ≥400㎡, 充放电/气密/均衡设备",
+          "tier2": "片区网点: ≥100㎡",
+          "personnel": "≥3 certified",
+          "equipment": "充放电15万/气密5万/均衡2万"
+        },
+        "learned_date": "2026-04-28"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "aftermarket_repair"
+    },
+    "onto_battery_system_battery_recycling": {
+      "entity_data": {
+        "id": "battery_recycling",
+        "name": "电池回收利用",
+        "category": "lifecycle",
+        "knowledge": {
+          "retirement_criteria": "余能<70%, 压差>150mV, 温差>8℃",
+          "pack_reuse": "余能≥65%, 温差≤4℃",
+          "module_reuse": "余能≥65%, 温差≤3℃",
+          "cell_reuse": "余能≥70%, 内阻≤1.2x"
+        },
+        "learned_date": "2026-04-28"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "battery_recycling"
+    },
+    "onto_battery_system_pack_production_line": {
+      "entity_data": {
+        "id": "pack_production_line",
+        "name": "PACK生产线",
+        "category": "manufacturing",
+        "knowledge": {
+          "capacity": "3JPH, ~15000 packs/year",
+          "stations": [
+            "涂胶",
+            "模组入箱",
+            "激光焊接",
+            "BDU安装",
+            "气密测试",
+            "EOL测试"
+          ],
+          "quality": "OEE≥85%, 一次合格率≥98%",
+          "control": "SIEMENS 1500 PLC + MES"
+        },
+        "learned_date": "2026-04-28"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "pack_production_line"
+    },
+    "onto_battery_system_ctc_skateboard": {
+      "entity_data": {
+        "id": "ctc_skateboard",
+        "name": "CTC滑板底盘",
+        "category": "technology",
+        "knowledge": {
+          "weight_reduction": "10%",
+          "range_increase": "14%",
+          "cost_reduction": "12% per Wh",
+          "definition": "非承载车身+线传转向/制动+电池底盘一体化",
+          "players": [
+            "Rivian",
+            "Arrival",
+            "Canoo",
+            "REE",
+            "悠跑"
+          ]
+        },
+        "learned_date": "2026-04-28"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "ctc_skateboard"
+    },
+    "onto_battery_system_lithium_resource_market": {
+      "entity_data": {
+        "id": "lithium_resource_market",
+        "name": "锂资源市场",
+        "category": "market_dynamics",
+        "definition": "碳酸锂等锂资源的价格形成机制、供需格局和产业链权力分配",
+        "attributes": {
+          "price_2026_apr": "18万元/吨（10个月+120%）",
+          "global_shortage": "8万吨LCE（大摩预测）",
+          "demand_growth": "赣锋+30%/天齐200万吨全球需求",
+          "supply_constraints": [
+            "津巴布韦配额限制",
+            "澳洲柴油荒",
+            "江西停产换证"
+          ],
+          "cost_impact_per_vehicle": "单车锂成本3000→8000+元",
+          "price_forecast": "15-20万元/吨（赣锋李良彬）"
+        },
+        "relations": [
+          "drives_cost_of:cell",
+          "affects_valuation_of:baas_asset"
+        ],
+        "learned_date": "2026-04-29"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "lithium_resource_market 碳酸锂等锂资源的价格形成机制、供需格局和产业链权力分配"
+    },
+    "onto_battery_system_battery_cost_paradigm_shift": {
+      "entity_data": {
+        "id": "battery_cost_paradigm_shift",
+        "name": "电池成本范式转移",
+        "category": "industry_trend",
+        "definition": "新能源产业从制造驱动到资源驱动的成本逻辑转变",
+        "attributes": {
+          "old_paradigm": "技术进步→电池降价→渗透率提升（确定性的工程问题）",
+          "new_paradigm": "资源博弈→成本波动→不确定性管理（博弈问题）",
+          "power_shift": "制造端议价权→资源端议价权",
+          "valuation_impact": "DCF模型失效，转向实物期权定价",
+          "key_players_with_mines": [
+            "宁德时代（宜春锂云母）",
+            "比亚迪（盐湖提锂）"
+          ]
+        },
+        "relations": [
+          "driven_by:lithium_resource_market",
+          "impacts:pack_design",
+          "impacts:baas_asset"
+        ],
+        "learned_date": "2026-04-29"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "battery_cost_paradigm_shift 新能源产业从制造驱动到资源驱动的成本逻辑转变"
+    },
+    "onto_battery_system_energy_storage_demand": {
+      "entity_data": {
+        "id": "energy_storage_demand",
+        "name": "储能需求",
+        "category": "market_dynamics",
+        "definition": "电网级储能对锂资源的刚性需求，正在改变锂的需求结构",
+        "attributes": {
+          "growth_rate": "增速超动力电池",
+          "demand_characteristic": "比车更刚性（车可不买，电网必须储能）",
+          "strategic_upgrade": "从工业金属→能源金属",
+          "apr_production": "206.5GWh（同比+58%）",
+          "may_forecast": "218.8GWh（同比+63%）"
+        },
+        "relations": [
+          "drives_demand_of:lithium_resource_market",
+          "complements:ev_battery_field_study"
+        ],
+        "learned_date": "2026-04-29"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "energy_storage_demand 电网级储能对锂资源的刚性需求，正在改变锂的需求结构"
+    },
+    "onto_battery_system_battery_swap_standard": {
+      "entity_data": {
+        "id": "battery_swap_standard",
+        "name": "换电标准统一",
+        "category": "industry_dynamics",
+        "definition": "换电模式规模化必须解决的电池包尺寸/接口/BMS通信协议的行业统一问题",
+        "attributes": {
+          "bottleneck": "电池包尺寸/接口/通信协议各不相同",
+          "paths": [
+            "监管强制标准",
+            "市场自发联盟",
+            "场景分化先行"
+          ],
+          "current_status": "多标准并存，技术兼容方案先行"
+        },
+        "relations": [
+          "constrains:swap_station"
+        ],
+        "learned_date": "2026-04-30"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "battery_swap_standard 换电模式规模化必须解决的电池包尺寸/接口/BMS通信协议的行业统一问题"
+    },
+    "onto_battery_system_technical_compatibility": {
+      "entity_data": {
+        "id": "technical_compatibility",
+        "name": "技术兼容路线",
+        "category": "engineering_approach",
+        "definition": "通过机械臂自适应抓取等工程手段兼容不同尺寸电池包，蔚来5代站VGA机械臂100kWh-42kWh",
+        "attributes": {
+          "example": "蔚来5代站VGA可伸缩机械臂",
+          "compatibility_range": "100kWh ↔ 42kWh",
+          "strategy": "用技术兼容化解标准不统一僵局"
+        },
+        "relations": [
+          "enabled_by:nio_5th_gen_station",
+          "works_around:battery_swap_standard"
+        ],
+        "learned_date": "2026-04-30"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "technical_compatibility 通过机械臂自适应抓取等工程手段兼容不同尺寸电池包，蔚来5代站VGA机械臂100kWh-42kWh"
+    },
+    "onto_battery_system_energy_replenishment_tripartite": {
+      "entity_data": {
+        "id": "energy_replenishment_tripartite",
+        "name": "补能三分天下",
+        "category": "industry_trend",
+        "definition": "家充+公充+换电三种补能方式互补共存，换电份额从5%提升至15-20%",
+        "attributes": {
+          "home_charging": "有固定车位，成本最低",
+          "public_charging": "覆盖面广，高峰排队严重",
+          "battery_swap": "3分钟换电 vs 30分钟快充",
+          "swap_market_share": "5% → 15-20%"
+        },
+        "relations": [
+          "includes:battery_swap"
+        ],
+        "learned_date": "2026-04-30"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "energy_replenishment_tripartite 家充+公充+换电三种补能方式互补共存，换电份额从5%提升至15-20%"
+    },
+    "onto_battery_system_flash_charge": {
+      "entity_data": {
+        "id": "flash_charge",
+        "name": "闪充/快充技术",
+        "definition": "高倍率充电技术，通过提升充电功率缩短补能时间，但受限于析锂边界和热管理能力",
+        "attributes": {
+          "key_metrics": [
+            "峰值功率",
+            "功率维持时间",
+            "可用SOC窗口",
+            "温度适应范围"
+          ],
+          "typical_rates": [
+            "2C",
+            "3C",
+            "4C",
+            "5C",
+            "10C及以上"
+          ],
+          "thermal_load": "产热量∝I²，5C充电热负荷是1C的25倍"
+        },
+        "relations": [
+          "constrained_by:lithium_plating",
+          "managed_by:BMS",
+          "limited_by:thermal_management"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "flash_charge 高倍率充电技术，通过提升充电功率缩短补能时间，但受限于析锂边界和热管理能力"
+    },
+    "onto_battery_system_lithium_plating": {
+      "entity_data": {
+        "id": "lithium_plating",
+        "name": "析锂",
+        "definition": "充电电流过大时锂离子来不及嵌入石墨层间，在负极表面以金属锂枝晶形式析出，可刺穿隔膜导致内短路",
+        "attributes": {
+          "trigger_factors": [
+            "充电倍率过高",
+            "低温充电",
+            "高SOC充电(SOC>60%)"
+          ],
+          "risk_characteristics": {
+            "low_temp": "2C即可触发析锂",
+            "high_temp": "5C反而安全",
+            "time_to_failure": "几十个循环内可从健康到安全隐患"
+          },
+          "mechanism": "锂离子嵌入速度<充电电流供给速度→表面析出→枝晶生长→刺穿隔膜→内短路→热失控"
+        },
+        "relations": [
+          "constrains:flash_charge",
+          "monitored_by:BMS_plating_detection"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "lithium_plating 充电电流过大时锂离子来不及嵌入石墨层间，在负极表面以金属锂枝晶形式析出，可刺穿隔膜导致内短路"
+    },
+    "onto_battery_system_battery_thermal_management": {
+      "entity_data": {
+        "id": "battery_thermal_management",
+        "name": "电池热管理",
+        "definition": "控制电池工作在安全温度范围内，包含冷却、加热、均温和保温策略",
+        "attributes": {
+          "safety_boundaries": {
+            "55°C": "工作温度上限-工程红线",
+            "55-60°C": "SEI加速重构增厚、内阻上升",
+            "60-80°C": "隔膜热收缩、微短路风险",
+            "80°C+": "LiPF₆显著分解产HF、热失控级联"
+          },
+          "cooling_methods": [
+            "源头减热(全极耳/固液混合/磷酸锰铁锂)",
+            "多面液冷(效率+50-500%)",
+            "相变材料+液冷复合",
+            "浸没式冷却(0.67°C温差/介质:氟化液硅油GTL酯/PFAS法规推碳氢赛道/高流速反超水冷/工程挑战:密封+低温流动+材料相容性/GB38031-2025驱动/商用车先落地)"
+          ],
+          "smart_control": [
+            "±1°C精度传感器",
+            "实时EIS诊断",
+            "AI预测控制MPC",
+            "路况天气预规划"
+          ]
+        },
+        "relations": [
+          "protects:cell",
+          "enables:flash_charge",
+          "part_of:BMS"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "battery_thermal_management 控制电池工作在安全温度范围内，包含冷却、加热、均温和保温策略"
+    },
+    "onto_battery_system_SOH_estimation": {
+      "entity_data": {
+        "id": "SOH_estimation",
+        "name": "SOH精确估算",
+        "definition": "电池健康状态精确估算，当前行业车端误差±3%，目标±0.5%，是BMS制定充电策略的核心输入",
+        "attributes": {
+          "current_accuracy": "±3%（行业普遍水平）",
+          "target_accuracy": "±0.5%（精算级）",
+          "impact": "SOH误差±3%→BMS策略偏差10-15%→恶性循环（测量不准→策略偏差→加速老化→更不准）",
+          "methods": [
+            "BatteryGPT",
+            "物理+AI融合",
+            "云端+车端协同"
+          ]
+        },
+        "relations": [
+          "inputs_to:BMS",
+          "enables:safe_flash_charge",
+          "required_by:BaaS_asset_valuation"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "SOH_estimation 电池健康状态精确估算，当前行业车端误差±3%，目标±0.5%，是BMS制定充电策略的核心输入"
+    },
+    "onto_battery_system_electrolyte_lithium_salt": {
+      "entity_data": {
+        "id": "electrolyte_lithium_salt",
+        "name": "电解液锂盐热稳定性",
+        "definition": "电解液中锂盐的热分解特性直接影响电池安全边界",
+        "attributes": {
+          "LiPF6": {
+            "decomposition_temp": "80°C",
+            "byproduct": "HF(氢氟酸，腐蚀正极/SEI)",
+            "status": "当前主流"
+          },
+          "LiTFSI": {
+            "decomposition_temp": "纯态350°C+，碳酸酯溶剂中140-270°C",
+            "byproduct": "不产HF",
+            "status": "下一代选项"
+          }
+        },
+        "relations": [
+          "affects:thermal_runaway_temperature",
+          "determines:electrolyte_safety_margin"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "entities",
+      "text": "electrolyte_lithium_salt 电解液中锂盐的热分解特性直接影响电池安全边界"
+    },
+    "onto_battery_system_battery_system_relations_28": {
+      "entity_data": {
+        "type": "contains",
+        "description": "包含关系",
+        "examples": [
+          "pack contains module",
+          "module contains cell"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_28 包含关系"
+    },
+    "onto_battery_system_battery_system_relations_29": {
+      "entity_data": {
+        "type": "monitored_by",
+        "description": "被监控",
+        "examples": [
+          "cell monitored_by BMS"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_29 被监控"
+    },
+    "onto_battery_system_battery_system_relations_30": {
+      "entity_data": {
+        "type": "complies_with",
+        "description": "符合标准",
+        "examples": [
+          "pack complies_with GB38031"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_30 符合标准"
+    },
+    "onto_battery_system_battery_system_relations_31": {
+      "entity_data": {
+        "type": "depends_on",
+        "description": "依赖",
+        "examples": [
+          "thermal_management depends_on cooling_plate"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_31 依赖"
+    },
+    "onto_battery_system_battery_system_relations_32": {
+      "entity_data": {
+        "type": "implements",
+        "description": "实现/执行",
+        "examples": [
+          "batterygpt implements SOH_prediction"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_32 实现/执行"
+    },
+    "onto_battery_system_battery_system_relations_33": {
+      "entity_data": {
+        "type": "complements",
+        "description": "互补",
+        "examples": [
+          "batterygpt complements physics_ai_hybrid"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_33 互补"
+    },
+    "onto_battery_system_battery_system_relations_34": {
+      "entity_data": {
+        "from": "ev_battery_field_study",
+        "to": "baas_asset",
+        "type": "informs_operation"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_34"
+    },
+    "onto_battery_system_battery_system_relations_35": {
+      "entity_data": {
+        "from": "powertrain_architecture",
+        "to": "cell_material_and_design",
+        "type": "upstream_of"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_35"
+    },
+    "onto_battery_system_battery_system_relations_36": {
+      "entity_data": {
+        "from": "cell_material_and_design",
+        "to": "module_design",
+        "type": "upstream_of"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_36"
+    },
+    "onto_battery_system_battery_system_relations_37": {
+      "entity_data": {
+        "from": "lithium_resource_market",
+        "to": "cell",
+        "type": "drives_cost_of"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_37"
+    },
+    "onto_battery_system_battery_system_relations_38": {
+      "entity_data": {
+        "from": "lithium_resource_market",
+        "to": "baas_asset",
+        "type": "affects_valuation_of"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_38"
+    },
+    "onto_battery_system_battery_system_relations_39": {
+      "entity_data": {
+        "from": "battery_cost_paradigm_shift",
+        "to": "lithium_resource_market",
+        "type": "driven_by"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_39"
+    },
+    "onto_battery_system_battery_system_relations_40": {
+      "entity_data": {
+        "from": "battery_cost_paradigm_shift",
+        "to": "pack",
+        "type": "impacts"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_40"
+    },
+    "onto_battery_system_battery_system_relations_41": {
+      "entity_data": {
+        "from": "energy_storage_demand",
+        "to": "lithium_resource_market",
+        "type": "drives_demand_of"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_41"
+    },
+    "onto_battery_system_battery_system_relations_42": {
+      "entity_data": {
+        "from": "energy_storage_demand",
+        "to": "ev_battery_field_study",
+        "type": "complements"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "battery_system_relations_42"
+    },
+    "onto_battery_system_flash_charge_constrained_by_plating": {
+      "entity_data": {
+        "id": "flash_charge_constrained_by_plating",
+        "source": "flash_charge",
+        "target": "lithium_plating",
+        "type": "constrained_by"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "flash_charge_constrained_by_plating"
+    },
+    "onto_battery_system_flash_charge_managed_by_bms": {
+      "entity_data": {
+        "id": "flash_charge_managed_by_bms",
+        "source": "flash_charge",
+        "target": "BMS",
+        "type": "managed_by"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "flash_charge_managed_by_bms"
+    },
+    "onto_battery_system_soh_inputs_to_bms": {
+      "entity_data": {
+        "id": "soh_inputs_to_bms",
+        "source": "SOH_estimation",
+        "target": "BMS",
+        "type": "inputs_to"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "soh_inputs_to_bms"
+    },
+    "onto_battery_system_thermal_management_limits_flash_charge": {
+      "entity_data": {
+        "id": "thermal_management_limits_flash_charge",
+        "source": "battery_thermal_management",
+        "target": "flash_charge",
+        "type": "limits"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "thermal_management_limits_flash_charge"
+    },
+    "onto_battery_system_electrolyte_affects_thermal": {
+      "entity_data": {
+        "id": "electrolyte_affects_thermal",
+        "source": "electrolyte_lithium_salt",
+        "target": "battery_thermal_management",
+        "type": "affects"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "relations",
+      "text": "electrolyte_affects_thermal"
+    },
+    "onto_battery_system_battery_system_source_documents_48": {
+      "entity_data": {
+        "part": "Part II - 模组篇",
+        "doc_id": "doxcnoWhs1wxPLfcK8DEL8csOxh",
+        "length": 103724
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "source_documents",
+      "text": "battery_system_source_documents_48"
+    },
+    "onto_battery_system_battery_system_source_documents_49": {
+      "entity_data": {
+        "part": "Part III - 电气属性篇",
+        "doc_id": "Muc4dadC9oOMhMxI2NIcB24pnhd",
+        "length": 94692
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "source_documents",
+      "text": "battery_system_source_documents_49"
+    },
+    "onto_battery_system_battery_system_source_documents_50": {
+      "entity_data": {
+        "part": "Part IV - BMS篇",
+        "doc_id": "VeR6dYJMXo5zjyxY3FJcuTzknlV",
+        "length": 177345
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "source_documents",
+      "text": "battery_system_source_documents_50"
+    },
+    "onto_battery_system_battery_system_source_documents_51": {
+      "entity_data": {
+        "part": "Part V - 热属性与热安全篇",
+        "doc_id": "WXcYdFMpcoDJ1gxPA83cx5whnGc",
+        "length": 119618
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "source_documents",
+      "text": "battery_system_source_documents_51"
+    },
+    "onto_battery_system_battery_system_source_documents_52": {
+      "entity_data": {
+        "part": "Part VI - 机械属性篇",
+        "doc_id": "Vmt6d4n8oofPEFxLt8TciyJ4nOU",
+        "length": 135861
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "source_documents",
+      "text": "battery_system_source_documents_52"
+    },
+    "onto_battery_system_battery_system_source_documents_53": {
+      "entity_data": {
+        "part": "Part VII - 系统篇",
+        "doc_id": "WoUXdAVckoWjUIx8Ml8c1lkSnNb",
+        "length": 126287
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "source_documents",
+      "text": "battery_system_source_documents_53"
+    },
+    "onto_battery_system_电池模组设计技术规范": {
+      "entity_data": {
+        "value": "电池模组设计技术规范"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "learned_documents",
+      "text": "电池模组设计技术规范 电池模组设计技术规范"
+    },
+    "onto_battery_system_CTP技术演进": {
+      "entity_data": {
+        "value": "CTP技术演进"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "learned_documents",
+      "text": "CTP技术演进 CTP技术演进"
+    },
+    "onto_battery_system_battery_system_learned_documents_56": {
+      "entity_data": {
+        "date": "2026-04-27",
+        "title": "Part III - 电气属性",
+        "key_entities": [
+          "BDU",
+          "fuse_selection",
+          "copper_busbar",
+          "creepage_clearance",
+          "precharge_circuit"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "learned_documents",
+      "text": "battery_system_learned_documents_56"
+    },
+    "onto_battery_system_Part V 热属性与热安全": {
+      "entity_data": {
+        "value": "Part V 热属性与热安全"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "learned_documents",
+      "text": "Part V 热属性与热安全 Part V 热属性与热安全"
+    },
+    "onto_battery_system_Part VI 机械属性": {
+      "entity_data": {
+        "value": "Part VI 机械属性"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "learned_documents",
+      "text": "Part VI 机械属性 Part VI 机械属性"
+    },
+    "onto_battery_system_Part VII 系统": {
+      "entity_data": {
+        "value": "Part VII 系统"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "learned_documents",
+      "text": "Part VII 系统 Part VII 系统"
+    },
+    "onto_battery_system_Part VIII 高压安全": {
+      "entity_data": {
+        "value": "Part VIII 高压安全"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "learned_documents",
+      "text": "Part VIII 高压安全 Part VIII 高压安全"
+    },
+    "onto_battery_system_Part IX 储存运输保养": {
+      "entity_data": {
+        "value": "Part IX 储存运输保养"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "learned_documents",
+      "text": "Part IX 储存运输保养 Part IX 储存运输保养"
+    },
+    "onto_battery_system_Part X 售后维修": {
+      "entity_data": {
+        "value": "Part X 售后维修"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "learned_documents",
+      "text": "Part X 售后维修 Part X 售后维修"
+    },
+    "onto_battery_system_Part XI 回收利用": {
+      "entity_data": {
+        "value": "Part XI 回收利用"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "learned_documents",
+      "text": "Part XI 回收利用 Part XI 回收利用"
+    },
+    "onto_battery_system_Part XII PACK线技术任务书": {
+      "entity_data": {
+        "value": "Part XII PACK线技术任务书"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "learned_documents",
+      "text": "Part XII PACK线技术任务书 Part XII PACK线技术任务书"
+    },
+    "onto_battery_system_battery_system_learned_documents_65": {
+      "entity_data": {
+        "date": "2026-04-29",
+        "title": "锂价暴涨120%，新能源真正的成本战争才刚开始",
+        "key_entities": [
+          "lithium_resource_market",
+          "battery_cost_paradigm_shift",
+          "energy_storage_demand"
+        ],
+        "source": "飞书云盘docx/孙建庆创作"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "learned_documents",
+      "text": "battery_system_learned_documents_65"
+    },
+    "onto_battery_system_battery_system_learned_documents_66": {
+      "entity_data": {
+        "date": "2026-05-05",
+        "title": "钠电拐点：CATL 60GWh大单深度解读",
+        "key_entities": [
+          "sodium_ion_battery",
+          "60GWh_mega_order",
+          "hard_carbon_anode",
+          "energy_storage_market",
+          "CATL_Haibo_Sichuang_partnership"
+        ],
+        "source": "飞书云盘docx/孙建庆创作"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "learned_documents",
+      "text": "battery_system_learned_documents_66"
+    },
+    "onto_battery_system_BatterySystemComponent": {
+      "entity_data": {
+        "id": "BatterySystemComponent",
+        "label": "电池系统组件",
+        "parent": "Thing",
+        "definition": "电池系统从电芯到整包的层级组件",
+        "subclasses": [
+          "Cell",
+          "Module",
+          "Pack",
+          "RESS",
+          "BMS",
+          "BDU",
+          "CoolingPlate",
+          "ThermalInsulation"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "tbox_class",
+      "text": "BatterySystemComponent 电池系统从电芯到整包的层级组件 Cell Module Pack RESS BMS BDU CoolingPlate ThermalInsulation"
+    },
+    "onto_battery_system_Cell": {
+      "entity_data": {
+        "id": "Cell",
+        "parent": "BatterySystemComponent",
+        "definition": "电池包储存和输出电能的最小单元",
+        "key_attributes": [
+          "nominal_voltage",
+          "thermal_runaway_temp",
+          "chemistry_type"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "tbox_class",
+      "text": "Cell 电池包储存和输出电能的最小单元 nominal_voltage thermal_runaway_temp chemistry_type"
+    },
+    "onto_battery_system_Module": {
+      "entity_data": {
+        "id": "Module",
+        "parent": "BatterySystemComponent",
+        "definition": "电芯串并联组装的集合体，含机械/热管理/BMS/高低压子系统"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "tbox_class",
+      "text": "Module 电芯串并联组装的集合体，含机械/热管理/BMS/高低压子系统"
+    },
+    "onto_battery_system_Pack": {
+      "entity_data": {
+        "id": "Pack",
+        "parent": "BatterySystemComponent",
+        "definition": "对外输出电能的完整电池单元，含模组/BMS/箱体/冷却/线缆"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "tbox_class",
+      "text": "Pack 对外输出电能的完整电池单元，含模组/BMS/箱体/冷却/线缆"
+    },
+    "onto_battery_system_RESS_Component": {
+      "entity_data": {
+        "id": "RESS_Component",
+        "label": "可充电储能系统",
+        "parent": "BatterySystemComponent",
+        "definition": "电池模组+箱体+BMS主从板+高低压电气+热管理的系统总成"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "tbox_class",
+      "text": "RESS_Component 电池模组+箱体+BMS主从板+高低压电气+热管理的系统总成"
+    },
+    "onto_battery_system_BMS_Component": {
+      "entity_data": {
+        "id": "BMS_Component",
+        "label": "电池管理系统",
+        "parent": "BatterySystemComponent",
+        "definition": "监控电压/电流/绝缘/温度，计算SOC/SOH/SOP，执行热管理策略和故障防护"
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "tbox_class",
+      "text": "BMS_Component 监控电压/电流/绝缘/温度，计算SOC/SOH/SOP，执行热管理策略和故障防护"
+    },
+    "onto_battery_system_SystemDesignConstraint": {
+      "entity_data": {
+        "id": "SystemDesignConstraint",
+        "label": "系统设计约束",
+        "parent": "Thing",
+        "definition": "电池系统设计的强制性工程约束",
+        "subclasses": [
+          "ThermalConstraint",
+          "ElectricalConstraint",
+          "MechanicalConstraint"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "tbox_class",
+      "text": "SystemDesignConstraint 电池系统设计的强制性工程约束 ThermalConstraint ElectricalConstraint MechanicalConstraint"
+    },
+    "onto_battery_system_SafetyStandard_System": {
+      "entity_data": {
+        "id": "SafetyStandard_System",
+        "label": "安全标准(系统级)",
+        "parent": "Thing",
+        "definition": "适用于电池系统层级的安全标准",
+        "instances": [
+          "GB38031",
+          "GB31467",
+          "ISO26262"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "tbox_class",
+      "text": "SafetyStandard_System 适用于电池系统层级的安全标准 GB38031 GB31467 ISO26262"
+    },
+    "onto_battery_system_BatteryAI": {
+      "entity_data": {
+        "id": "BatteryAI",
+        "label": "电池AI算法",
+        "parent": "Thing",
+        "definition": "应用于电池寿命预测和安全监控的AI模型",
+        "instances": [
+          "BatteryGPT"
+        ],
+        "key_properties": [
+          "model_architecture",
+          "input_data",
+          "output_metrics",
+          "deployment_target"
+        ]
+      },
+      "domain": "battery_system",
+      "domain_label": "电池系统设计技术规范",
+      "category": "tbox_class",
+      "text": "BatteryAI 应用于电池寿命预测和安全监控的AI模型 model_architecture input_data output_metrics deployment_target BatteryGPT"
+    },
+    "onto_battery_technology_LCO": {
+      "entity_data": {
+        "id": "LCO",
+        "class": "CathodeMaterial",
+        "hasCapacity": 274,
+        "hasMaxVoltage": 4.2,
+        "hasDiffusionCoefficient": "1e-9~1e-8",
+        "hasBandGap": 0,
+        "hasConductivity": "1e-2",
+        "hasThermalStabilityRank": 5
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "cathode_materials",
+      "text": "LCO CathodeMaterial hasCapacity:274 hasMaxVoltage:4.2 hasDiffusionCoefficient:1e-9~1e-8 hasBandGap:0 hasConductivity:1e-2 hasThermalStabilityRank:5"
+    },
+    "onto_battery_technology_NCM811": {
+      "entity_data": {
+        "id": "NCM811",
+        "class": "CathodeMaterial",
+        "hasCapacity": 276,
+        "hasMaxVoltage": 4.2,
+        "hasDiffusionCoefficient": "1e-9~1e-8",
+        "hasBandGap": 0,
+        "hasConductivity": "1e-3",
+        "hasThermalStabilityRank": 3
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "cathode_materials",
+      "text": "NCM811 CathodeMaterial hasCapacity:276 hasMaxVoltage:4.2 hasDiffusionCoefficient:1e-9~1e-8 hasBandGap:0 hasConductivity:1e-3 hasThermalStabilityRank:3"
+    },
+    "onto_battery_technology_NCA": {
+      "entity_data": {
+        "id": "NCA",
+        "class": "CathodeMaterial",
+        "hasCapacity": 279,
+        "hasMaxVoltage": 4.2,
+        "hasThermalStabilityRank": 4
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "cathode_materials",
+      "text": "NCA CathodeMaterial hasCapacity:279 hasMaxVoltage:4.2 hasThermalStabilityRank:4"
+    },
+    "onto_battery_technology_LFP": {
+      "entity_data": {
+        "id": "LFP",
+        "class": "CathodeMaterial",
+        "hasCapacity": 170,
+        "hasMaxVoltage": 3.7,
+        "hasDiffusionCoefficient": "1e-14~1e-13",
+        "hasBandGap": 3.7,
+        "hasConductivity": "1e-9",
+        "hasThermalStabilityRank": 1
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "cathode_materials",
+      "text": "LFP CathodeMaterial hasCapacity:170 hasMaxVoltage:3.7 hasDiffusionCoefficient:1e-14~1e-13 hasBandGap:3.7 hasConductivity:1e-9 hasThermalStabilityRank:1"
+    },
+    "onto_battery_technology_LMO": {
+      "entity_data": {
+        "id": "LMO",
+        "class": "CathodeMaterial",
+        "hasCapacity": 148,
+        "hasMaxVoltage": 4.2,
+        "hasDiffusionCoefficient": "1e-11~1e-9",
+        "hasBandGap": 0.5,
+        "hasConductivity": "1e-4",
+        "hasThermalStabilityRank": 2
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "cathode_materials",
+      "text": "LMO CathodeMaterial hasCapacity:148 hasMaxVoltage:4.2 hasDiffusionCoefficient:1e-11~1e-9 hasBandGap:0.5 hasConductivity:1e-4 hasThermalStabilityRank:2"
+    },
+    "onto_battery_technology_Graphite": {
+      "entity_data": {
+        "id": "Graphite",
+        "class": "AnodeMaterial",
+        "hasCapacity": 372,
+        "hasDiffusionCoefficient": "1e-8~1e-7",
+        "hasVolumeExpansion": 10
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "anode_materials",
+      "text": "Graphite AnodeMaterial hasCapacity:372 hasDiffusionCoefficient:1e-8~1e-7 hasVolumeExpansion:10"
+    },
+    "onto_battery_technology_HardCarbon": {
+      "entity_data": {
+        "id": "HardCarbon",
+        "class": "AnodeMaterial",
+        "hasCapacity": 250450,
+        "hasVolumeExpansion": 15
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "anode_materials",
+      "text": "HardCarbon AnodeMaterial hasCapacity:250450 hasVolumeExpansion:15"
+    },
+    "onto_battery_technology_Silicon": {
+      "entity_data": {
+        "id": "Silicon",
+        "class": "AnodeMaterial",
+        "hasCapacity": 4200,
+        "hasVolumeExpansion": 300
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "anode_materials",
+      "text": "Silicon AnodeMaterial hasCapacity:4200 hasVolumeExpansion:300"
+    },
+    "onto_battery_technology_LTO": {
+      "entity_data": {
+        "id": "LTO",
+        "class": "AnodeMaterial",
+        "hasCapacity": 170,
+        "hasVolumeExpansion": 0.2
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "anode_materials",
+      "text": "LTO AnodeMaterial hasCapacity:170 hasVolumeExpansion:0.2"
+    },
+    "onto_battery_technology_LithiumMetal": {
+      "entity_data": {
+        "id": "LithiumMetal",
+        "class": "AnodeMaterial",
+        "hasCapacity": 3860,
+        "hasDiffusionCoefficient": "1e-12~1e-11",
+        "hasVolumeExpansion": 999,
+        "hasCoulombicEfficiency": "99.5~99.9 (liquid), 99.95+ (solid-state target)",
+        "hasLi_Li_plus_potential": "-3.040 V vs SHE",
+        "hasDendriteThresholdCurrent": "J* ≈ 1~10 mA/cm² (Chazalviel Sand model)",
+        "hasSEI_thickness": "20~50 nm (native), 100~500 nm (cycled)",
+        "hasMeltingPoint": "180.5 °C",
+        "hasDensity": "0.534 g/cm³",
+        "hasCrystalStructure": "BCC (Im-3m), a=3.51 Å",
+        "dangerousFailureMode": "枝晶短路+热失控 (T_onset_ARC=80~120°C vs carbonate electrolyte)",
+        "improvementStrategies": [
+          "CO₂电解液添加剂",
+          "LiAsF₆替代LiPF₆",
+          "LiF-rich SEI设计",
+          "3D集流体",
+          "固态电解质界面层",
+          "锂合金(LiAl/LiₓPb)"
+        ],
+        "source": "Handbook of Battery Materials Ch4 (Yamaki & Tobishima, 1999) + 深读要点 2026-05-18"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "anode_materials",
+      "text": "LithiumMetal AnodeMaterial hasCapacity:3860 hasDiffusionCoefficient:1e-12~1e-11 hasVolumeExpansion:999"
+    },
+    "onto_battery_technology_电化学方法原理与应用（Bard & Faulkner）": {
+      "entity_data": {
+        "value": "电化学方法原理与应用（Bard & Faulkner）"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "source_documents",
+      "text": "电化学方法原理与应用（Bard & Faulkner） 电化学方法原理与应用（Bard & Faulkner）"
+    },
+    "onto_battery_technology_固体物理导论（Kittel 8th Ed.）": {
+      "entity_data": {
+        "value": "固体物理导论（Kittel 8th Ed.）"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "source_documents",
+      "text": "固体物理导论（Kittel 8th Ed.） 固体物理导论（Kittel 8th Ed.）"
+    },
+    "onto_battery_technology_March高等有机化学（7th Ed.）": {
+      "entity_data": {
+        "value": "March高等有机化学（7th Ed.）"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "source_documents",
+      "text": "March高等有机化学（7th Ed.） March高等有机化学（7th Ed.）"
+    },
+    "onto_battery_technology_Handbook of Battery Materials（Besenhard 1999）": {
+      "entity_data": {
+        "value": "Handbook of Battery Materials（Besenhard 1999）"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "source_documents",
+      "text": "Handbook of Battery Materials（Besenhard 1999） Handbook of Battery Materials（Besenhard 1999）"
+    },
+    "onto_battery_technology_Handbook of Batteries（Linden & Reddy 3rd Ed.）": {
+      "entity_data": {
+        "value": "Handbook of Batteries（Linden & Reddy 3rd Ed.）"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "source_documents",
+      "text": "Handbook of Batteries（Linden & Reddy 3rd Ed.） Handbook of Batteries（Linden & Reddy 3rd Ed.）"
+    },
+    "onto_battery_technology_锂电池基础科学问题系列（I-VII）": {
+      "entity_data": {
+        "value": "锂电池基础科学问题系列（I-VII）"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "source_documents",
+      "text": "锂电池基础科学问题系列（I-VII） 锂电池基础科学问题系列（I-VII）"
+    },
+    "onto_battery_technology_锂离子电池正极材料技术发展与应用分析（1-4）": {
+      "entity_data": {
+        "value": "锂离子电池正极材料技术发展与应用分析（1-4）"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "source_documents",
+      "text": "锂离子电池正极材料技术发展与应用分析（1-4） 锂离子电池正极材料技术发展与应用分析（1-4）"
+    },
+    "onto_battery_technology_ATL电池基本原理培训": {
+      "entity_data": {
+        "value": "ATL电池基本原理培训"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "source_documents",
+      "text": "ATL电池基本原理培训 ATL电池基本原理培训"
+    },
+    "onto_battery_technology_battery_technology_source_documents_18": {
+      "entity_data": {
+        "date": "2026-05-12",
+        "source": "Kittel 固体物理导论 第8版 第1章 晶体结构",
+        "type": "deep_reading",
+        "entities_added": [
+          "crystal_structures"
+        ],
+        "file": "2026-05-12_固体物理导论_Ch1_晶体结构_深读要点.md"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "source_documents",
+      "text": "battery_technology_source_documents_18"
+    },
+    "onto_battery_technology_LFP_Debye": {
+      "entity_data": {
+        "id": "LFP_Debye",
+        "class": "DebyeTemperature",
+        "material": "LFP",
+        "value_K": 680,
+        "tolerance": 20,
+        "implication": "高θ_D→低温比热小→相同产热温升快(低温热响应悖论)"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "phonon_properties",
+      "text": "LFP_Debye DebyeTemperature"
+    },
+    "onto_battery_technology_NMC811_Debye": {
+      "entity_data": {
+        "id": "NMC811_Debye",
+        "class": "DebyeTemperature",
+        "material": "NMC811",
+        "value_K": 450,
+        "tolerance": 40,
+        "implication": "θ_D比LFP低34%→低温热容大→热缓冲好但热稳定性差"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "phonon_properties",
+      "text": "NMC811_Debye DebyeTemperature"
+    },
+    "onto_battery_technology_Graphite_Debye": {
+      "entity_data": {
+        "id": "Graphite_Debye",
+        "class": "DebyeTemperature",
+        "material": "Graphite",
+        "value_K": 1850,
+        "tolerance": 100,
+        "implication": "极高θ_D→面内sp²共价键声子极硬→室温比热已近Dulong-Petit极限"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "phonon_properties",
+      "text": "Graphite_Debye DebyeTemperature"
+    },
+    "onto_battery_technology_LFP_Gruneisen": {
+      "entity_data": {
+        "id": "LFP_Gruneisen",
+        "class": "GruneisenParameter",
+        "material": "LFP",
+        "value": 1.2,
+        "expansion_coefficient_10e6_perK": "9-12",
+        "implication": "低非谐性→小热膨胀→正极颗粒循环稳定性好"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "phonon_properties",
+      "text": "LFP_Gruneisen GruneisenParameter 1.2"
+    },
+    "onto_battery_technology_NMC811_Gruneisen": {
+      "entity_data": {
+        "id": "NMC811_Gruneisen",
+        "class": "GruneisenParameter",
+        "material": "NMC811",
+        "value": 1.8,
+        "expansion_coefficient_10e6_perK": "13-16",
+        "implication": "高非谐性→大各向异性膨胀→晶界应力集中→二次颗粒开裂根因"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "phonon_properties",
+      "text": "NMC811_Gruneisen GruneisenParameter 1.8"
+    },
+    "onto_battery_technology_Graphite_anisotropy": {
+      "entity_data": {
+        "id": "Graphite_anisotropy",
+        "class": "GruneisenParameter",
+        "material": "Graphite",
+        "value_a_axis": 0.8,
+        "value_c_axis": 1.5,
+        "expansion_a": -1,
+        "expansion_c": 27,
+        "implication": "c轴膨胀为a轴34倍→锂嵌入层离→孤立死锂→容量衰减"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "phonon_properties",
+      "text": "Graphite_anisotropy GruneisenParameter"
+    },
+    "onto_battery_technology_PhononThermalConductivity_Bottleneck": {
+      "entity_data": {
+        "id": "PhononThermalConductivity_Bottleneck",
+        "class": "PhononThermalConductivity",
+        "electrode_out_of_plane_W_per_mK": "0.3-1.5",
+        "separator_electrolyte_W_per_mK": "0.1-0.3",
+        "implication": "电芯法向热瓶颈在隔膜+电解液串联层→提升正极材料κ对电芯整体κ改善<20%",
+        "five_material_kappa": {
+          "LFP": "0.5-1.5",
+          "NMC": "1.0-3.0",
+          "LLZO": "1.0-2.5",
+          "LGPS": "0.3-0.8",
+          "Electrolyte_LP30": "0.1-0.2"
+        }
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "phonon_properties",
+      "text": "PhononThermalConductivity_Bottleneck PhononThermalConductivity"
+    },
+    "onto_battery_technology_ThermalRunaway_PhononFeedback": {
+      "entity_data": {
+        "id": "ThermalRunaway_PhononFeedback",
+        "class": "PhononThermalProperty",
+        "description": "Umklapp过程声子正反馈：T↑→U过程↑→κ↓→局部T↑↑→声子密度↑→κ↓↓→自加速",
+        "critical_temperature_windows": {
+          "-40_to_-20C": "边界散射主导→锂析出风险",
+          "60_to_80C": "U过程显著→κ降至室温60%→加速老化阈值",
+          "120_to_150C": "非谐性急剧增强→隔膜熔融前传热能力已崩塌",
+          "above_200C": "声子+电子+化学三重热源→所有传热机制失效"
+        }
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "phonon_properties",
+      "text": "ThermalRunaway_PhononFeedback PhononThermalProperty Umklapp过程声子正反馈：T↑→U过程↑→κ↓→局部T↑↑→声子密度↑→κ↓↓→自加速"
+    },
+    "onto_battery_technology_BatteryChemistry": {
+      "entity_data": {
+        "id": "BatteryChemistry",
+        "label": "电池化学体系",
+        "parent": "Thing",
+        "definition": "电池正负极+电解液构成的电化学体系类型",
+        "subclasses": [
+          "CathodeMaterial",
+          "AnodeMaterial",
+          "ElectrolyteSystem"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "BatteryChemistry 电池正负极+电解液构成的电化学体系类型 CathodeMaterial AnodeMaterial ElectrolyteSystem"
+    },
+    "onto_battery_technology_CathodeMaterial": {
+      "entity_data": {
+        "id": "CathodeMaterial",
+        "parent": "BatteryChemistry",
+        "definition": "正极活性材料，决定电池能量密度和热稳定性上限",
+        "instances": [
+          "LCO",
+          "NCM",
+          "NCA",
+          "LFP",
+          "LMO"
+        ],
+        "key_properties": [
+          "capacity_mAh_g",
+          "nominal_voltage_V",
+          "conductivity_S_cm",
+          "diffusion_coefficient_cm2_s",
+          "thermal_stability_rank"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "CathodeMaterial 正极活性材料，决定电池能量密度和热稳定性上限 capacity_mAh_g nominal_voltage_V conductivity_S_cm diffusion_coefficient_cm2_s thermal_stability_rank LCO NCM NCA LFP LMO"
+    },
+    "onto_battery_technology_AnodeMaterial": {
+      "entity_data": {
+        "id": "AnodeMaterial",
+        "parent": "BatteryChemistry",
+        "definition": "负极活性材料，影响首效和倍率性能",
+        "instances": [
+          "Graphite",
+          "HardCarbon",
+          "Silicon",
+          "LTO"
+        ],
+        "key_properties": [
+          "capacity_mAh_g",
+          "nominal_voltage_V",
+          "volume_expansion_percent"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "AnodeMaterial 负极活性材料，影响首效和倍率性能 capacity_mAh_g nominal_voltage_V volume_expansion_percent Graphite HardCarbon Silicon LTO"
+    },
+    "onto_battery_technology_ElectrochemicalPhenomenon": {
+      "entity_data": {
+        "id": "ElectrochemicalPhenomenon",
+        "parent": "Thing",
+        "definition": "电池运行中的电化学物理过程",
+        "subclasses": [
+          "SEIFormation",
+          "LithiumPlating",
+          "ElectrolyteDecomposition",
+          "JahnTellerDistortion",
+          "TransitionMetalDissolution"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "ElectrochemicalPhenomenon 电池运行中的电化学物理过程 SEIFormation LithiumPlating ElectrolyteDecomposition JahnTellerDistortion TransitionMetalDissolution"
+    },
+    "onto_battery_technology_SEIFormation": {
+      "entity_data": {
+        "id": "SEIFormation",
+        "parent": "ElectrochemicalPhenomenon",
+        "definition": "负极表面电解液还原分解形成的固体电解质界面膜",
+        "key_attributes": [
+          "formation_potential_V",
+          "thickness_nm",
+          "composition_layers",
+          "ionic_conductivity",
+          "electronic_insulation"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "SEIFormation 负极表面电解液还原分解形成的固体电解质界面膜 formation_potential_V thickness_nm composition_layers ionic_conductivity electronic_insulation"
+    },
+    "onto_battery_technology_LithiumPlating": {
+      "entity_data": {
+        "id": "LithiumPlating",
+        "parent": "ElectrochemicalPhenomenon",
+        "definition": "锂离子在负极表面以金属态析出而非嵌入石墨层间",
+        "triggers": [
+          "low_temperature",
+          "high_rate_charging",
+          "overcharge",
+          "anode_overhang_effect"
+        ],
+        "consequence": "枝晶生长→刺穿隔膜→内短路→热失控"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "LithiumPlating 锂离子在负极表面以金属态析出而非嵌入石墨层间 low_temperature high_rate_charging overcharge anode_overhang_effect 枝晶生长→刺穿隔膜→内短路→热失控"
+    },
+    "onto_battery_technology_CharacterizationMethod": {
+      "entity_data": {
+        "id": "CharacterizationMethod",
+        "parent": "Thing",
+        "definition": "电池电化学性能测试与表征手段",
+        "instances": [
+          "EIS",
+          "CV",
+          "GITT",
+          "PITT",
+          "DSC_TG",
+          "XRD",
+          "SEM_TEM",
+          "DRT",
+          "NLEIS",
+          "GEIS"
+        ],
+        "key_properties": [
+          "what_it_measures",
+          "test_duration",
+          "destructive_or_not"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "CharacterizationMethod 电池电化学性能测试与表征手段 what_it_measures test_duration destructive_or_not EIS CV GITT PITT DSC_TG XRD SEM_TEM DRT NLEIS GEIS"
+    },
+    "onto_battery_technology_BMSAlgorithm": {
+      "entity_data": {
+        "id": "BMSAlgorithm",
+        "parent": "Thing",
+        "definition": "电池管理系统核心算法",
+        "instances": [
+          "CoulombCounting",
+          "KalmanFilter",
+          "EKF",
+          "UKF",
+          "NeuralNetwork",
+          "GPT_based"
+        ],
+        "key_properties": [
+          "estimation_target",
+          "accuracy",
+          "computational_cost",
+          "convergence_guarantee"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "BMSAlgorithm 电池管理系统核心算法 estimation_target accuracy computational_cost convergence_guarantee CoulombCounting KalmanFilter EKF UKF NeuralNetwork GPT_based"
+    },
+    "onto_battery_technology_ThermalManagementMethod": {
+      "entity_data": {
+        "id": "ThermalManagementMethod",
+        "parent": "Thing",
+        "definition": "电池热管理技术路线",
+        "instances": [
+          "LiquidCooling",
+          "AirCooling",
+          "Refrigerant",
+          "PhaseChangeMaterial"
+        ],
+        "key_properties": [
+          "cooling_capacity_W",
+          "temperature_uniformity",
+          "system_complexity",
+          "cost"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "ThermalManagementMethod 电池热管理技术路线 cooling_capacity_W temperature_uniformity system_complexity cost LiquidCooling AirCooling Refrigerant PhaseChangeMaterial"
+    },
+    "onto_battery_technology_PhysicalLaw": {
+      "entity_data": {
+        "id": "PhysicalLaw",
+        "parent": "Thing",
+        "definition": "支配电池电化学行为的底层物理方程",
+        "instances": [
+          "NernstEquation",
+          "ButlerVolmer",
+          "FickDiffusion",
+          "TafelEquation",
+          "CottrellEquation",
+          "RandlesSevcik"
+        ],
+        "key_properties": [
+          "formula",
+          "application_scenario",
+          "key_output"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "PhysicalLaw 支配电池电化学行为的底层物理方程 formula application_scenario key_output NernstEquation ButlerVolmer FickDiffusion TafelEquation CottrellEquation RandlesSevcik"
+    },
+    "onto_battery_technology_ReactiveIntermediates": {
+      "entity_data": {
+        "id": "ReactiveIntermediates",
+        "parent": "ElectrochemicalPhenomenon",
+        "definition": "电池界面反应中的活性中间体：碳正离子/碳负离子/自由基/卡宾，SEI成膜与电解液分解的核心参与者",
+        "subclasses": [
+          "CarbocationIntermediate",
+          "CarbanionIntermediate",
+          "FreeRadicalIntermediate",
+          "CarbeneIntermediate"
+        ],
+        "key_properties": [
+          "lifetime_s",
+          "generation_potential_V",
+          "stability_rank",
+          "battery_zone"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "ReactiveIntermediates 电池界面反应中的活性中间体：碳正离子/碳负离子/自由基/卡宾，SEI成膜与电解液分解的核心参与者 lifetime_s generation_potential_V stability_rank battery_zone CarbocationIntermediate CarbanionIntermediate FreeRadicalIntermediate CarbeneIntermediate"
+    },
+    "onto_battery_technology_CarbocationIntermediate": {
+      "entity_data": {
+        "id": "CarbocationIntermediate",
+        "parent": "ReactiveIntermediates",
+        "definition": "碳正离子(C⁺)：三配位碳+空p轨道，正极>4.3V溶剂氧化产物，Lewis酸催化重排→电解液老化",
+        "key_attributes": [
+          "generation:SET_oxidation>4.3V",
+          "stability:3°>2°>1°",
+          "pathway:PF5_catalyzed_rearrangement",
+          "outcome:CEI_growth+solvent_drying"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "CarbocationIntermediate 碳正离子(C⁺)：三配位碳+空p轨道，正极>4.3V溶剂氧化产物，Lewis酸催化重排→电解液老化 generation:SET_oxidation>4.3V stability:3°>2°>1° pathway:PF5_catalyzed_rearrangement outcome:CEI_growth+solvent_drying"
+    },
+    "onto_battery_technology_CarbanionIntermediate": {
+      "entity_data": {
+        "id": "CarbanionIntermediate",
+        "parent": "ReactiveIntermediates",
+        "definition": "碳负离子(C⁻)：三配位碳+孤对电子，EC还原开环产物等价物，LEDC/SEI无机相碳源",
+        "key_attributes": [
+          "generation:EC_reduction<0.8V",
+          "stability:-I_substituents",
+          "pathway:Li+_pairing→LEDC_precipitation",
+          "pKa_alpha_C_H~35"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "CarbanionIntermediate 碳负离子(C⁻)：三配位碳+孤对电子，EC还原开环产物等价物，LEDC/SEI无机相碳源 generation:EC_reduction<0.8V stability:-I_substituents pathway:Li+_pairing→LEDC_precipitation pKa_alpha_C_H~35"
+    },
+    "onto_battery_technology_FreeRadicalIntermediate": {
+      "entity_data": {
+        "id": "FreeRadicalIntermediate",
+        "parent": "ReactiveIntermediates",
+        "definition": "自由基(C·)：7电子物种，EC还原自由基阴离子→开环自由基→二聚/链转移→SEI有机聚合物层",
+        "key_attributes": [
+          "generation:SET_reduction_0.5-1.5V",
+          "BDE_CH3-H_439kJ_mol",
+          "steady_state_conc_10nM",
+          "termination:combination_vs_disproportionation"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "FreeRadicalIntermediate 自由基(C·)：7电子物种，EC还原自由基阴离子→开环自由基→二聚/链转移→SEI有机聚合物层 generation:SET_reduction_0.5-1.5V BDE_CH3-H_439kJ_mol steady_state_conc_10nM termination:combination_vs_disproportionation"
+    },
+    "onto_battery_technology_CarbeneIntermediate": {
+      "entity_data": {
+        "id": "CarbeneIntermediate",
+        "parent": "ReactiveIntermediates",
+        "definition": "卡宾(:CR₂)：二价碳6电子物种，热失控>200°C时碳酸酯α-消除产物，C-H插入→自由基链爆炸→热失控不可逆",
+        "key_attributes": [
+          "generation:thermal_alpha_elimination>200C",
+          "singlet_vs_triplet_dE_38kJ_mol",
+          "pathway:C-H_insertion→radical_amplification",
+          "role:thermal_runaway_trigger"
+        ]
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "CarbeneIntermediate 卡宾(:CR₂)：二价碳6电子物种，热失控>200°C时碳酸酯α-消除产物，C-H插入→自由基链爆炸→热失控不可逆 generation:thermal_alpha_elimination>200C singlet_vs_triplet_dE_38kJ_mol pathway:C-H_insertion→radical_amplification role:thermal_runaway_trigger"
+    },
+    "onto_battery_technology_PhononThermalProperty": {
+      "entity_data": {
+        "id": "PhononThermalProperty",
+        "parent": "PhysicalLaw",
+        "definition": "声子热学性质：Debye温度/热膨胀Grüneisen参数/声子热导率—支配电芯热管理的第一性物理",
+        "subclasses": [
+          "DebyeTemperature",
+          "GruneisenParameter",
+          "PhononThermalConductivity"
+        ],
+        "source": "Kittel Ch5 Phonons II: Thermal Properties"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "PhononThermalProperty 声子热学性质：Debye温度/热膨胀Grüneisen参数/声子热导率—支配电芯热管理的第一性物理 DebyeTemperature GruneisenParameter PhononThermalConductivity"
+    },
+    "onto_battery_technology_DebyeTemperature": {
+      "entity_data": {
+        "id": "DebyeTemperature",
+        "parent": "PhononThermalProperty",
+        "definition": "声子谱截止频率的温度等价参数θ_D=ℏω_D/k_B，决定低温比热和声子硬度",
+        "key_equation": "C_V=(12π⁴/5)Nk_B(T/θ_D)³ (T≪θ_D)"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "DebyeTemperature 声子谱截止频率的温度等价参数θ_D=ℏω_D/k_B，决定低温比热和声子硬度"
+    },
+    "onto_battery_technology_GruneisenParameter": {
+      "entity_data": {
+        "id": "GruneisenParameter",
+        "parent": "PhononThermalProperty",
+        "definition": "γ=-d(ln ω)/d(ln V)，表征非谐性强度与热膨胀—材料热-力耦合的单一标量判据",
+        "key_equation": "α=γ·C_V·κ_T/(3V)"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "GruneisenParameter γ=-d(ln ω)/d(ln V)，表征非谐性强度与热膨胀—材料热-力耦合的单一标量判据"
+    },
+    "onto_battery_technology_PhononThermalConductivity": {
+      "entity_data": {
+        "id": "PhononThermalConductivity",
+        "parent": "PhononThermalProperty",
+        "definition": "声子气体模型κ=(1/3)C_V·v_s·ℓ，受Umklapp/边界/缺陷三种散射限制",
+        "key_equation": "κ=(1/3)C_V v_s ℓ"
+      },
+      "domain": "battery_technology",
+      "domain_label": "电池技术",
+      "category": "tbox_class",
+      "text": "PhononThermalConductivity 声子气体模型κ=(1/3)C_V·v_s·ℓ，受Umklapp/边界/缺陷三种散射限制"
+    },
+    "onto_energy_internet_工商储盈利模式分水岭（VPP聚合部分）": {
+      "entity_data": {
+        "value": "工商储盈利模式分水岭（VPP聚合部分）"
+      },
+      "domain": "energy_internet",
+      "domain_label": "能源互联网与虚拟电厂",
+      "category": "source_documents",
+      "text": "工商储盈利模式分水岭（VPP聚合部分） 工商储盈利模式分水岭（VPP聚合部分）"
+    },
+    "onto_energy_internet_从等级到智能（电力调度相关）": {
+      "entity_data": {
+        "value": "从等级到智能（电力调度相关）"
+      },
+      "domain": "energy_internet",
+      "domain_label": "能源互联网与虚拟电厂",
+      "category": "source_documents",
+      "text": "从等级到智能（电力调度相关） 从等级到智能（电力调度相关）"
+    },
+    "onto_energy_internet_VirtualPowerPlant": {
+      "entity_data": {
+        "id": "VirtualPowerPlant",
+        "label": "虚拟电厂",
+        "parent": "Thing",
+        "definition": "聚合分布式能源资源参与电力市场的虚拟调度实体",
+        "aggregatable_resources": [
+          "分布式储能",
+          "EV电池",
+          "屋顶光伏",
+          "柔性负荷"
+        ],
+        "value_proposition": "100个×100MWh工商储=10GWh VPP等效容量",
+        "key_challenges": [
+          "调度精度",
+          "通信可靠性",
+          "结算机制",
+          "市场准入"
+        ],
+        "response_requirement": "AGC响应≤30s"
+      },
+      "domain": "energy_internet",
+      "domain_label": "能源互联网与虚拟电厂",
+      "category": "tbox_class",
+      "text": "VirtualPowerPlant 聚合分布式能源资源参与电力市场的虚拟调度实体"
+    },
+    "onto_energy_internet_DemandResponse": {
+      "entity_data": {
+        "id": "DemandResponse",
+        "label": "需求响应",
+        "parent": "Thing",
+        "definition": "电力用户响应市场价格或激励信号调整用电行为",
+        "subclasses": [
+          "PriceBasedDR",
+          "IncentiveBasedDR",
+          "EmergencyDR"
+        ],
+        "compensation_cn": "2-5元/kWh"
+      },
+      "domain": "energy_internet",
+      "domain_label": "能源互联网与虚拟电厂",
+      "category": "tbox_class",
+      "text": "DemandResponse 电力用户响应市场价格或激励信号调整用电行为 PriceBasedDR IncentiveBasedDR EmergencyDR"
+    },
+    "onto_energy_internet_PowerMarket": {
+      "entity_data": {
+        "id": "PowerMarket",
+        "label": "电力市场",
+        "parent": "Thing",
+        "definition": "电力交易的市场化机制",
+        "subclasses": [
+          "SpotMarket",
+          "AncillaryServices",
+          "CapacityMarket",
+          "GreenCertificate"
+        ],
+        "cn_status": "现货市场建设加速，独立储能可参与"
+      },
+      "domain": "energy_internet",
+      "domain_label": "能源互联网与虚拟电厂",
+      "category": "tbox_class",
+      "text": "PowerMarket 电力交易的市场化机制 SpotMarket AncillaryServices CapacityMarket GreenCertificate"
+    },
+    "onto_energy_internet_SourceGridLoadStorage": {
+      "entity_data": {
+        "id": "SourceGridLoadStorage",
+        "label": "源网荷储协同",
+        "parent": "Thing",
+        "definition": "电源-电网-负荷-储能一体化协同优化调度",
+        "optimization_target": "可再生能源消纳最大化+系统成本最小化",
+        "key_technologies": [
+          "预测调度",
+          "实时优化",
+          "数字孪生"
+        ]
+      },
+      "domain": "energy_internet",
+      "domain_label": "能源互联网与虚拟电厂",
+      "category": "tbox_class",
+      "text": "SourceGridLoadStorage 电源-电网-负荷-储能一体化协同优化调度"
+    },
+    "onto_energy_internet_V2G": {
+      "entity_data": {
+        "id": "V2G",
+        "label": "车网互动",
+        "parent": "DemandResponse",
+        "definition": "电动车电池作为分布式储能资源参与电网互动",
+        "modes": [
+          "V1G(单向调节充电功率)",
+          "V2G(双向充放电)"
+        ]
+      },
+      "domain": "energy_internet",
+      "domain_label": "能源互联网与虚拟电厂",
+      "category": "tbox_class",
+      "text": "V2G 电动车电池作为分布式储能资源参与电网互动"
+    },
+    "onto_energy_storage_RS_PeakValley": {
+      "entity_data": {
+        "id": "RS_PeakValley",
+        "class": "RevenueStream",
+        "type": "PeakValleyArbitrage",
+        "unit_price": "0.5-0.8元/kWh"
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "revenue_streams_data",
+      "text": "RS_PeakValley RevenueStream"
+    },
+    "onto_energy_storage_RS_DR": {
+      "entity_data": {
+        "id": "RS_DR",
+        "class": "RevenueStream",
+        "type": "DemandResponseSubsidy",
+        "unit_price": "2-5元/kWh"
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "revenue_streams_data",
+      "text": "RS_DR RevenueStream"
+    },
+    "onto_energy_storage_RS_Capacity": {
+      "entity_data": {
+        "id": "RS_Capacity",
+        "class": "RevenueStream",
+        "type": "CapacityLeasing",
+        "benefit": "降基本电费20-40%"
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "revenue_streams_data",
+      "text": "RS_Capacity RevenueStream"
+    },
+    "onto_energy_storage_RS_Ancillary": {
+      "entity_data": {
+        "id": "RS_Ancillary",
+        "class": "RevenueStream",
+        "type": "AncillaryServices",
+        "benefit": "调频收入8-12%总投资"
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "revenue_streams_data",
+      "text": "RS_Ancillary RevenueStream"
+    },
+    "onto_energy_storage_工商储盈利模式分水岭": {
+      "entity_data": {
+        "value": "工商储盈利模式分水岭"
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "source_documents",
+      "text": "工商储盈利模式分水岭 工商储盈利模式分水岭"
+    },
+    "onto_energy_storage_储能业务服务及数据应用讨论": {
+      "entity_data": {
+        "value": "储能业务服务及数据应用讨论"
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "source_documents",
+      "text": "储能业务服务及数据应用讨论 储能业务服务及数据应用讨论"
+    },
+    "onto_energy_storage_钠电拐点：CATL 60GWh大单深度解读": {
+      "entity_data": {
+        "value": "钠电拐点：CATL 60GWh大单深度解读"
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "source_documents",
+      "text": "钠电拐点：CATL 60GWh大单深度解读 钠电拐点：CATL 60GWh大单深度解读"
+    },
+    "onto_energy_storage_Handbook of Batteries - Part 4 Safety": {
+      "entity_data": {
+        "value": "Handbook of Batteries - Part 4 Safety"
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "source_documents",
+      "text": "Handbook of Batteries - Part 4 Safety Handbook of Batteries - Part 4 Safety"
+    },
+    "onto_energy_storage_StorageSystem": {
+      "entity_data": {
+        "id": "StorageSystem",
+        "label": "储能系统",
+        "parent": "Thing",
+        "definition": "从电芯到站级控制的全层级储能系统",
+        "subclasses": [
+          "CIStorage",
+          "GridStorage",
+          "ResidentialStorage"
+        ],
+        "hierarchy": "cell → module → rack → container → station"
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "tbox_class",
+      "text": "StorageSystem 从电芯到站级控制的全层级储能系统 CIStorage GridStorage ResidentialStorage"
+    },
+    "onto_energy_storage_CIStorage": {
+      "entity_data": {
+        "id": "CIStorage",
+        "label": "工商业储能",
+        "parent": "StorageSystem",
+        "capacity_range": "100kW-10MW",
+        "revenue_streams": [
+          "峰谷套利",
+          "需量管理",
+          "需求响应"
+        ],
+        "irr_sensitivity": "峰谷价差从0.8→0.5元/kWh→IRR从12%→4.2%"
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "tbox_class",
+      "text": "CIStorage 工商业储能"
+    },
+    "onto_energy_storage_GridStorage": {
+      "entity_data": {
+        "id": "GridStorage",
+        "label": "电网侧储能",
+        "parent": "StorageSystem",
+        "capacity_range": "10MW+",
+        "applications": [
+          "调频",
+          "调峰",
+          "新能源消纳",
+          "黑启动"
+        ],
+        "policy": "独立储能可参与电力现货市场"
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "tbox_class",
+      "text": "GridStorage 电网侧储能"
+    },
+    "onto_energy_storage_RevenueStream": {
+      "entity_data": {
+        "id": "RevenueStream",
+        "label": "收益来源",
+        "parent": "Thing",
+        "instances": [
+          "PeakValleyArbitrage",
+          "DemandResponseSubsidy",
+          "CapacityLeasing",
+          "AncillaryServices",
+          "VPPAggregation"
+        ],
+        "key_properties": [
+          "unit_price",
+          "availability_guarantee",
+          "policy_dependency"
+        ]
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "tbox_class",
+      "text": "RevenueStream 收益来源 unit_price availability_guarantee policy_dependency PeakValleyArbitrage DemandResponseSubsidy CapacityLeasing AncillaryServices VPPAggregation"
+    },
+    "onto_energy_storage_EconomicModel": {
+      "entity_data": {
+        "id": "EconomicModel",
+        "label": "经济性模型",
+        "parent": "Thing",
+        "definition": "储能项目投资回报计算模型",
+        "key_inputs": [
+          "battery_cost_per_kWh",
+          "PCS_cost",
+          "BOP_cost",
+          "O&M_cost",
+          "revenue_streams"
+        ],
+        "key_outputs": [
+          "IRR",
+          "payback_years",
+          "NPV"
+        ],
+        "LFP_real_degradation": "年衰减2-3%/第5年仅剩85%"
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "tbox_class",
+      "text": "EconomicModel 储能项目投资回报计算模型"
+    },
+    "onto_energy_storage_SodiumIonStorage": {
+      "entity_data": {
+        "id": "SodiumIonStorage",
+        "label": "钠电储能",
+        "parent": "CIStorage",
+        "cost_advantage": "理论比LFP低30-40%，量产初期实际低10-15%",
+        "cycle_life": "实验室3000-5000次 vs LFP已验6000-8000次",
+        "low_temp_advantage": "-20°C正常充放电",
+        "critical_window": "2026-2028最关键三年",
+        "market_signal": "CATL 60GWh大单验证"
+      },
+      "domain": "energy_storage",
+      "domain_label": "储能系统",
+      "category": "tbox_class",
+      "text": "SodiumIonStorage 钠电储能 cycle_life:实验室3000-5000次 vs LFP已验6000-8000次"
+    },
+    "onto_new_energy_market_NaIon_2026": {
+      "entity_data": {
+        "id": "NaIon_2026",
+        "class": "SodiumIon",
+        "hasTRL": 8,
+        "hasEnergyDensity": 160,
+        "hasMassProductionYear": 2026,
+        "trigger": "CATL×海博思创 3年60GWh"
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "technology_timeline",
+      "text": "NaIon_2026 SodiumIon"
+    },
+    "onto_new_energy_market_SiAnode_2026": {
+      "entity_data": {
+        "id": "SiAnode_2026",
+        "class": "SiliconAnode",
+        "hasTRL": 7,
+        "hasEnergyDensity": 400,
+        "hasMassProductionYear": 2026,
+        "trigger": "中科星城满产"
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "technology_timeline",
+      "text": "SiAnode_2026 SiliconAnode"
+    },
+    "onto_new_energy_market_SolidState_TBD": {
+      "entity_data": {
+        "id": "SolidState_TBD",
+        "class": "SolidState",
+        "hasTRL": 4,
+        "hasEnergyDensity": 500,
+        "hasMassProductionYear": 0,
+        "trigger": "未定"
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "technology_timeline",
+      "text": "SolidState_TBD SolidState"
+    },
+    "onto_new_energy_market_4680_2022_2026": {
+      "entity_data": {
+        "id": "4680_2022_2026",
+        "class": "CylindricalCell",
+        "hasTRL": 7,
+        "hasCellType": "4680大圆柱",
+        "hasEnergyDensity": 300,
+        "hasMassProductionYear": 2023,
+        "trigger": "Tesla量产+松下/三星SDI跟进",
+        "notes": "全极耳设计降低内阻, CTC/CTB结构适配, 但良率爬坡慢(2022-2024)",
+        "source": "learning_20260531_nas_batch4"
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "technology_timeline",
+      "text": "4680_2022_2026 CylindricalCell"
+    },
+    "onto_new_energy_market_钠电拐点：CATL 60GWh大单深度解读": {
+      "entity_data": {
+        "value": "钠电拐点：CATL 60GWh大单深度解读"
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "source_documents",
+      "text": "钠电拐点：CATL 60GWh大单深度解读 钠电拐点：CATL 60GWh大单深度解读"
+    },
+    "onto_new_energy_market_宁德时代钠电池量产装车": {
+      "entity_data": {
+        "value": "宁德时代钠电池量产装车"
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "source_documents",
+      "text": "宁德时代钠电池量产装车 宁德时代钠电池量产装车"
+    },
+    "onto_new_energy_market_硅基负极吨级出货分析": {
+      "entity_data": {
+        "value": "硅基负极吨级出货分析"
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "source_documents",
+      "text": "硅基负极吨级出货分析 硅基负极吨级出货分析"
+    },
+    "onto_new_energy_market_动力电池10年技术发展": {
+      "entity_data": {
+        "value": "动力电池10年技术发展"
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "source_documents",
+      "text": "动力电池10年技术发展 动力电池10年技术发展"
+    },
+    "onto_new_energy_market_百人会论坛综述": {
+      "entity_data": {
+        "value": "百人会论坛综述"
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "source_documents",
+      "text": "百人会论坛综述 百人会论坛综述"
+    },
+    "onto_new_energy_market_NewBatteryTechnology": {
+      "entity_data": {
+        "id": "NewBatteryTechnology",
+        "label": "新电池技术",
+        "parent": "Thing",
+        "definition": "处于研发或产业化初期的电池新技术路线",
+        "subclasses": [
+          "SodiumIon",
+          "SolidState",
+          "SiliconAnode"
+        ],
+        "key_properties": [
+          "TRL_level",
+          "energy_density_Wh_kg",
+          "mass_production_year",
+          "bottleneck"
+        ]
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "tbox_class",
+      "text": "NewBatteryTechnology 处于研发或产业化初期的电池新技术路线 TRL_level energy_density_Wh_kg mass_production_year bottleneck SodiumIon SolidState SiliconAnode"
+    },
+    "onto_new_energy_market_SodiumIon": {
+      "entity_data": {
+        "id": "SodiumIon",
+        "label": "钠离子电池",
+        "parent": "NewBatteryTechnology",
+        "energy_density": "120-160 Wh/kg",
+        "cathode_routes": [
+          "层状氧化物",
+          "聚阴离子",
+          "普鲁士蓝"
+        ],
+        "anode": "硬碳(8-12万元/吨→需降至5万以下)",
+        "supply_chain_bottleneck": "硬碳6-8万吨/年需求(当前<3万吨)",
+        "china_IP_dominance": "中国钠电专利占全球70%+",
+        "status_2026": "商业化元年，CATL 60GWh大单验证",
+        "competitive_position": "与锂电互补：锂电→乘用车，钠电→大规模储能"
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "tbox_class",
+      "text": "SodiumIon 钠离子电池"
+    },
+    "onto_new_energy_market_SolidState": {
+      "entity_data": {
+        "id": "SolidState",
+        "label": "固态电池",
+        "parent": "NewBatteryTechnology",
+        "status": "研发阶段，量产路径未明",
+        "electrolyte_types": [
+          "氧化物",
+          "硫化物",
+          "聚合物"
+        ],
+        "key_challenges": [
+          "界面阻抗",
+          "锂枝晶",
+          "制造工艺",
+          "成本"
+        ],
+        "target": ">1000 Wh/L, 金属锂负极"
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "tbox_class",
+      "text": "SolidState 固态电池"
+    },
+    "onto_new_energy_market_SiliconAnode": {
+      "entity_data": {
+        "id": "SiliconAnode",
+        "label": "硅基负极",
+        "parent": "NewBatteryTechnology",
+        "status": "吨级出货量临界点",
+        "theoretical_capacity": "4200 mAh/g(10倍石墨)",
+        "actual_utilization": "<50%",
+        "key_challenge": "300%体积膨胀→颗粒粉化→SEI持续破裂再生",
+        "solutions": [
+          "纳米硅",
+          "SiOx",
+          "硅碳复合",
+          "预锂化"
+        ],
+        "supply_chain_signal_2026": "中科星城满产→需求爆发前兆"
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "tbox_class",
+      "text": "SiliconAnode 硅基负极"
+    },
+    "onto_new_energy_market_SupplyChainSignal": {
+      "entity_data": {
+        "id": "SupplyChainSignal",
+        "label": "供应链信号",
+        "parent": "Thing",
+        "definition": "判断新技术产业化拐点的可观测指标",
+        "key_indicators": [
+          "上游产能利用率",
+          "设备订单量",
+          "专利数量趋势",
+          "头部客户订单规模",
+          "吨级出货是否达标"
+        ]
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "tbox_class",
+      "text": "SupplyChainSignal 判断新技术产业化拐点的可观测指标"
+    },
+    "onto_new_energy_market_IndustryTrend": {
+      "entity_data": {
+        "id": "IndustryTrend",
+        "label": "产业趋势",
+        "parent": "Thing",
+        "definition": "锂电/钠电/固态等电池技术路线的发展方向和竞争格局变化",
+        "key_questions": [
+          "哪些技术真的从实验室走进工厂了",
+          "量产拐点信号是什么",
+          "对现有锂电体系的替代还是互补"
+        ]
+      },
+      "domain": "new_energy_market",
+      "domain_label": "新能源产业动态",
+      "category": "tbox_class",
+      "text": "IndustryTrend 锂电/钠电/固态等电池技术路线的发展方向和竞争格局变化"
+    },
+    "onto_policy_economics_工商储盈利模式分水岭": {
+      "entity_data": {
+        "value": "工商储盈利模式分水岭"
+      },
+      "domain": "policy_economics",
+      "domain_label": "能源政策与经济学",
+      "category": "source_documents",
+      "text": "工商储盈利模式分水岭 工商储盈利模式分水岭"
+    },
+    "onto_policy_economics_加拿大贸易部长访华EV投资分析": {
+      "entity_data": {
+        "value": "加拿大贸易部长访华EV投资分析"
+      },
+      "domain": "policy_economics",
+      "domain_label": "能源政策与经济学",
+      "category": "source_documents",
+      "text": "加拿大贸易部长访华EV投资分析 加拿大贸易部长访华EV投资分析"
+    },
+    "onto_policy_economics_碳酸锂价格分析": {
+      "entity_data": {
+        "value": "碳酸锂价格分析"
+      },
+      "domain": "policy_economics",
+      "domain_label": "能源政策与经济学",
+      "category": "source_documents",
+      "text": "碳酸锂价格分析 碳酸锂价格分析"
+    },
+    "onto_policy_economics_蔚来泰星能源合作交流": {
+      "entity_data": {
+        "value": "蔚来泰星能源合作交流"
+      },
+      "domain": "policy_economics",
+      "domain_label": "能源政策与经济学",
+      "category": "source_documents",
+      "text": "蔚来泰星能源合作交流 蔚来泰星能源合作交流"
+    },
+    "onto_policy_economics_PolicyInstrument": {
+      "entity_data": {
+        "id": "PolicyInstrument",
+        "label": "政策工具",
+        "parent": "Thing",
+        "definition": "政府/监管机构影响产业行为的政策手段",
+        "subclasses": [
+          "CarbonMarket",
+          "ElectricityPricing",
+          "SubsidyPolicy",
+          "RecyclingRegulation"
+        ]
+      },
+      "domain": "policy_economics",
+      "domain_label": "能源政策与经济学",
+      "category": "tbox_class",
+      "text": "PolicyInstrument 政府/监管机构影响产业行为的政策手段 CarbonMarket ElectricityPricing SubsidyPolicy RecyclingRegulation"
+    },
+    "onto_policy_economics_CarbonMarket": {
+      "entity_data": {
+        "id": "CarbonMarket",
+        "label": "碳市场",
+        "parent": "PolicyInstrument",
+        "key_mechanisms": [
+          "中国ETS(全国碳市场覆盖电力)",
+          "EU CBAM(对电池出口影响)",
+          "碳足迹核算(欧盟电池法规)"
+        ],
+        "cn_expansion": "后续扩至钢铁/水泥/铝"
+      },
+      "domain": "policy_economics",
+      "domain_label": "能源政策与经济学",
+      "category": "tbox_class",
+      "text": "CarbonMarket 碳市场"
+    },
+    "onto_policy_economics_ElectricityPricing": {
+      "entity_data": {
+        "id": "ElectricityPricing",
+        "label": "电价机制",
+        "parent": "PolicyInstrument",
+        "key_factors": [
+          "峰谷价差(鸭子曲线效应)",
+          "分时电价(各省差异)",
+          "两部制电价(基本+电度)"
+        ],
+        "storage_arbitrage_window": "2-3年(IRR从12%降至4.2%后的转型期)"
+      },
+      "domain": "policy_economics",
+      "domain_label": "能源政策与经济学",
+      "category": "tbox_class",
+      "text": "ElectricityPricing 电价机制"
+    },
+    "onto_policy_economics_SupplyChainRisk": {
+      "entity_data": {
+        "id": "SupplyChainRisk",
+        "label": "供应链风险",
+        "parent": "Thing",
+        "definition": "关键电池原材料的地缘政治和市场风险",
+        "key_materials": [
+          "锂",
+          "钴",
+          "镍"
+        ],
+        "cn_dominance": "中国掌握全球70%+锂电材料加工能力",
+        "lithium_price_history": "60万→7万→反弹至近20万(2022-2026)"
+      },
+      "domain": "policy_economics",
+      "domain_label": "能源政策与经济学",
+      "category": "tbox_class",
+      "text": "SupplyChainRisk 关键电池原材料的地缘政治和市场风险"
+    },
+    "onto_policy_economics_EconomicVariable": {
+      "entity_data": {
+        "id": "EconomicVariable",
+        "label": "经济变量",
+        "parent": "Thing",
+        "definition": "影响电池产业链的经济参数",
+        "key_variables": [
+          "碳酸锂价格",
+          "电价",
+          "碳价",
+          "补贴强度",
+          "产能利用率"
+        ]
+      },
+      "domain": "policy_economics",
+      "domain_label": "能源政策与经济学",
+      "category": "tbox_class",
+      "text": "EconomicVariable 影响电池产业链的经济参数"
+    },
+    "onto_standards_registry_GB_38031-2025": {
+      "entity_data": {
+        "id": "GB_38031-2025",
+        "class": "Standard",
+        "type": "强制性国标",
+        "name": "电动汽车用动力蓄电池安全要求",
+        "hasImplementDate": "2026-07-01",
+        "replacesStandard": "GB_38031-2020",
+        "key_requirements": [
+          "2小时不起火不爆炸",
+          "热扩散试验",
+          "针刺/过充/过放/外部短路"
+        ]
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standards",
+      "text": "GB_38031-2025 Standard"
+    },
+    "onto_standards_registry_GB_T_44500-2024": {
+      "entity_data": {
+        "id": "GB_T_44500-2024",
+        "class": "Standard",
+        "type": "推荐性国标",
+        "name": "新能源汽车运行安全性能检验规程",
+        "hasImplementDate": "2025-03-01",
+        "key_requirements": [
+          "动力蓄电池安全（充电+放电）",
+          "驱动电机安全",
+          "电控系统安全",
+          "电气安全（绝缘+电位均衡）"
+        ],
+        "notes": "年检标准。非营运小型6年内免检，6-10年每2年1次。企业技术文件阈值优先"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standards",
+      "text": "GB_T_44500-2024 Standard"
+    },
+    "onto_standards_registry_GB_T_45688-2025": {
+      "entity_data": {
+        "id": "GB_T_45688-2025",
+        "class": "Standard",
+        "type": "推荐性国标",
+        "name": "新能源汽车运行安全性能动态监测预警",
+        "hasImplementDate": "2025-12-01",
+        "key_requirements": [
+          "12项故障监测",
+          "12项隐患模型",
+          "三级故障+两级隐患",
+          "换电7项特殊适配"
+        ]
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standards",
+      "text": "GB_T_45688-2025 Standard"
+    },
+    "onto_standards_registry_GB_T_32960.3": {
+      "entity_data": {
+        "id": "GB_T_32960.3",
+        "class": "Standard",
+        "type": "推荐性国标",
+        "name": "电动汽车远程服务与管理系统技术规范",
+        "notes": "附录A.6 故障报警数据项（45688引用）"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standards",
+      "text": "GB_T_32960.3 Standard"
+    },
+    "onto_standards_registry_GB_7258-2017": {
+      "entity_data": {
+        "id": "GB_7258-2017",
+        "class": "Standard",
+        "type": "强制性国标",
+        "name": "机动车运行安全技术条件",
+        "hasImplementDate": "2018-01-01",
+        "key_requirements": [
+          "高压安全（标记/遮栏/等电位）",
+          "导线绝缘耐温100/125℃",
+          "客车电池异常报警+5min不起火"
+        ]
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standards",
+      "text": "GB_7258-2017 Standard"
+    },
+    "onto_standards_registry_CN_NEV_standards_2020": {
+      "entity_data": {
+        "id": "CN_NEV_standards_2020",
+        "class": "StandardSystem",
+        "type": "国家体系",
+        "name": "中国新能源汽车国家标准体系(2020版)",
+        "hasCategory": {
+          "基础通用": [
+            "GB/T 18384安全要求",
+            "GB/T 31498碰撞后安全"
+          ],
+          "车载储能系统": [
+            "GB 38031电池安全",
+            "GB/T 31484寿命",
+            "GB/T 31485安全",
+            "GB/T 31486电性能"
+          ],
+          "充电系统与接口": [
+            "GB/T 20234连接器",
+            "GB/T 27930通信协议"
+          ],
+          "电驱系统": [
+            "GB/T 18488驱动电机",
+            "GB/T 29307可靠性"
+          ],
+          "整车": [
+            "GB 18352排放",
+            "GB 27999能耗"
+          ]
+        },
+        "source": "learning_20260531_nas_batch2",
+        "importance": 0.9
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standards",
+      "text": "CN_NEV_standards_2020 StandardSystem"
+    },
+    "onto_standards_registry_NIO_enterprise_standards": {
+      "entity_data": {
+        "id": "NIO_enterprise_standards",
+        "class": "StandardSystem",
+        "type": "企业标准清单",
+        "name": "NIO电池系统企业标准清单",
+        "hasStandards": [
+          "NIO-EP-TR-0030 BMS设计及测试规范(2019)",
+          "QBS-GS-0004-01-2021 电池系统安全设计标准",
+          "QBS-DS-0001-01-2021 电池系统热管理系统设计规范",
+          "QBS-TS-0003-01-2021 电池系统循环寿命测试规范",
+          "NIO-TP.20.002-2019 可靠性及寿命规范 V2.0"
+        ],
+        "notes": "NIO企业标准超越国标部分: Pyrofuse 3ms+5ms时序、IP6K9K附加、碰撞后TE<0.2J、循环后螺栓扭矩检查、15年30万km服务寿命等",
+        "source": "learning_20260531_nas_batch1",
+        "importance": 0.95
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standards",
+      "text": "NIO_enterprise_standards StandardSystem"
+    },
+    "onto_standards_registry_standards_registry_standards_7": {
+      "entity_data": {
+        "standard_id": "GB/T16935",
+        "name": "GB/T 16935.1 (IEC 60664-1) 低压系统内设备的绝缘配合",
+        "type": "推荐性国标",
+        "domain": "electrical_safety",
+        "description": "爬电距离与电气间隙设计的核心标准。模组设计参考此标准确定最小爬电距离(污染等级3/材料组别Ⅲb/平台电压403.2V)和电气间隙(2700VDC耐压+4000m海拔修正)。",
+        "importance": 0.9,
+        "key_thresholds": {
+          "creepage_403V_pollution3_groupIII": "6.35mm",
+          "clearance_2700VDC_4000m": "2.63mm",
+          "altitude_correction_4000m": 1.29
+        },
+        "source": "2026-06-18 NAS D11 Module设计制造",
+        "cross_ref": [
+          "模组爬电距离校核",
+          "FC60平台电气设计"
+        ]
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standards",
+      "text": "standards_registry_standards_7 爬电距离与电气间隙设计的核心标准。模组设计参考此标准确定最小爬电距离(污染等级3/材料组别Ⅲb/平台电压403.2V)和电气间隙(2700VDC耐压+4000m海拔修正)。 GB/T16935 {'creepage_403V_pollution3_groupIII': '6.35mm', 'clearance_2700VDC_4000m': '2.63mm', 'altitude_correction_4000m': 1.29}"
+    },
+    "onto_standards_registry_TH_NCM_charge_max_temp": {
+      "entity_data": {
+        "id": "TH_NCM_charge_max_temp",
+        "class": "StandardThreshold",
+        "parameter": "充电最高温度(NCM)",
+        "value": 60,
+        "unit": "°C",
+        "standard": "GB_T_44500"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standard_thresholds",
+      "text": "TH_NCM_charge_max_temp StandardThreshold 60"
+    },
+    "onto_standards_registry_TH_LFP_charge_max_temp": {
+      "entity_data": {
+        "id": "TH_LFP_charge_max_temp",
+        "class": "StandardThreshold",
+        "parameter": "充电最高温度(LFP)",
+        "value": 65,
+        "unit": "°C",
+        "standard": "GB_T_44500"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standard_thresholds",
+      "text": "TH_LFP_charge_max_temp StandardThreshold 65"
+    },
+    "onto_standards_registry_TH_NCM_charge_max_voltage": {
+      "entity_data": {
+        "id": "TH_NCM_charge_max_voltage",
+        "class": "StandardThreshold",
+        "parameter": "充电最高电压(NCM)",
+        "value": 4.5,
+        "unit": "V",
+        "standard": "GB_T_44500"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standard_thresholds",
+      "text": "TH_NCM_charge_max_voltage StandardThreshold 4.5"
+    },
+    "onto_standards_registry_TH_LFP_charge_max_voltage": {
+      "entity_data": {
+        "id": "TH_LFP_charge_max_voltage",
+        "class": "StandardThreshold",
+        "parameter": "充电最高电压(LFP)",
+        "value": 3.85,
+        "unit": "V",
+        "standard": "GB_T_44500"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standard_thresholds",
+      "text": "TH_LFP_charge_max_voltage StandardThreshold 3.85"
+    },
+    "onto_standards_registry_TH_voltage_range": {
+      "entity_data": {
+        "id": "TH_voltage_range",
+        "class": "StandardThreshold",
+        "parameter": "电压极差(同类型)",
+        "value": 0.3,
+        "unit": "V",
+        "standard": "GB_T_44500"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standard_thresholds",
+      "text": "TH_voltage_range StandardThreshold 0.3"
+    },
+    "onto_standards_registry_TH_DC_insulation": {
+      "entity_data": {
+        "id": "TH_DC_insulation",
+        "class": "StandardThreshold",
+        "parameter": "直流绝缘",
+        "value": 100,
+        "unit": "Ω/V",
+        "standard": "GB_T_44500"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standard_thresholds",
+      "text": "TH_DC_insulation StandardThreshold 100"
+    },
+    "onto_standards_registry_TH_AC_insulation": {
+      "entity_data": {
+        "id": "TH_AC_insulation",
+        "class": "StandardThreshold",
+        "parameter": "交流绝缘",
+        "value": 1,
+        "unit": "MΩ",
+        "standard": "GB_T_44500"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standard_thresholds",
+      "text": "TH_AC_insulation StandardThreshold 1"
+    },
+    "onto_standards_registry_TH_equipotential_platform": {
+      "entity_data": {
+        "id": "TH_equipotential_platform",
+        "class": "StandardThreshold",
+        "parameter": "电位均衡(平台)",
+        "value": 0.1,
+        "unit": "Ω",
+        "standard": "GB_T_44500"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standard_thresholds",
+      "text": "TH_equipotential_platform StandardThreshold 0.1"
+    },
+    "onto_standards_registry_TH_equipotential_parts": {
+      "entity_data": {
+        "id": "TH_equipotential_parts",
+        "class": "StandardThreshold",
+        "parameter": "电位均衡(部件)",
+        "value": 0.2,
+        "unit": "Ω",
+        "standard": "GB_T_44500"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "standard_thresholds",
+      "text": "TH_equipotential_parts StandardThreshold 0.2"
+    },
+    "onto_standards_registry_GB/T 31484/31485/31486 系列（循环寿命/安全/电性能）尚未系统学习": {
+      "entity_data": {
+        "value": "GB/T 31484/31485/31486 系列（循环寿命/安全/电性能）尚未系统学习"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "known_gaps",
+      "text": "GB/T 31484/31485/31486 系列（循环寿命/安全/电性能）尚未系统学习 GB/T 31484/31485/31486 系列（循环寿命/安全/电性能）尚未系统学习"
+    },
+    "onto_standards_registry_GB/T 34014/34015/33598 系列（回收/编码/梯次利用）尚未系统学习": {
+      "entity_data": {
+        "value": "GB/T 34014/34015/33598 系列（回收/编码/梯次利用）尚未系统学习"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "known_gaps",
+      "text": "GB/T 34014/34015/33598 系列（回收/编码/梯次利用）尚未系统学习 GB/T 34014/34015/33598 系列（回收/编码/梯次利用）尚未系统学习"
+    },
+    "onto_standards_registry_GB/T 38698 系列（拆解规范）尚未系统学习": {
+      "entity_data": {
+        "value": "GB/T 38698 系列（拆解规范）尚未系统学习"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "known_gaps",
+      "text": "GB/T 38698 系列（拆解规范）尚未系统学习 GB/T 38698 系列（拆解规范）尚未系统学习"
+    },
+    "onto_standards_registry_IEC 62660/62619/62933 系列（国际标准）尚未系统学习": {
+      "entity_data": {
+        "value": "IEC 62660/62619/62933 系列（国际标准）尚未系统学习"
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "known_gaps",
+      "text": "IEC 62660/62619/62933 系列（国际标准）尚未系统学习 IEC 62660/62619/62933 系列（国际标准）尚未系统学习"
+    },
+    "onto_standards_registry_Standard": {
+      "entity_data": {
+        "id": "Standard",
+        "label": "标准",
+        "parent": "Thing",
+        "definition": "电池/新能源汽车相关的国家或国际技术标准",
+        "subclasses": [
+          "强制性国标",
+          "推荐性国标",
+          "国际标准"
+        ],
+        "key_properties": [
+          "standard_id",
+          "name",
+          "type",
+          "implement_date",
+          "domain",
+          "replaces"
+        ]
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "tbox_class",
+      "text": "Standard 电池/新能源汽车相关的国家或国际技术标准 standard_id name type implement_date domain replaces 强制性国标 推荐性国标 国际标准"
+    },
+    "onto_standards_registry_StandardThreshold": {
+      "entity_data": {
+        "id": "StandardThreshold",
+        "label": "标准阈值",
+        "parent": "Thing",
+        "definition": "标准中定义的量化判定阈值",
+        "key_properties": [
+          "parameter",
+          "value",
+          "unit",
+          "applicable_chemistry",
+          "test_condition"
+        ]
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "tbox_class",
+      "text": "StandardThreshold 标准中定义的量化判定阈值 parameter value unit applicable_chemistry test_condition"
+    },
+    "onto_standards_registry_StandardRelation": {
+      "entity_data": {
+        "id": "StandardRelation",
+        "label": "标准间关系",
+        "parent": "Thing",
+        "definition": "标准之间的引用、替代、互补关系",
+        "instances": [
+          "replaces(替代)",
+          "references(引用)",
+          "complements(互补)",
+          "extends(扩展)",
+          "derives_from(派生)"
+        ]
+      },
+      "domain": "standards_registry",
+      "domain_label": "标准法规索引",
+      "category": "tbox_class",
+      "text": "StandardRelation 标准之间的引用、替代、互补关系 replaces(替代) references(引用) complements(互补) extends(扩展) derives_from(派生)"
+    }
+  }
+}

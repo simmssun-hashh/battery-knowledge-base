@@ -1,0 +1,198 @@
+{
+  "domain": "new_energy_market",
+  "name": "新能源产业动态",
+  "description": "钠电/固态/硅基负极等新技术产业化跟踪、产业链格局、竞争分析",
+  "version": "V2.0",
+  "last_updated": "2026-05-11T13:06:00Z",
+  "ontology_model": "TBox+ABox",
+  "tbox": {
+    "description": "概念定义层：新技术产业化评估框架、供应链信号判据",
+    "classes": [
+      {
+        "id": "NewBatteryTechnology",
+        "label": "新电池技术",
+        "parent": "Thing",
+        "definition": "处于研发或产业化初期的电池新技术路线",
+        "subclasses": ["SodiumIon", "SolidState", "SiliconAnode"],
+        "key_properties": ["TRL_level", "energy_density_Wh_kg", "mass_production_year", "bottleneck"]
+      },
+      {
+        "id": "SodiumIon",
+        "label": "钠离子电池",
+        "parent": "NewBatteryTechnology",
+        "energy_density": "120-160 Wh/kg",
+        "cathode_routes": ["层状氧化物", "聚阴离子", "普鲁士蓝"],
+        "anode": "硬碳(8-12万元/吨→需降至5万以下)",
+        "supply_chain_bottleneck": "硬碳6-8万吨/年需求(当前<3万吨)",
+        "china_IP_dominance": "中国钠电专利占全球70%+",
+        "status_2026": "商业化元年，CATL 60GWh大单验证",
+        "competitive_position": "与锂电互补：锂电→乘用车，钠电→大规模储能"
+      },
+      {
+        "id": "SolidState",
+        "label": "固态电池",
+        "parent": "NewBatteryTechnology",
+        "status": "研发阶段，量产路径未明",
+        "electrolyte_types": ["氧化物", "硫化物", "聚合物"],
+        "key_challenges": ["界面阻抗", "锂枝晶", "制造工艺", "成本"],
+        "target": ">1000 Wh/L, 金属锂负极"
+      },
+      {
+        "id": "SiliconAnode",
+        "label": "硅基负极",
+        "parent": "NewBatteryTechnology",
+        "status": "吨级出货量临界点",
+        "theoretical_capacity": "4200 mAh/g(10倍石墨)",
+        "actual_utilization": "<50%",
+        "key_challenge": "300%体积膨胀→颗粒粉化→SEI持续破裂再生",
+        "solutions": ["纳米硅", "SiOx", "硅碳复合", "预锂化"],
+        "supply_chain_signal_2026": "中科星城满产→需求爆发前兆"
+      },
+      {
+        "id": "SupplyChainSignal",
+        "label": "供应链信号",
+        "parent": "Thing",
+        "definition": "判断新技术产业化拐点的可观测指标",
+        "key_indicators": ["上游产能利用率", "设备订单量", "专利数量趋势", "头部客户订单规模", "吨级出货是否达标"]
+      },
+      {
+        "id": "IndustryTrend",
+        "label": "产业趋势",
+        "parent": "Thing",
+        "definition": "锂电/钠电/固态等电池技术路线的发展方向和竞争格局变化",
+        "key_questions": ["哪些技术真的从实验室走进工厂了", "量产拐点信号是什么", "对现有锂电体系的替代还是互补"]
+      }
+    ],
+    "properties": [
+      {
+        "id": "hasTRL",
+        "label": "技术就绪度",
+        "domain": "NewBatteryTechnology",
+        "range": "integer",
+        "unit": "1-9",
+        "cardinality": "1",
+        "description": "TRL 1-3=基础研究, 4-6=技术开发, 7-9=工程化量产"
+      },
+      {
+        "id": "hasEnergyDensity",
+        "label": "能量密度",
+        "domain": "NewBatteryTechnology",
+        "range": "float",
+        "unit": "Wh/kg",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasMassProductionYear",
+        "label": "量产年份",
+        "domain": "NewBatteryTechnology",
+        "range": "integer",
+        "cardinality": "1"
+      },
+      {
+        "id": "hasSupplyBottleneck",
+        "label": "供应链瓶颈",
+        "domain": "NewBatteryTechnology",
+        "range": "string",
+        "cardinality": "1"
+      }
+    ],
+    "rules": [
+      {
+        "id": "rule_mass_production_signal",
+        "label": "量产拐点判断规则",
+        "if": "tech.supply_chain_signal == '吨级出货' AND tech.capacity_utilization > 80%",
+        "then": "mass_production_imminent_within_12_months",
+        "example": "硅基负极：中科星城满产→2026拐点"
+      },
+      {
+        "id": "rule_sodium_lithium_relationship",
+        "label": "钠锂关系判据",
+        "if": "application.energy_density_requirement > 200 Wh/kg",
+        "then": "lithium_required AND sodium_not_applicable",
+        "if": "application.energy_density_requirement <= 160 Wh/kg AND application.cycle_life > 3000",
+        "then": "sodium_preferred_over_lithium",
+        "conclusion": "钠电与锂电互补，非替代"
+      }
+    ]
+  },
+  "abox": {
+    "description": "事实数据层：各新技术路线的量产时间线、产能数据、供应链瓶颈",
+    "technology_timeline": [
+      {"id": "NaIon_2026", "class": "SodiumIon", "hasTRL": 8, "hasEnergyDensity": 160, "hasMassProductionYear": 2026, "trigger": "CATL×海博思创 3年60GWh"},
+      {"id": "SiAnode_2026", "class": "SiliconAnode", "hasTRL": 7, "hasEnergyDensity": 400, "hasMassProductionYear": 2026, "trigger": "中科星城满产"},
+      {"id": "SolidState_TBD", "class": "SolidState", "hasTRL": 4, "hasEnergyDensity": 500, "hasMassProductionYear": 0, "trigger": "未定"},
+      {"id": "4680_2022_2026", "class": "CylindricalCell", "hasTRL": 7, "hasCellType": "4680大圆柱", "hasEnergyDensity": 300, "hasMassProductionYear": 2023, "trigger": "Tesla量产+松下/三星SDI跟进", "notes": "全极耳设计降低内阻, CTC/CTB结构适配, 但良率爬坡慢(2022-2024)", "source": "learning_20260531_nas_batch4"}
+    ],
+    "source_documents": [
+      "钠电拐点：CATL 60GWh大单深度解读",
+      "宁德时代钠电池量产装车",
+      "硅基负极吨级出货分析",
+      "动力电池10年技术发展",
+      "百人会论坛综述"
+    ],
+    "catl_cell_correlation_model": {
+      "id": "CATL_small_large_cell_correlation",
+      "type": "engineering_model",
+      "name": "CATL大小电芯电性能关联模型(2016)",
+      "properties": {
+        "P58_811_small_cell_Ah": 0.074,
+        "P58_811_large_cell_Ah": 58,
+        "P58_NP_ratio_small": 1.26,
+        "P58_NP_ratio_large": 1.24,
+        "aluminum_foil_small_um": 30,
+        "aluminum_foil_large_um": 16,
+        "copper_foil_small_um": 38,
+        "copper_foil_large_um": 6,
+        "formation_small": "45°C夹具",
+        "formation_large": "45°C负压",
+        "fixture_force_small_N": "1500/300",
+        "fixture_force_large_N": 3000,
+        "checkpoint_system": [
+          "冷压极片/JR: 工艺参数COV, 膜片电阻, 阻抗分析, 粘接力, 阳极OI值",
+          "化成容量: 化成首效, 阴极容量发挥",
+          "倍率: 高低温倍率, 析锂窗口",
+          "循环: 25/45°C循环",
+          "存储: 高温存储60°C 100%SOC",
+          "产气: 体积vs气压",
+          "EIS: 全电芯EIS, 0.04C dQ/dV, 阳极SEI阻抗"
+        ],
+        "key_challenge": "小电芯产热<<散热(无温度梯度), 大电芯需热电耦合",
+        "equipment_diff": "小电芯手动叠片 vs 大电芯自动卷绕"
+      },
+      "source": "learning_20260531_nas_batch2",
+      "importance": 0.95
+    },
+    "prismatic_cell_new_process": {
+      "id": "prismatic_cell_process_2016",
+      "type": "manufacturing_process",
+      "name": "CATL方形电芯新工艺开发(2016)",
+      "properties": {
+        "target": "角位空间利用率78%→>95%",
+        "method": "侧面热压整形减少宽度(单层压缩~70μm)",
+        "compressible_amount": "Pattern间隙+PCS涂层+隔膜基材",
+        "validation": "P42项目 圆形vs方形RT/60°C循环无显著差异",
+        "failure_modes": [
+          "整形量不够→刮擦",
+          "过度挤压→析锂/褶皱",
+          "侧面定位偏差→Crack风险"
+        ],
+        "extreme_top_cover": {
+          "method": "取消软连接+顶支架→硬板转接片",
+          "BOM_cost_saving_RMB_per_Cell": -2.59,
+          "space_utilization_gain_pct": 2.7,
+          "LFP_ear_fold_space_mm": "9.0→5.5",
+          "short_circuit_protection": "4JR(根部预焊束缚+C型保护片)→2JR(L型极耳预整形+C型保护片)"
+        },
+        "timeline": "2016.4启动→2016.10 DEMO验证→2017.3 Ready for MP"
+      },
+      "source": "learning_20260531_nas_batch5",
+      "importance": 0.9
+    }
+  },
+  "learning_template": {
+    "description": "新能源产业动态领域的学习笔记采集模板",
+    "required_fields": ["技术路线", "能量密度", "量产时间线", "产能/出货量", "供应链瓶颈"],
+    "optional_fields": ["成本对标", "龙头企业", "专利布局", "政策驱动"],
+    "example": "钠电→层状氧化物160Wh/kg→CATL 60GWh(2026-2028)→硬碳产能<3万吨瓶颈→成本比LFP低10-15%"
+  }
+}

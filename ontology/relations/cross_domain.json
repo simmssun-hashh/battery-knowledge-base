@@ -1,0 +1,309 @@
+{
+  "name": "ontology_cross_domain_relations",
+  "description": "跨领域知识关联（V2.0 TBox级），揭示不同domain TBox类之间的依赖、引用和协同关系",
+  "version": "V2.1",
+  "last_updated": "2026-06-16T01:57:00Z",
+  "ontology_model": "TBox+ABox",
+  "tbox_relations": [
+    {
+      "id": "TCR001",
+      "from_class": "battery_safety.SafetyStandard",
+      "to_class": "battery_operations.BatterySwapStation",
+      "type": "regulates",
+      "desc": "GB/T 45688 SafetyStandard要求BatterySwapStation做电池级监测（替代车辆级）",
+      "abox_references": [
+        "GB_T_45688-2025"
+      ]
+    },
+    {
+      "id": "TCR002",
+      "from_class": "battery_technology.CathodeMaterial",
+      "to_class": "battery_safety.BatteryChemistry",
+      "type": "determines",
+      "desc": "CathodeMaterial的热稳定性决定BatteryChemistry的安全阈值",
+      "rule": "LFP.hasThermalStabilityRank=1 → max_temp=65°C; NCM.hasThermalStabilityRank=3 → max_temp=60°C"
+    },
+    {
+      "id": "TCR003",
+      "from_class": "new_energy_market.SodiumIon",
+      "to_class": "energy_storage.CIStorage",
+      "type": "enables",
+      "desc": "SodiumIon低成本使CIStorage大规模部署经济可行",
+      "rule": "SodiumIon.hasEnergyDensity ≤ 160Wh/kg → 适用场景=大规模储能"
+    },
+    {
+      "id": "TCR004",
+      "from_class": "energy_storage.CIStorage",
+      "to_class": "energy_internet.VirtualPowerPlant",
+      "type": "aggregates_into",
+      "desc": "CIStorage聚合为VirtualPowerPlant参与电力市场",
+      "rule": "100个×100MWh CIStorage=10GWh VirtualPowerPlant等效容量"
+    },
+    {
+      "id": "TCR005",
+      "from_class": "policy_economics.ElectricityPricing",
+      "to_class": "energy_storage.EconomicModel",
+      "type": "drives",
+      "desc": "峰谷价差(ElectricityPricing)是EconomicModel.hasIRR的核心变量",
+      "rule": "IF hasPeakValleySpread < 0.5元/kWh THEN hasIRR < 5%"
+    },
+    {
+      "id": "TCR006",
+      "from_class": "battery_technology.SEIFormation",
+      "to_class": "battery_operations.SOHPredictionModel",
+      "type": "mechanism_of",
+      "desc": "SEI持续增厚是SOH衰减的物理根源，SOHPredictionModel需捕捉SEI阻抗演化"
+    },
+    {
+      "id": "TCR007",
+      "from_class": "battery_safety.ThermalRunawayEvent",
+      "to_class": "battery_technology.CathodeMaterial",
+      "type": "constrained_by",
+      "desc": "ThermalRunawayEvent的2h不起火要求倒逼隔热设计",
+      "rule": "GB 38031-2025: hasThermalRunawayDelay=2h"
+    },
+    {
+      "id": "TCR008",
+      "from_class": "new_energy_market.SiliconAnode",
+      "to_class": "battery_technology.AnodeMaterial",
+      "type": "extends",
+      "desc": "SiliconAnode.hasCapacity=4200mAh/g 远超 Graphite.hasCapacity=372mAh/g",
+      "constraint": "hasVolumeExpansion=300% → 需纳米化+预锂化"
+    },
+    {
+      "id": "TCR009",
+      "from_class": "standards_registry.Standard",
+      "to_class": "battery_safety.SafetyStandard",
+      "type": "instance_of",
+      "desc": "standards_registry中的Standard实例属于battery_safety.SafetyStandard的子类",
+      "rule": "强制性国标.hasImplementDate → 到期自动替代旧标准"
+    },
+    {
+      "id": "TCR010",
+      "from_class": "battery_operations.BatteryAsset",
+      "to_class": "battery_operations.CascadeApplication",
+      "type": "transitions_to",
+      "desc": "BatteryAsset.hasSOH<80%→CascadeApplication; hasSOH<60%→回收",
+      "rule": "rule_cascade_screening in battery_operations"
+    },
+    {
+      "id": "TCR011",
+      "from_class": "policy_economics.SupplyChainRisk",
+      "to_class": "new_energy_market.SodiumIon",
+      "type": "accelerates",
+      "desc": "碳酸锂价格波动(SupplyChainRisk)加速SodiumIon产业化进程",
+      "rule": "IF lithium_price > 200000元/吨 THEN sodium_ion_viability_improved"
+    },
+    {
+      "id": "TCR012",
+      "from_class": "battery_technology.BMSAlgorithm",
+      "to_class": "battery_operations.SOHPredictionModel",
+      "type": "implements",
+      "desc": "BMSAlgorithm(CoulombCounting/KalmanFilter等)在车端实现SOHPredictionModel的轻量版本"
+    },
+    {
+      "id": "TCR013",
+      "from_class": "battery_operations.BatteryAsset",
+      "to_class": "battery_operations.voltai_architecture",
+      "type": "managed_by",
+      "desc": "VoltAI系统对BatteryAsset进行全生命周期智能管理（安全/SOH/运营）"
+    }
+  ],
+  "abox_relations": [
+    {
+      "id": "R001",
+      "from": "battery_safety.GB_T_45688-2025",
+      "to": "battery_operations.battery_swap",
+      "type": "regulates",
+      "desc": "45688要求换电体系做电池级监测和数据归属解耦"
+    },
+    {
+      "id": "R002",
+      "from": "battery_safety.GB_T_44500-2024",
+      "to": "battery_operations.soh_prediction",
+      "type": "depends_on",
+      "desc": "年检标准的SOH判定依赖运营监控的SOH算法精度"
+    },
+    {
+      "id": "R003",
+      "from": "battery_technology.cathode",
+      "to": "battery_safety.thresholds",
+      "type": "determines",
+      "desc": "不同正极材料热稳定性决定安全阈值"
+    },
+    {
+      "id": "R004",
+      "from": "new_energy_market.sodium_ion",
+      "to": "energy_storage.C_I_storage",
+      "type": "enables",
+      "desc": "钠电低成本使其成为大规模储能首选"
+    },
+    {
+      "id": "R005",
+      "from": "energy_storage.C_I_storage",
+      "to": "energy_internet.virtual_power_plant",
+      "type": "aggregates_into",
+      "desc": "工商业储能聚合为虚拟电厂"
+    },
+    {
+      "id": "R006",
+      "from": "policy_economics.electricity_pricing",
+      "to": "energy_storage.economic_model",
+      "type": "drives",
+      "desc": "峰谷价差是储能IRR核心变量"
+    },
+    {
+      "id": "R007",
+      "from": "battery_technology.SEI_formation",
+      "to": "battery_operations.soh_prediction",
+      "type": "mechanism_of",
+      "desc": "SEI增厚是SOH衰减的物理根源"
+    },
+    {
+      "id": "R008",
+      "from": "battery_safety.GB_38031-2025",
+      "to": "battery_technology.pack_design",
+      "type": "constrains",
+      "desc": "2h不起火倒逼模组隔热设计"
+    },
+    {
+      "id": "R009",
+      "from": "new_energy_market.silicon_anode",
+      "to": "battery_technology.anode",
+      "type": "extends",
+      "desc": "硅负极4200 vs 石墨372 mAh/g"
+    },
+    {
+      "id": "R010",
+      "from": "standards_registry.GB_T_45688-2025",
+      "to": "standards_registry.GB_T_32960.3",
+      "type": "references",
+      "desc": "45688引用32960.3附录A.6"
+    },
+    {
+      "id": "R011",
+      "from": "battery_operations.voltai_architecture_2026",
+      "to": "battery_safety.GB_38031-2025",
+      "type": "implements",
+      "desc": "VoltAI安全监控Agent实现GB 38031-2025的2h不起火预警要求"
+    },
+    {
+      "id": "R012",
+      "from": "battery_operations.voltai_architecture_2026",
+      "to": "battery_safety.GB_T_45688-2025",
+      "type": "implements",
+      "desc": "VoltAI充电桩监控模块实现GB/T 45688隐患异常检测要求"
+    },
+    {
+      "id": "R013",
+      "from": "battery_operations.voltai_architecture_2026",
+      "to": "battery_operations.BatteryGPT",
+      "type": "based_on",
+      "desc": "VoltAI高精度SOH方案基于BatteryGPT生成式方法，目标RMSE±0.5%"
+    }
+  ],
+  "ontology_evolution": {
+    "auto_discovery_rules": {
+      "description": "新知识入库→自动匹配TBox类→自动归属到对应domain",
+      "keyword_to_tbox_class": {
+        "安全|热失控|起火|绝缘|故障|BMS报警": {
+          "domain": "battery_safety",
+          "class": "ThermalEvent|ElectricalEvent|InsulationEvent"
+        },
+        "材料|正极|负极|电解液|SEI|扩散|电化学": {
+          "domain": "battery_technology",
+          "class": "CathodeMaterial|AnodeMaterial|ElectrochemicalPhenomenon"
+        },
+        "换电|梯次|残值|BaaS|运营|SOH": {
+          "domain": "battery_operations",
+          "class": "BatteryAsset|BatterySwapStation|SOHPredictionModel"
+        },
+        "储能|IRR|峰谷|容量租赁|调频|PCS": {
+          "domain": "energy_storage",
+          "class": "CIStorage|EconomicModel|RevenueStream"
+        },
+        "虚拟电厂|VPP|需求响应|电力市场|聚合": {
+          "domain": "energy_internet",
+          "class": "VirtualPowerPlant|DemandResponse"
+        },
+        "钠电|固态|硅基|量产|产业化|供应链": {
+          "domain": "new_energy_market",
+          "class": "SodiumIon|SolidState|SiliconAnode|SupplyChainSignal"
+        },
+        "碳交易|碳足迹|补贴|电价|政策|双积分": {
+          "domain": "policy_economics",
+          "class": "PolicyInstrument|CarbonMarket|ElectricityPricing"
+        },
+        "GB/T|GB |IEC |ISO |SAE ": {
+          "domain": "standards_registry",
+          "class": "Standard|StandardThreshold"
+        }
+      }
+    },
+    "tbox_consistency_rules": [
+      "新实体必须归属到至少一个TBox类",
+      "新属性必须声明domain和range",
+      "新规则必须引用已存在的TBox类或属性",
+      "跨域关系必须同时存在于tbox_relations和abox_relations中"
+    ],
+    "review_schedule": {
+      "light_review": "每周日DREAMING Light → 扫描新学习文件 → 自动补充到对应TBox类",
+      "deep_review": "每月第一个周日 → 检查TBox类覆盖完整性 → 识别新出现的知识类型需要新建类",
+      "domain_expansion_trigger": "连续3个新学习文件无法匹配现有TBox类 → 自动提议新建类或domain"
+    }
+  },
+  "methodology_references": [
+    {
+      "id": "METHOD001",
+      "name": "构建业务本体语义for关联关系",
+      "learned_date": "2026-05-11",
+      "source": "飞书文档 OGxNdvzR5oebzRxCxYMcOwWAnme",
+      "key_concepts": {
+        "TBox": "术语集，定义概念与规则，不含具体数据（类比DB Schema/OOP Class）",
+        "ABox": "断言集，真实业务数据，填充TBox结构（类比表数据/OOP Object）",
+        "OWL": "建立在RDF上的高级本体语言，定义类/属性/关系/约束，适合建模TBox",
+        "RDF": "W3C基础标准，三元组（主语-谓语-宾语）表达信息，适合表达ABox",
+        "推理引擎": "HermiT/Pellet，自动推导隐含知识+验证模型一致性"
+      },
+      "toolchain": {
+        "modeling": "Protégé（斯坦福开源本体编辑器）",
+        "reasoning": "HermiT/Pellet推理引擎",
+        "storage": "GraphDB（三元组库，隐式逻辑推导）/ Neo4j（属性图，显式关系分析）",
+        "programming": "Owlready2（Python库，程序化本体操作）"
+      },
+      "application_to_existing_domains": {
+        "蔚来能源云映射": {
+          "TBox建模": "电池包类型、换电站类型、订单类型、客户类型",
+          "ABox填充": "具体电池包实例、站点实例、充换电订单",
+          "业务规则示例": [
+            "可换电电池 ≡ BatteryPack ∧ (healthStatus ≥ 阈值) ∧ (cycleCount < 上限)",
+            "紧急维保电池 ≡ BatteryPack ∧ (healthStatus < 阈值) ∧ (inService = true)"
+          ]
+        },
+        "工具演进路径": "当前ontology/domain/*.json是轻量TBox，若需推理能力可考虑迁移到OWL+推理机"
+      },
+      "relationship_to_Palantir": {
+        "TBox_ABox": "↔ Palantir Object Type + Link Type（语义层）",
+        "推理引擎自动归类": "↔ Palantir Functions（业务逻辑单元）+ 实时沙盘",
+        "OWL_RDF_Protege": "↔ 提供Palantir研究所缺的具体技术栈实现"
+      }
+    }
+  ],
+  "cross_references": [
+    {
+      "source_domain": "battery_technology",
+      "source_chapter": "Kittel_Ch5_PhononThermal",
+      "target_domains": [
+        "battery_safety",
+        "battery_operations",
+        "energy_storage"
+      ],
+      "connections": {
+        "battery_safety": "声子Umklapp正反馈→热失控自加速链/声子DOS零频模式→深度脱锂结构崩塌前兆",
+        "battery_operations": "Debye温度→低温热响应速率→低温充电策略的物理约束",
+        "energy_storage": "Grüneisen匹配→固态电解质-正极界面热循环稳定性→储能系统长寿命设计"
+      },
+      "date_added": "2026-05-29"
+    }
+  ]
+}
